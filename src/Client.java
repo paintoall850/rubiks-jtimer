@@ -92,28 +92,23 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         int appWidth = getSize().width, appHeight = getSize().height;
         setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
-        // configure chatSound
-        try {
+        try { // configure chatSound
             chatSound = Applet.newAudioClip(getClass().getResource("blip.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "blip.wav not found. There will be no audio when a message is recieved.");}
 
-        //configure countdownClip
-        try {
+        try { //configure countdownClip
             countdownClip = Applet.newAudioClip(getClass().getResource("count.mid"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no audio during countdown.");}
 
-        //configure bing1
-        try {
+        try { //configure bing1
             bing1 = Applet.newAudioClip(getClass().getResource("bing1.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "bing1.wav not found. There will be no 'ready' sound.");}
 
-        //configure bing2
-        try {
+        try { //configure bing2
             bing2 = Applet.newAudioClip(getClass().getResource("bing2.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "bing2.wav not found. There will be no 'ready' sound.");}
 
-        //configure startupClip
-        try {
+        try { //configure startupClip
             startupClip = Applet.newAudioClip(getClass().getResource("startup.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "startup.wav not found. There will be no startup sound.");}
 

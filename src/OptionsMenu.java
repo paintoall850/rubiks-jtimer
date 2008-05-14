@@ -394,6 +394,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         showMinutesX = true;
         countdownColorX = Color.red;
         timerColorX = Color.blue;
+        // yellow = (255,222,140), purple = (255,220,220), cyan = (140,255,222), Ocean = (200,221,242)
         textBackgrColorX = new Color(200,221,242);
         currentColorX = new Color(0,180,0);
         fastestColorX = Color.blue;

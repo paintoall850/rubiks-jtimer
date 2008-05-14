@@ -64,7 +64,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
 
     private double[] timeQueue = new double[100];
     // yellow = (255,222,140), purple = (255,220,220), cyan = (140,255,222), Ocean = (200,221,242)
-    private static final Color backColor = new Color(200,221,242);
+    //private static final Color backColor = new Color(200,221,242);
     private static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 18);
     private static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
     private static final Border blackLine = BorderFactory.createLineBorder(Color.black);
@@ -255,7 +255,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
         bestAverageText = new JTextArea("Average: N/A\nIndividual Times: N/A");
         bestAverageText.setFont(new Font("Serif", Font.PLAIN, 14));
         bestAverageText.setBorder(blackLine);
-        bestAverageText.setBackground(backColor);
+        //bestAverageText.setBackground(backColor);
         bestAverageText.setEditable(false);
 
         insertTimeButton = new JButton ("Insert Own Time");
