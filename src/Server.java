@@ -359,6 +359,8 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 
                 localTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, usernameText.getText() + "'s Statistics"));
                 out.println("U" + usernameText.getText());
+                out.println("P" + puzzleCombo.getSelectedItem());
+                out.println("T" + countdownCombo.getSelectedItem());
                 out.flush();
                 generateNewScramble();
 

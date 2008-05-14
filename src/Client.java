@@ -182,10 +182,10 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
 
         puzzleLabel = new JLabel("Puzzle:");
         puzzleCombo = new JComboBox(puzzleChoices);
-        puzzleCombo.setSelectedItem("3x3x3");
+        //puzzleCombo.setSelectedItem("3x3x3");
         countdownLabel = new JLabel("Countdown:");
         countdownCombo = new JComboBox(countdownChoices);
-        countdownCombo.setSelectedItem("15");
+        //countdownCombo.setSelectedItem("15");
         startButton = new JButton("Stop Timer");
         popButton = new JButton("POP");
 
