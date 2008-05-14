@@ -29,7 +29,7 @@ import java.text.*;
 import java.util.*;
 import javax.swing.border.Border;
 
-public class Client extends JFrame implements ActionListener, KeyListener, Runnable{
+public class Client extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
     JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel, useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel,
             countdownLabel, bigPicture, smallPicture, userIsTyping;
     JTextField usernameText, serverIpText, serverPortText, handicapText, chatText;
@@ -179,8 +179,9 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         remoteAverageDetailButton = new JButton("View Rolling");
         remoteSessionDetailButton = new JButton("View Session");
 
+        //puzzleLabel = new JLabel("Puzzle:");
+        //puzzleCombo = new JComboBox(puzzleChoices);
         countdownLabel = new JLabel("Countdown:");
-        String[] countdownChoices = {"0","3","5","10","15"};
         countdownCombo = new JComboBox(countdownChoices);
         countdownCombo.setSelectedItem("15");
         startButton = new JButton("Stop Timer");
