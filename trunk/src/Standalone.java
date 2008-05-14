@@ -30,22 +30,22 @@ import javax.swing.border.*;
 
 public class Standalone extends JFrame implements ActionListener, Runnable, Constants{
 
-    private static OptionsMenu optionsMenu;
-    private static ScrambleGenerator scrambleGenerator;
-    private static InstructionScreen instructionScreen;
-    private static AboutScreen aboutScreen;
+    private OptionsMenu optionsMenu;
+    private ScrambleGenerator scrambleGenerator;
+    private InstructionScreen instructionScreen;
+    private AboutScreen aboutScreen;
 
-    static JButton startButton, discardButton, popButton, plusTwoButton, averageModeButton;
-    static JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
-    static JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
-    static JLabel sessionStatsLabel, rollingAverageLabel, bestAverageLabel;
+    JButton startButton, discardButton, popButton, plusTwoButton, averageModeButton;
+    JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
+    JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
+    JLabel sessionStatsLabel, rollingAverageLabel, bestAverageLabel;
     JMenuBar jMenuBar;
     JMenu fileMenu, toolsMenu, networkMenu, helpMenu;
     JMenuItem saveBestItem, saveSessionItem, optionsItem, exitItem, importItem, generatorItem, instItem, aboutItem, serverItem, clientItem;
-    static JComboBox puzzleCombo, countdownCombo;
-    static JTextArea scrambleText, bestAverageText;
+    JComboBox puzzleCombo, countdownCombo;
+    JTextArea scrambleText, bestAverageText;
 
-    static JLabel[] averageLabels, timeLabels;
+    JLabel[] averageLabels, timeLabels;
     String[] timeString;
     SmartButton[] smartButton;
 
@@ -58,8 +58,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     private double[] timeQueue = new double[100];
 
-    static boolean runningCountdown;
-    static int placeInAverage = 0;
+    boolean runningCountdown;
+    int placeInAverage = 0;
     double startTime = 0, stopTime = 0;
     double sessionTotalTime = 0, sessionFastest = 0, sessionSlowest = 0;
     double bestAverage = 0, bestStandardDeviation = 0, bestFastest = 0, bestSlowest = 0, previousAverage = 0;
@@ -71,8 +71,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     JFileChooser fc = new JFileChooser();
 
     ScrambleAlg scrambleAlg;
-    static ScramblePane scramblePane;
-    static TimerArea timerArea;
+    ScramblePane scramblePane;
+    TimerArea timerArea;
 
     String[] importedAlgs;
     boolean hasImported;
@@ -100,7 +100,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         // create this frame and show it
         Standalone app = new Standalone();
         app.setVisible(true);
-        startButton.requestFocus();
     } // end main
 
 //**********************************************************************************************************************
@@ -174,7 +173,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         setJMenuBar(jMenuBar);
 
         // inialize Popup Windows
-        optionsMenu = new OptionsMenu();
+        optionsMenu = new OptionsMenu(this); // pass it this so that it can update GUI when needed
         scrambleGenerator = new ScrambleGenerator();
         instructionScreen = new InstructionScreen();
         aboutScreen = new AboutScreen();
@@ -366,6 +365,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         hasImported = false;
         updateScrambleAlgs();
         timeLabels[0].setForeground(optionsMenu.currentColorX);
+        startButton.requestFocus();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     } // end constructor
@@ -1052,7 +1052,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
 
-    private static void updateScramblePane(){
+    private void updateScramblePane(){
         scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", scrambleText.getText());
     }
 
@@ -1128,7 +1128,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
 
-    public static void OptionsToGUI(){
+    public void OptionsToGUI(){
         if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+""))
             puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
         if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+""))

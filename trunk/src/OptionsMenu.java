@@ -42,7 +42,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         public String averageViewFormatX, sessionViewFormatX;
     }
 */
-
+    private Standalone myStandalone;
     JTabbedPane tabs;
     JPanel generalTab, colorTab, bestTab, sessionTab;
     JButton saveButton, resetButton, cancelButton;
@@ -60,7 +60,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
 //**********************************************************************************************************************
 
-    public OptionsMenu(){
+    public OptionsMenu(Standalone standalone){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -75,6 +75,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int appWidth = getSize().width, appHeight = getSize().height;
         setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+
+        myStandalone = standalone;
 
         countdownCLabel = new JLabel("Countdown");
         countdownColorText = new JTextArea();
@@ -279,7 +281,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         if(source == saveButton){
             saveOptions();
-            Standalone.OptionsToGUI();//Standalone.loadOptions(); // problematic
+            myStandalone.OptionsToGUI();//Standalone.loadOptions();
             setVisible(false);//this.dispose();
         } else if(source == cancelButton){
             setVisible(false);//this.dispose();
