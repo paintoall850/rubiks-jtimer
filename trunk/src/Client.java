@@ -30,6 +30,8 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public class Client extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
+    private Color myBackgrColor;
+
     JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel;
     JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
     JLabel puzzleLabel, countdownLabel, bigPicture, smallPicture, userIsTyping;
@@ -69,7 +71,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
 
 //**********************************************************************************************************************
 
-    public Client(){
+    public Client(Color textBackgrColor){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -108,6 +110,8 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         nf = NumberFormat.getNumberInstance(new Locale("en", "US"));
         timeFormat = (DecimalFormat)nf;
         timeFormat.applyPattern("00.00");
+
+        myBackgrColor = textBackgrColor;
 
         //GUI Object creation
         usernameLabel = new JLabel("Username:");
@@ -148,7 +152,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         scrambleText.setEditable(false);
         scrambleText.setLineWrap(true);
         scrambleText.setWrapStyleWord(true);
-        scrambleText.setBackground(backColor);
+        scrambleText.setBackground(myBackgrColor);
         scrambleText.setForeground(Color.black);
         scrambleText.setBorder(blackLine);
         scrambleText.setFont(lgAlgFont); // needs to be fixed
@@ -422,16 +426,16 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
                 updateStats();
             }
         } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getLocalSessionView(), backColor);
+            DetailedView win = new DetailedView("Session Times", getLocalSessionView(), myBackgrColor);
             win.setVisible(true);
         } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView(), backColor);
+            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView(), myBackgrColor);
             win.setVisible(true);
         } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getRemoteSessionView(), backColor);
+            DetailedView win = new DetailedView("Session Times", getRemoteSessionView(), myBackgrColor);
             win.setVisible(true);
         } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView(), backColor);
+            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView(), myBackgrColor);
             win.setVisible(true);
         }
     }
