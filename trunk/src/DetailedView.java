@@ -29,9 +29,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
     String printToWindow;
     JButton saveButton;
 
-    private static final Color backColor = new Color(200,221,242);
-
-    public DetailedView(String windowTitle, String printToWindow){
+    public DetailedView(String windowTitle, String printToWindow, Color textBackgrColor){
         this.printToWindow = printToWindow;
 
         // configure Contentpane
@@ -53,7 +51,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         JTextArea window = new JTextArea();
         window.setEditable(false);
         window.setFont(new Font("Serif", Font.PLAIN, 12));
-        window.setBackground(backColor);
+        window.setBackground(textBackgrColor);
         JScrollPane scrollPane = new JScrollPane(window);
         scrollPane.setBorder(blackLine);
         scrollPane.setBounds(10,10,500,380);

@@ -30,14 +30,14 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
     JTextField numText;
     JRadioButton formatPrint, formatImport;
     ButtonGroup radioGroup;
-    ScrambleAlgorithm algGenerator;
+    ScrambleAlg algGenerator;
 
     public ScrambleGenerator(){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
-        algGenerator = new ScrambleAlgorithm();
+        algGenerator = new ScrambleAlg();
 
         // configure JFrame
         setTitle("Scramble Generator");

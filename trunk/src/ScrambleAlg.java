@@ -18,32 +18,32 @@
  *
  */
 
-public class ScrambleAlgorithm{
-    Scramble2x2 cube2x2x2;
-    Scramble3x3 cube3x3x3;
-    Scramble4x4 cube4x4x4;
-    Scramble5x5 cube5x5x5;
+public class ScrambleAlg{
+    Scramble2x2 cube2x2;
+    Scramble3x3 cube3x3;
+    Scramble4x4 cube4x4;
+    Scramble5x5 cube5x5;
     //ScramblePyraminx pyraminx;
     ScrambleMegaminx megaminx;
 
-    public ScrambleAlgorithm(){
-        cube2x2x2 = new Scramble2x2();
-        cube3x3x3 = new Scramble3x3();
-        cube4x4x4 = new Scramble4x4();
-        cube5x5x5 = new Scramble5x5();
+    public ScrambleAlg(){
+        cube2x2 = new Scramble2x2();
+        cube3x3 = new Scramble3x3();
+        cube4x4 = new Scramble4x4();
+        cube5x5 = new Scramble5x5();
         //pyraminx  = new ScramblePyraminx();
         megaminx  = new ScrambleMegaminx();
     }
 
     public String generateAlg(String puzzle){
         if(puzzle.equals("2x2x2"))
-            return cube2x2x2.generateScramble();
+            return cube2x2.generateScramble();
         if(puzzle.equals("3x3x3"))
-            return cube3x3x3.generateScramble();
+            return cube3x3.generateScramble();
         if(puzzle.equals("4x4x4"))
-            return cube4x4x4.generateScramble();
+            return cube4x4.generateScramble();
         if(puzzle.equals("5x5x5"))
-            return cube5x5x5.generateScramble();
+            return cube5x5.generateScramble();
 //        if(puzzle.equals("Pyraminx"))
 //            return pyraminx.generateScramble();
         if(puzzle.equals("Megaminx"))

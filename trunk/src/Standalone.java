@@ -57,10 +57,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     DecimalFormat ssxx, ss;
 
     private double[] timeQueue = new double[100];
-    // yellow = (255,222,140), purple = (255,220,220), cyan = (140,255,222), Ocean = (200,221,242)
-    //private static final Color backColor = new Color(200,221,242);
-    private static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 18);
-    private static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
 
     static boolean runningCountdown;
     static int placeInAverage = 0;
@@ -74,7 +70,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     JFileChooser fc = new JFileChooser();
 
-    ScrambleAlgorithm algGenerator;
+    ScrambleAlg scrambleAlg;
     static ScramblePane scramblePane;
     static TimerArea timerArea;
 
@@ -115,7 +111,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         fc.setFileFilter(new TextFileFilter());
         fc.setAcceptAllFileFilterUsed(false);
-        algGenerator = new ScrambleAlgorithm();
+        scrambleAlg = new ScrambleAlg();
 
         // configure Contentpane
         Container contentPane = getContentPane();
@@ -503,10 +499,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == countdownCombo){
             startButton.requestFocus();
         } else if(source == sessionDetailedViewButton){
-            DetailedView win = new DetailedView("Session Times", getSessionView());
+            DetailedView win = new DetailedView("Session Times", getSessionView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == averageDetailedViewButton){
-            DetailedView win = new DetailedView("Best Average", getAverageView());
+            DetailedView win = new DetailedView("Best Average", getAverageView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == saveSessionItem){
             if(cubesSolved >= 1){
@@ -1049,7 +1045,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 JOptionPane.showMessageDialog(this, "All imported scrambles have been used. Random scrambles will now be displayed.");
                 hasImported = false;
             }
-            scrambleText.setText(algGenerator.generateAlg(puzzleCombo.getSelectedItem()+""));
+            scrambleText.setText(scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+""));
         }
         updateScramblePane();
     } // end updateScrambleAlgs

@@ -30,8 +30,9 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public class Client extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
-    JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel, useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel,
-            countdownLabel, bigPicture, smallPicture, userIsTyping;
+    JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel;
+    JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
+    JLabel puzzleLabel, countdownLabel, bigPicture, smallPicture, userIsTyping;
     JTextField usernameText, serverIpText, serverPortText, handicapText, chatText;
     JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
     JTextPane chatPane;
@@ -40,7 +41,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
     AudioClip chatSound, countdownClip, bing1, bing2, startupClip;
     JTextField scrambleText;
     String remoteUsername;
-    JComboBox countdownCombo;
+    JComboBox puzzleCombo, countdownCombo;
     JCheckBox localStatusLabel;
     JScrollPane chatScrollPane;
     java.util.Timer timerThread;
@@ -65,10 +66,6 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
 
     //listening thread
     Thread chatListener;
-
-    private static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 16);
-    private static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
-    private static final Color backColor = new Color(200,221,242);
 
 //**********************************************************************************************************************
 
@@ -147,7 +144,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         scrambleText = new JTextField("");
         useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText.setHorizontalAlignment(SwingConstants.CENTER);
-        scrambleText.setFont(lgAlgFont);
+        scrambleText.setFont(lgAlgFont); // needs to be fixed
         scrambleText.setEditable(false);
         scrambleText.setBackground(backColor);
         scrambleText.setBorder(blackLine);
@@ -175,8 +172,9 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         remoteAverageDetailButton = new JButton("View Rolling");
         remoteSessionDetailButton = new JButton("View Session");
 
-        //puzzleLabel = new JLabel("Puzzle:");
-        //puzzleCombo = new JComboBox(puzzleChoices);
+        puzzleLabel = new JLabel("Puzzle:");
+        puzzleCombo = new JComboBox(puzzleChoices);
+        puzzleCombo.setSelectedItem("3x3x3");
         countdownLabel = new JLabel("Countdown:");
         countdownCombo = new JComboBox(countdownChoices);
         countdownCombo.setSelectedItem("15");
@@ -215,6 +213,8 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         localSessionDetailButton.setBounds(235-20,430,120,20);
         remoteAverageDetailButton.setBounds(590-20,405,120,20);
         remoteSessionDetailButton.setBounds(590-20,430,120,20);
+        puzzleLabel.setBounds(520+20,10,190-20-90,20);
+        puzzleCombo.setBounds(520+20,35,190-20-90,20);
         countdownLabel.setBounds(520+20+90,10,190-20-90,20);
         countdownCombo.setBounds(520+20+90,35,190-20-90,20);
         startButton.setBounds(520+20,60,190-20,20);
@@ -249,6 +249,8 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         contentPane.add(localSessionDetailButton);
         contentPane.add(remoteAverageDetailButton);
         contentPane.add(remoteSessionDetailButton);
+        contentPane.add(puzzleLabel);
+        contentPane.add(puzzleCombo);
         contentPane.add(countdownLabel);
         contentPane.add(countdownCombo);
         contentPane.add(startButton);
@@ -278,6 +280,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         localSessionDetailButton.setEnabled(false);
         remoteAverageDetailButton.setEnabled(false);
         remoteSessionDetailButton.setEnabled(false);
+        puzzleCombo.setEnabled(false); // only in server
         countdownCombo.setEnabled(false); // only in server
 
         //set everything to defaults
@@ -415,16 +418,16 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
                 updateStats();
             }
         } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getLocalSessionView());
+            DetailedView win = new DetailedView("Session Times", getLocalSessionView(), backColor);
             win.setVisible(true);
         } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView());
+            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView(), backColor);
             win.setVisible(true);
         } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getRemoteSessionView());
+            DetailedView win = new DetailedView("Session Times", getRemoteSessionView(), backColor);
             win.setVisible(true);
         } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView());
+            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView(), backColor);
             win.setVisible(true);
         }
     }
@@ -477,6 +480,8 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         }else if(prefix.equalsIgnoreCase("U")){
             remoteUsername = data;
             remoteTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, remoteUsername + "'s Statistics"));
+        } else if(prefix.equalsIgnoreCase("P")){
+            puzzleCombo.setSelectedItem(data);
         } else if(prefix.equalsIgnoreCase("T")){
             countdownCombo.setSelectedItem(data);
         } else if(prefix.equalsIgnoreCase("S")){
@@ -539,6 +544,8 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         userIsTyping.setVisible(false);
         chatText.setVisible(false);
         sendMessageButton.setVisible(false);
+        puzzleLabel.setVisible(false);
+        puzzleCombo.setVisible(false);
         countdownLabel.setVisible(false);
         countdownCombo.setVisible(false);
         startButton.setVisible(false);
@@ -571,6 +578,8 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         userIsTyping.setVisible(true);
         chatText.setVisible(true);
         sendMessageButton.setVisible(true);
+        puzzleLabel.setVisible(true);
+        puzzleCombo.setVisible(true);
         countdownLabel.setVisible(true);
         countdownCombo.setVisible(true);
         startButton.setVisible(true);
