@@ -23,7 +23,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.*;
 
-public class TimerArea extends JButton implements FocusListener, KeyListener{
+public class TimerArea extends JButton implements FocusListener, KeyListener, Constants{
     public enum TimerState {RESTING, STARTING, RUNNING, STOPPED, ACCEPT_WAIT, ACCEPT};
     private static final Color
             RED = new Color(255,0,0),
@@ -31,11 +31,13 @@ public class TimerArea extends JButton implements FocusListener, KeyListener{
             DK_GR = new Color(0,196,0),
             BLUE = new Color(0,0,255),
             GREY = new Color(80,80,80);
-    private Border myBorder;
+    //private Border myBorder;
+    private Standalone myStandalone;
     private TimerState myState;
     //private int i, j;
 
-    public TimerArea(){
+    public TimerArea(Standalone standalone){
+        myStandalone = standalone;
         myState = TimerState.RESTING;
         //i = 0; j = 0;
 
@@ -49,7 +51,7 @@ public class TimerArea extends JButton implements FocusListener, KeyListener{
     private void updateBorder(String title, Color textColor, Color borderColor){
         Font stdFont = new Font("SansSerif", Font.BOLD, 14);
         Border thickLine = BorderFactory.createLineBorder(borderColor, 3);
-        myBorder = BorderFactory.createTitledBorder(thickLine, title, TitledBorder.CENTER, TitledBorder.TOP, stdFont, textColor);
+        Border myBorder = BorderFactory.createTitledBorder(thickLine, title, TitledBorder.CENTER, TitledBorder.TOP, stdFont, textColor);
         setBorder(myBorder);
     }
 
@@ -92,11 +94,11 @@ public class TimerArea extends JButton implements FocusListener, KeyListener{
         if(e.getKeyCode() == KeyEvent.VK_SPACE)
             switch(myState){
                 case RESTING:       break;
-                case STARTING:      /*Standalone.timerStart();*/ myState = TimerState.RUNNING; focusGained(null); break;
+                case STARTING:      /*myStandalone.timerStart();*/ myState = TimerState.RUNNING; focusGained(null); break;
                 case RUNNING:       break;
                 case STOPPED:       myState = TimerState.ACCEPT_WAIT; focusGained(null); break;
                 case ACCEPT_WAIT:   break;
-                case ACCEPT:        /*Standalone.timerAccept();*/ myState = TimerState.RESTING; focusGained(null); break;
+                case ACCEPT:        /*myStandalone.timerAccept();*/ myState = TimerState.RESTING; focusGained(null); break;
             }
         //int code = e.getKeyCode();
         //updateBorder("Key Released! (" + code + "," + i + ")", new Color(0,0,255), new Color(255,0,0));
@@ -108,7 +110,7 @@ public class TimerArea extends JButton implements FocusListener, KeyListener{
             switch(myState){
                 case RESTING:       myState = TimerState.STARTING; focusGained(null); break;
                 case STARTING:      break;
-                case RUNNING:       /*Standalone.timerStop();*/ myState = TimerState.STOPPED; focusGained(null); break;
+                case RUNNING:       /*myStandalone.timerStop();*/ myState = TimerState.STOPPED; focusGained(null); break;
                 case STOPPED:       break;
                 case ACCEPT_WAIT:   myState = TimerState.ACCEPT; focusGained(null); break;
                 case ACCEPT:        break;

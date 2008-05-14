@@ -35,6 +35,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     private InstructionScreen instructionScreen;
     private AboutScreen aboutScreen;
 
+    private ScrambleAlg scrambleAlg;
+    private ScramblePane scramblePane;
+    private TimerArea timerArea;
+
     JButton startButton, discardButton, popButton, plusTwoButton, averageModeButton;
     JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
     JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
@@ -49,14 +53,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     String[] timeString;
     SmartButton[] smartButton;
 
-    private boolean averageOfFiveMode;
+    private boolean averageOfFiveMode; // experimental
 
     volatile Thread timerThread;
     AudioClip countdownClip = null;
 
     DecimalFormat ssxx, ss;
 
-    private double[] timeQueue = new double[100];
+    private double[] timeQueue = new double[100]; // gowd this is bad
 
     boolean runningCountdown;
     int placeInAverage = 0;
@@ -69,10 +73,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     String[] sessionTimes = new String[100], sessionScrambles = new String[100];
 
     JFileChooser fc = new JFileChooser();
-
-    ScrambleAlg scrambleAlg;
-    ScramblePane scramblePane;
-    TimerArea timerArea;
 
     String[] importedAlgs;
     boolean hasImported;
@@ -219,7 +219,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
 
-        timerArea = new TimerArea();
+        timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
         scramblePane = new ScramblePane();
         scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
@@ -364,7 +364,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         hasImported = false;
         updateScrambleAlgs();
         timeLabels[0].setForeground(optionsMenu.currentColorX);
-        startButton.requestFocus();
+        returnFocus();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     } // end constructor
@@ -400,7 +400,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timerLabel.setText("");//timerLabel.setText("Ready2?");
             timerLabel.setVisible(false);
             updateScrambleAlgs();
-            startButton.requestFocus();
+            returnFocus();
         } else if(source == popButton){
             acceptsSincePop = 0;
             numberOfPops++;
@@ -432,7 +432,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timerLabel.setText("");//timerLabel.setText("Ready3?");
             timerLabel.setVisible(false);
             updateScrambleAlgs();
-            startButton.requestFocus();
+            returnFocus();
         } else if(source == plusTwoButton){
             stopTime = stopTime + 2000;//1200000; // TEMP: was 2000
             cubesSolved++;
@@ -454,7 +454,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             if(optionsMenu.showResetConfirmX){
                 int choice = JOptionPane.showConfirmDialog(this,"Are you sure you want to reset this session and lose all times?","Warning!",0);
                 if(choice == 1){
-                    startButton.requestFocus();
+                    returnFocus();
                     return;
                 }
             }
@@ -491,12 +491,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timerLabel.setVisible(false);
             hasImported = false;
             updateScrambleAlgs();
-            startButton.requestFocus();
+            returnFocus();
         } else if(source == puzzleCombo){
             updateScrambleAlgs();
-            startButton.requestFocus();
+            returnFocus();
         } else if(source == countdownCombo){
-            startButton.requestFocus();
+            returnFocus();
         } else if(source == sessionDetailedViewButton){
             DetailedView win = new DetailedView("Session Times", getSessionView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
@@ -598,7 +598,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == serverItem){
             int choice = JOptionPane.showConfirmDialog(this,"Switching to Server Mode destroys main window session. Are you sure?","Warning!",0);
             if(choice == 1){
-                startButton.requestFocus();
+                returnFocus();
                 return;
             }
             Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsMenu.textBackgrColorX);
@@ -607,7 +607,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == clientItem){
             int choice = JOptionPane.showConfirmDialog(this,"Switching to Client Mode destroys main window session. Are you sure?","Warning!",0);
             if(choice == 1){
-                startButton.requestFocus();
+                returnFocus();
                 return;
             }
             Client client = new Client(optionsMenu.textBackgrColorX);
@@ -625,7 +625,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 if(countingDown == 0){
                     runningCountdown = false;
                     startButton.setEnabled(true);
-                    startButton.requestFocus();
+                    returnFocus();
                     timerLabel.setForeground(optionsMenu.timerColorX);
                     startTime = System.currentTimeMillis();
                 } else if(countingDown == 3){
@@ -893,7 +893,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         timerLabel.setText("");//timerLabel.setText("Ready5?");
         timerLabel.setVisible(false);
         updateScrambleAlgs();
-        startButton.requestFocus();
+        returnFocus();
     } // end acceptTime
 
 //**********************************************************************************************************************
@@ -1088,7 +1088,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timerLabel.setText("");//timerLabel.setText("Ready1?");
             timerLabel.setVisible(false);
             countdownClip.stop();
-            startButton.requestFocus();
+            returnFocus();
         } else {
             stopTime = System.currentTimeMillis();
             timerThread = null;
@@ -1119,6 +1119,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
             System.out.println(j);
         }
+    }
+
+//**********************************************************************************************************************
+
+    private void returnFocus(){ // debug: just to have it change one place while we try new stuff
+        startButton.requestFocus();
+        //timerArea.requestFocus();
     }
 
 //**********************************************************************************************************************
