@@ -51,6 +51,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
     NumberFormat nf;
     String remoteTime;
     boolean isTyping, remoteIsTyping;
+    Thread connectionListener;
 
     ImageIcon typeOn, typeOff;
 
@@ -319,12 +320,28 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         Object source = e.getSource();
 
         if(source == connectButton){
-            connectButton.setText("LISTENING"); // Bug: not getting flushed to the screen! Blocked
+            connectButton.setText("LISTENING");
             connectButton.setEnabled(false);
             try{
                 serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
-                //serverSocket.setSoTimeout(10000);
-                clientSocket = serverSocket.accept(); // problematic, blocking, needs new thread
+                connectionListener = new ConnectionListener(serverSocket, this);
+                connectionListener.setDaemon(true);
+                connectionListener.start();
+            } catch(Exception f){
+                JOptionPane.showMessageDialog(this, "Server information is not correctly formatted.");
+                hideGUI();
+                connectButton.setText("Start Server");
+                connectButton.setEnabled(true);
+                // client only: serverIpText.setEnabled(true);
+                usernameText.setEnabled(true);
+                serverPortText.setEnabled(true);
+                handicapText.setEnabled(true);
+                sendMessageButton.setEnabled(false);
+                chatText.setEnabled(false);
+                return;
+            }
+        } else if(e.getActionCommand().equals("Connected")){
+            try{
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
@@ -346,16 +363,8 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
                 sendMessageButton.setEnabled(true);
                 chatText.setEnabled(true);
             } catch(Exception f){
-                JOptionPane.showMessageDialog(this, "Server information is not correctly formatted.");
-                hideGUI();
-                connectButton.setText("Start Server");
-                connectButton.setEnabled(true);
-                // client only: serverIpText.setEnabled(true);
-                usernameText.setEnabled(true);
-                serverPortText.setEnabled(true);
-                handicapText.setEnabled(true);
-                sendMessageButton.setEnabled(false);
-                chatText.setEnabled(false);
+                JOptionPane.showMessageDialog(this, "Cannot get chat stream.");
+                System.out.println(f.getMessage());
                 return;
             }
         } else if(source == sendMessageButton || source == chatText){
@@ -1074,5 +1083,33 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
             }
         }
     } // end keyReleased
+
+//**********************************************************************************************************************
+
+    public void connectionMade(Socket clientSocket){
+        this.clientSocket = clientSocket;
+        ActionEvent evt = new ActionEvent("Connected", 0, "Connected");
+        this.actionPerformed(evt);
+    }
+//**********************************************************************************************************************
+    private class ConnectionListener extends Thread{
+        private ServerSocket socket;
+        private Server server;
+        private Socket clientSocket;
+
+        public ConnectionListener(ServerSocket socket, Server server){
+            this.socket = socket;
+            this.server = server;
+        }
+
+        public void run(){
+            try{
+                clientSocket = socket.accept();
+                server.connectionMade(clientSocket);
+            } catch(Exception e){
+                System.err.println(e.getMessage());
+            }
+        }
+    }
 
 }
