@@ -35,12 +35,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     private static InstructionScreen instructionScreen;
     private static AboutScreen aboutScreen;
 
-    //private static String puzzle, countdownX;
-    //private static boolean showResetConfirm, showMinutes;
-    //private static Color countdownColor, timerColor, textBackgrColor, currentColor, fastestColor, slowestColor;
-    //private static Color[] xColor = new Color[6];//fColor, bColor, lColor, rColor, dColor, uColor;
-    //private static String averageViewFormat, sessionViewFormat;
-
     static JButton startButton, discardButton, popButton, plusTwoButton, averageModeButton;
     static JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
     static JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
@@ -1152,27 +1146,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
         if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+""))
             countdownCombo.setSelectedItem(optionsMenu.countdownX);
-        //showResetConfirm = optionsMenu.showResetConfirmX;
-        //showMinutes = optionsMenu.showMinutesX;
-        //countdownColor = optionsMenu.countdownColorX;
-        //timerColor = optionsMenu.timerColorX;
-        //textBackgrColor = optionsMenu.textBackgrColorX;
-        //currentColor = optionsMenu.currentColorX;
-        //fastestColor = optionsMenu.fastestColorX;
-        //slowestColor = optionsMenu.slowestColorX;
-        //fColor = optionsMenu.faceColorsX[0];
-        //bColor = optionsMenu.faceColorsX[1];
-        //lColor = optionsMenu.faceColorsX[2];
-        //rColor = optionsMenu.faceColorsX[3];
-        //dColor = optionsMenu.faceColorsX[4];
-        //uColor = optionsMenu.faceColorsX[5];
-        //for(int side=0; side<6; side++)
-        //    xColor[side] = optionsMenu.faceColorsX[side];
-        //averageViewFormat = optionsMenu.averageViewFormatX;
-        //sessionViewFormat = optionsMenu.sessionViewFormatX;
 
         timeLabels[placeInAverage].setForeground(optionsMenu.currentColorX);
-        scramblePane.setColors(optionsMenu.faceColorsX);//xColor);
+        scramblePane.setColors(optionsMenu.faceColorsX);
         updateScramblePane();
         scrambleText.setBackground(optionsMenu.textBackgrColorX);
         bestAverageText.setBackground(optionsMenu.textBackgrColorX);
