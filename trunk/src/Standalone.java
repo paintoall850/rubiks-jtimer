@@ -61,10 +61,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     //private static final Color backColor = new Color(200,221,242);
     private static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 18);
     private static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
-    private static final Border blackLine = BorderFactory.createLineBorder(Color.black);
-    private static final Border theBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createLoweredBevelBorder(),
-                BorderFactory.createRaisedBevelBorder());
 
     static boolean runningCountdown;
     static int placeInAverage = 0;

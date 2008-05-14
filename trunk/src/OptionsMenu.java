@@ -42,10 +42,6 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         public String averageViewFormatX, sessionViewFormatX;
     }
 */
-    private static final Border blackLine = BorderFactory.createLineBorder(Color.black);
-    private static final Border theBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createLoweredBevelBorder(),
-                BorderFactory.createRaisedBevelBorder());
 
     JTabbedPane tabs;
     JPanel generalTab, colorTab, bestTab, sessionTab;
