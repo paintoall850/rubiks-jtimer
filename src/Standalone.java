@@ -601,7 +601,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 startButton.requestFocus();
                 return;
             }
-            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"");
+            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsMenu.textBackgrColorX);
             server.setVisible(true);
             disposeAll(); //this.dispose();
         } else if(source == clientItem){
@@ -610,7 +610,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 startButton.requestFocus();
                 return;
             }
-            Client client = new Client();
+            Client client = new Client(optionsMenu.textBackgrColorX);
             client.setVisible(true);
             disposeAll(); //this.dispose();
         }

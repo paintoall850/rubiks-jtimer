@@ -29,7 +29,7 @@ import javax.swing.border.Border;
 public interface Constants{
     static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 18);
     static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
-    static final Color backColor = new Color(200,221,242); // eventually want to kill off
+    //static final Color backColor = new Color(200,221,242); // eventually want to kill off
 
     static final Border blackLine = BorderFactory.createLineBorder(Color.black);
     static final Border theBorder = BorderFactory.createCompoundBorder(
