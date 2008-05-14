@@ -23,9 +23,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class ScrambleGenerator extends JFrame implements ActionListener{
+public class ScrambleGenerator extends JFrame implements ActionListener, Constants{
     JButton generateButton;
-    JComboBox cubeCombo;
+    JComboBox puzzleCombo;
     JLabel puzzleLabel, numLabel;
     JTextField numText;
     JRadioButton formatPrint, formatImport;
@@ -51,10 +51,9 @@ public class ScrambleGenerator extends JFrame implements ActionListener{
         setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
         puzzleLabel = new JLabel("Puzzle:");
+        puzzleCombo = new JComboBox(puzzleChoices);
+        puzzleCombo.setSelectedItem("3x3x3");
         numLabel = new JLabel("# of Scrambles:");
-        String[] cubeChoices = {"2x2x2","3x3x3","4x4x4","5x5x5"/*,"Pyraminx"*/,"Megaminx"};
-        cubeCombo = new JComboBox(cubeChoices);
-        cubeCombo.setSelectedItem("3x3x3");
         numText = new JTextField("13");
         generateButton = new JButton("Generate Scrambles");
         generateButton.addActionListener(this);
@@ -63,7 +62,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener{
         radioGroup = new ButtonGroup();
 
         puzzleLabel.setBounds(10,5,70,20);
-        cubeCombo.setBounds(10,25,70,20);
+        puzzleCombo.setBounds(10,25,70,20);
         numLabel.setBounds(90,5,120,20);
         numText.setBounds(90,25,120,20);
         formatPrint.setBounds(10,50,200,20);
@@ -72,7 +71,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener{
 
         contentPane.add(puzzleLabel);
         contentPane.add(numLabel);
-        contentPane.add(cubeCombo);
+        contentPane.add(puzzleCombo);
         contentPane.add(numText);
         contentPane.add(generateButton);
         contentPane.add(formatPrint);
@@ -104,12 +103,12 @@ public class ScrambleGenerator extends JFrame implements ActionListener{
             String printToFile = "";
 
             if(formatPrint.isSelected()){
-                printToFile = "----- Rubik's JTimer Generated Scrambles -----\r\n\r\nCube Type: " + cubeCombo.getSelectedItem() + "\r\nNumber of Scrambles: " + numberOfScrambles + "\r\n\r\nScrambles:\r\n";
+                printToFile = "----- Rubik's JTimer Generated Scrambles -----\r\n\r\nCube Type: " + puzzleCombo.getSelectedItem() + "\r\nNumber of Scrambles: " + numberOfScrambles + "\r\n\r\nScrambles:\r\n";
                 for(int i=0; i<numberOfScrambles; i++)
-                    printToFile = printToFile + (i+1) + ")          " + algGenerator.generateAlg(cubeCombo.getSelectedItem()+"") + "\r\n";
+                    printToFile = printToFile + (i+1) + ")          " + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\r\n";
             } else {
                 for(int i=0; i<numberOfScrambles; i++)
-                    printToFile = printToFile + algGenerator.generateAlg(cubeCombo.getSelectedItem()+"") + "\r\n";
+                    printToFile = printToFile + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\r\n";
             }
 
             JFileChooser fc = new JFileChooser();

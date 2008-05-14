@@ -25,7 +25,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.border.Border;
 
-public class OptionsMenu extends JFrame implements ActionListener, MouseListener{
+public class OptionsMenu extends JFrame implements ActionListener, MouseListener, Constants{
     private static final String FACE_NAMES[] = {"Front","Back","Left","Right","Down","Up"};
 
     public String puzzleX, countdownX;
@@ -55,7 +55,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     JLabel[] faceCLabels = new JLabel[6];
     JLabel faceColorLabel, previewLabel;
 
-    JComboBox cubeCombo, countdownCombo;
+    JComboBox puzzleCombo, countdownCombo;
     JCheckBox confirmBox, showMinutesBox;
     JTextArea countdownColorText, timerColorText, textBackgrColorText, fastestColorText, slowestColorText, currentColorText;
     JTextArea[] faceColorTexts = new JTextArea[6];
@@ -135,10 +135,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         resetButton = new JButton("Reset All Options");
         cancelButton = new JButton("Cancel");
         puzzleLabel = new JLabel("Puzzle:");
-        String[] cubeChoices = {"2x2x2","3x3x3","4x4x4","5x5x5"/*,"Pyraminx"*/, "Megaminx"};
-        cubeCombo = new JComboBox(cubeChoices);
+        puzzleCombo = new JComboBox(puzzleChoices);
         countdownLabel = new JLabel("Countdown:");
-        String[] countdownChoices = {"0","3","5","10","15"};
         countdownCombo = new JComboBox(countdownChoices);
 
         averageSyntaxLabel = new JLabel("<HTML>%A - Average<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times And Scrambles<br>%O - Times Only<br>%T - Date And Time<br>%S - Slowest Time</HTML>");
@@ -162,7 +160,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         generalTab.add(colorLabel);
         generalTab.add(puzzleLabel);
         generalTab.add(countdownLabel);
-        generalTab.add(cubeCombo);
+        generalTab.add(puzzleCombo);
         generalTab.add(countdownCombo);
         generalTab.add(confirmBox);
         generalTab.add(showMinutesBox);
@@ -209,7 +207,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         cancelButton.setBounds(2*186+30,255,186,30);
 
         puzzleLabel.setBounds(30,25,80,20);
-        cubeCombo.setBounds(30,45,80,20);
+        puzzleCombo.setBounds(30,45,80,20);
         countdownLabel.setBounds(120,25,80,20);
         countdownCombo.setBounds(120,45,80,20);
         confirmBox.setBounds(30,75,230,20);
@@ -309,7 +307,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 //**********************************************************************************************************************
 
     private void saveOptions(){
-        puzzleX = cubeCombo.getSelectedItem()+"";
+        puzzleX = puzzleCombo.getSelectedItem()+"";
         countdownX = countdownCombo.getSelectedItem()+"";
         showResetConfirmX = confirmBox.isSelected();
         showMinutesX = showMinutesBox.isSelected();
@@ -414,7 +412,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 //**********************************************************************************************************************
 
     private void OptionsToGUI(){
-        cubeCombo.setSelectedItem(puzzleX);
+        puzzleCombo.setSelectedItem(puzzleX);
         countdownCombo.setSelectedItem(countdownX);
         confirmBox.setSelected(showResetConfirmX);
         showMinutesBox.setSelected(showMinutesX);

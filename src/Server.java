@@ -29,7 +29,7 @@ import java.text.*;
 import java.util.*;
 import javax.swing.border.Border;
 
-public class Server extends JFrame implements ActionListener, KeyListener, Runnable{
+public class Server extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
     JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel, useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel,
             countdownLabel, remoteStatusLabel, bigPicture, smallPicture, userIsTyping;
     JTextField usernameText, serverIpText, serverPortText, handicapText, chatText;
@@ -320,9 +320,13 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         Object source = e.getSource();
 
         if(source == connectButton){
-            connectButton.setText("LISTENING");
-            connectButton.setEnabled(false);
             try{
+                connectButton.setText("LISTENING");
+                connectButton.setEnabled(false);
+                usernameText.setEnabled(false);
+                serverPortText.setEnabled(false);
+                handicapText.setEnabled(false);
+
                 serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
                 connectionListener = new ConnectionListener(serverSocket, this);
                 connectionListener.setDaemon(true);

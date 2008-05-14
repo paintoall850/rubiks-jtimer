@@ -28,7 +28,7 @@ import java.io.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.border.*;
 
-public class Standalone extends JFrame implements ActionListener, Runnable{
+public class Standalone extends JFrame implements ActionListener, Runnable, Constants{
 
     private static OptionsMenu optionsMenu;
     private static ScrambleGenerator scrambleGenerator;
@@ -48,7 +48,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
     JMenuBar jMenuBar;
     JMenu fileMenu, toolsMenu, networkMenu, helpMenu;
     JMenuItem saveBestItem, saveSessionItem, optionsItem, exitItem, importItem, generatorItem, instItem, aboutItem, serverItem, clientItem;
-    static JComboBox cubeCombo, countdownCombo;
+    static JComboBox puzzleCombo, countdownCombo;
     static JTextArea scrambleText, bestAverageText;
 
     static JLabel[] averageLabels, timeLabels;
@@ -195,11 +195,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
 
         // initialize GUI objects
         puzzleLabel = new JLabel("Puzzle:");
-        String[] cubeChoices = {"2x2x2","3x3x3","4x4x4","5x5x5"/*,"Pyraminx"*/, "Megaminx"};
-        cubeCombo = new JComboBox(cubeChoices);
-
+        puzzleCombo = new JComboBox(puzzleChoices);
         countdownLabel = new JLabel("Countdown:");
-        String[] countdownChoices = {"0","3","5","10","15"};
         countdownCombo = new JComboBox(countdownChoices);
 
         startButton = new JButton("Start Timer");
@@ -290,7 +287,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
 
         // setBounds
         puzzleLabel.setBounds(10,5,80,20);
-        cubeCombo.setBounds(10,25,80,20);
+        puzzleCombo.setBounds(10,25,80,20);
         countdownLabel.setBounds(100,5,80,20);
         countdownCombo.setBounds(100,25,80,20);
         startButton.setBounds(10,50,170,70);
@@ -340,7 +337,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
         aboutItem.addActionListener(this);
         serverItem.addActionListener(this);
         clientItem.addActionListener(this);
-        cubeCombo.addActionListener(this);
+        puzzleCombo.addActionListener(this);
         countdownCombo.addActionListener(this);
         startButton.addActionListener(this); //HERE
         discardButton.addActionListener(this);
@@ -354,7 +351,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
 
         // add to contentPane
         contentPane.add(puzzleLabel);
-        contentPane.add(cubeCombo);
+        contentPane.add(puzzleCombo);
         contentPane.add(countdownLabel);
         contentPane.add(countdownCombo);
         contentPane.add(startButton);
@@ -417,7 +414,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
             discardButton.setEnabled(false);
             popButton.setEnabled(false);
             plusTwoButton.setEnabled(false);
-            cubeCombo.setEnabled(true);
+            puzzleCombo.setEnabled(true);
             countdownCombo.setEnabled(true);
             startButton.setText("Start Timer");
             timerLabel.setText("");//timerLabel.setText("Ready2?");
@@ -449,7 +446,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
             discardButton.setEnabled(false);
             popButton.setEnabled(false);
             plusTwoButton.setEnabled(false);
-            cubeCombo.setEnabled(true);
+            puzzleCombo.setEnabled(true);
             countdownCombo.setEnabled(true);
             startButton.setText("Start Timer");
             timerLabel.setText("");//timerLabel.setText("Ready3?");
@@ -507,7 +504,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
             discardButton.setEnabled(false);
             popButton.setEnabled(false);
             plusTwoButton.setEnabled(false);
-            cubeCombo.setEnabled(true);
+            puzzleCombo.setEnabled(true);
             countdownCombo.setEnabled(true);
             startButton.setText("Start Timer");
             timerLabel.setText("");//timerLabel.setText("Ready4?");
@@ -515,7 +512,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
             hasImported = false;
             updateScrambleAlgs();
             startButton.requestFocus();
-        } else if(source == cubeCombo){
+        } else if(source == puzzleCombo){
             updateScrambleAlgs();
             startButton.requestFocus();
         } else if(source == countdownCombo){
@@ -911,7 +908,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
         discardButton.setEnabled(false);
         popButton.setEnabled(false);
         plusTwoButton.setEnabled(false);
-        cubeCombo.setEnabled(true);
+        puzzleCombo.setEnabled(true);
         countdownCombo.setEnabled(true);
         startButton.setText("Start Timer");
         timerLabel.setText("");//timerLabel.setText("Ready5?");
@@ -1057,7 +1054,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
 //**********************************************************************************************************************
 
     private void updateScrambleAlgs(){
-        scrambleText.setFont(cubeCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
+        scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
         if(hasImported && (importedIndex < importedAlgs.length)){
             scrambleText.setText(importedAlgs[importedIndex]);
             importedIndex++;
@@ -1067,7 +1064,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
                 JOptionPane.showMessageDialog(this, "All imported scrambles have been used. Random scrambles will now be displayed.");
                 hasImported = false;
             }
-            scrambleText.setText(algGenerator.generateAlg(cubeCombo.getSelectedItem()+""));
+            scrambleText.setText(algGenerator.generateAlg(puzzleCombo.getSelectedItem()+""));
         }
         updateScramblePane();
     } // end updateScrambleAlgs
@@ -1075,7 +1072,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
 //**********************************************************************************************************************
 
     private static void updateScramblePane(){
-        scramblePane.newScramble(cubeCombo.getSelectedItem()+"", scrambleText.getText());
+        scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", scrambleText.getText());
     }
 
 //**********************************************************************************************************************
@@ -1090,7 +1087,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
         sessionResetButton.setEnabled(false);
         sessionDetailedViewButton.setEnabled(false);
         averageDetailedViewButton.setEnabled(false);
-        cubeCombo.setEnabled(false);
+        puzzleCombo.setEnabled(false);
         countdownCombo.setEnabled(false);
         timerThread = new Thread(this);
         timerThread.start();
@@ -1109,7 +1106,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
             discardButton.setEnabled(false);
             popButton.setEnabled(false);
             plusTwoButton.setEnabled(false);
-            cubeCombo.setEnabled(true);
+            puzzleCombo.setEnabled(true);
             countdownCombo.setEnabled(true);
             startButton.setText("Start Timer");
             timerLabel.setText("");//timerLabel.setText("Ready1?");
@@ -1151,8 +1148,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable{
 //**********************************************************************************************************************
 
     public static void OptionsToGUI(){
-        if(!optionsMenu.puzzleX.equals(cubeCombo.getSelectedItem()+""))
-            cubeCombo.setSelectedItem(optionsMenu.puzzleX);
+        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+""))
+            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
         if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+""))
             countdownCombo.setSelectedItem(optionsMenu.countdownX);
         //showResetConfirm = optionsMenu.showResetConfirmX;
