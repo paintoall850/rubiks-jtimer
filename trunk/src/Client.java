@@ -39,7 +39,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
     StyledDocument chatDoc;
     Style redStyle, blueStyle, blackStyle;
     AudioClip chatSound, countdownClip, bing1, bing2, startupClip;
-    JTextField scrambleText;
+    JTextArea scrambleText;
     String remoteUsername;
     JComboBox puzzleCombo, countdownCombo;
     JCheckBox localStatusLabel;
@@ -141,13 +141,17 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         sendMessageButton = new JButton("Send");
 
         useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
-        scrambleText = new JTextField("");
         useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        scrambleText.setHorizontalAlignment(SwingConstants.CENTER);
-        scrambleText.setFont(lgAlgFont); // needs to be fixed
+        scrambleText = new JTextArea("");
+        //scrambleText.setHorizontalAlignment(SwingConstants.CENTER);
+        scrambleText.setFocusable(true);
         scrambleText.setEditable(false);
+        scrambleText.setLineWrap(true);
+        scrambleText.setWrapStyleWord(true);
         scrambleText.setBackground(backColor);
+        scrambleText.setForeground(Color.black);
         scrambleText.setBorder(blackLine);
+        scrambleText.setFont(lgAlgFont); // needs to be fixed
 
         timerLabel = new JLabel("");
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -198,31 +202,31 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         serverPortText.setBounds(100,60,100,20);
         handicapText.setBounds(100,85,100,20);
         connectButton.setBounds(10,110,190,20);
-        chatScrollPane.setBounds(210,10,300+20,95);
+        chatScrollPane.setBounds(210,10,320,95);
         userIsTyping.setBounds(210,110,20,20);
-        chatText.setBounds(235,110,165+20+20,20);
-        sendMessageButton.setBounds(410+20+20,110,100-20,20);
-        useThisAlgLabel.setBounds(10,150,700,20);
-        scrambleText.setBounds(10,170,700,40);
+        chatText.setBounds(235,110,205,20);
+        sendMessageButton.setBounds(450,110,80,20);
+        useThisAlgLabel.setBounds(10,150-10,700,20);
+        scrambleText.setBounds(10,170-10,700,40+10);
         timerLabel.setBounds(10,220,700,75);
         localTimeUsernameLabel.setBounds(10,305,345,200);
         remoteTimeUsernameLabel.setBounds(365,305,345,200);
         localTimeLabel.setBounds(20,325,325,75);
         remoteTimeLabel.setBounds(375,325,325,75);
-        localAverageDetailButton.setBounds(235-20,405,120,20);
-        localSessionDetailButton.setBounds(235-20,430,120,20);
-        remoteAverageDetailButton.setBounds(590-20,405,120,20);
-        remoteSessionDetailButton.setBounds(590-20,430,120,20);
-        puzzleLabel.setBounds(520+20,10,190-20-90,20);
-        puzzleCombo.setBounds(520+20,35,190-20-90,20);
-        countdownLabel.setBounds(520+20+90,10,190-20-90,20);
-        countdownCombo.setBounds(520+20+90,35,190-20-90,20);
-        startButton.setBounds(520+20,60,190-20,20);
-        popButton.setBounds(520+20,85,190-20,20);
+        localAverageDetailButton.setBounds(215,405,120,20);
+        localSessionDetailButton.setBounds(215,430,120,20);
+        remoteAverageDetailButton.setBounds(570,405,120,20);
+        remoteSessionDetailButton.setBounds(570,430,120,20);
+        puzzleLabel.setBounds(540,15,80,20);
+        puzzleCombo.setBounds(540,35,80,20);
+        countdownLabel.setBounds(540+90,15,80,20);
+        countdownCombo.setBounds(540+90,35,80,20);
+        startButton.setBounds(540,60,170,20);
+        popButton.setBounds(540,85,170,20);
         smallPicture.setBounds(210,10,500,120);
         bigPicture.setBounds(10,150,700,355);
 
-        localStatusLabel.setBounds(520+20,110,190-20,20);
+        localStatusLabel.setBounds(540,110,170,20);
 
         //add to content pane
         contentPane.add(usernameLabel);

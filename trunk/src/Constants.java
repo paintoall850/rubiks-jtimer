@@ -27,9 +27,9 @@ import javax.swing.border.Border;
 
 //area for all Program Constants
 public interface Constants{
-    private final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 16);
-    private final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
-    private final Color backColor = new Color(200,221,242); // eventually want to kill off
+    static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 16);
+    static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
+    static final Color backColor = new Color(200,221,242); // eventually want to kill off
 
     static final Border blackLine = BorderFactory.createLineBorder(Color.black);
     static final Border theBorder = BorderFactory.createCompoundBorder(
