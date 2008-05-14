@@ -30,11 +30,11 @@ public class ScramblePane extends JPanel{
 
 //**********************************************************************************************************************
 
-    public ScramblePane(/*Color f, Color b, Color l, Color r, Color d, Color u*/){
+    public ScramblePane(){
         xFaceN = new JTextArea[MAX_ORDER+1][][][];
         xPrevN = new JTextArea[MAX_ORDER+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
         for(int side=0; side<6; side++) xColor[side] = Color.black; // just incase...
-        //setColors(f,b,l,r,d,u);
+
         for(int order=MIN_ORDER; order<=MAX_ORDER; order++){
             prepareNxN(order);
             setCubeBounds(order);
@@ -190,13 +190,7 @@ public class ScramblePane extends JPanel{
 
 //**********************************************************************************************************************
 
-    public void setColors(/*Color f, Color b, Color l, Color r, Color d, Color u*/Color[] x){
-        //xColor[0] = f;
-        //xColor[1] = b;
-        //xColor[2] = l;
-        //xColor[3] = r;
-        //xColor[4] = d;
-        //xColor[5] = u;
+    public void setColors(Color[] x){
         for(int side=0; side<6; side++)
             xColor[side] = x[side];
     }
