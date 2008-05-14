@@ -227,7 +227,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         timerArea = new TimerArea();
 
-        scramblePane = new ScramblePane(/*fColor, bColor, lColor, rColor, dColor, uColor*/);
+        scramblePane = new ScramblePane();
         scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setLayout(null);
 
@@ -242,7 +242,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         bestAverageText = new JTextArea("Average: N/A\nIndividual Times: N/A");
         bestAverageText.setFont(new Font("Serif", Font.PLAIN, 14));
         bestAverageText.setBorder(blackLine);
-        //bestAverageText.setBackground(backColor);
         bestAverageText.setEditable(false);
 
         insertTimeButton = new JButton ("Insert Own Time");
@@ -261,12 +260,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         enterPressesWhenFocused(sessionDetailedViewButton);
         enterPressesWhenFocused(averageDetailedViewButton);
         enterPressesWhenFocused(insertTimeButton);
-/*
-        startButton.registerKeyboardAction(
-                startButton.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
-                KeyStroke.getKeyStroke(' ', false),
-                JComponent.WHEN_FOCUSED);
-*/
+
         timeString = new String[12];
         timeLabels = new JLabel[12];
         for(int i=0; i<12; i++){
@@ -299,9 +293,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         insertTimeButton.setBounds(311-70,311+20,160,20);
         sessionResetButton.setBounds(311-70,336+20,160,20);
 
-        int x = 20;
-        int width = 64;
-        int seperation = 5;
+        // total width is 834 if there is a 10 margine on each side
+        // so use formula: margin = (834-12*width-11*separation)/2 + 10
+        // initial x value is left margine
+        int x = 14;
+        int width = 67;
+        int seperation = 2;
         for(int i=0; i<12; i++){
             smartButton[i].setBounds(x, 225, width, 56);
             //averageLabels[i].setBounds(x, 225, width, 20);
@@ -310,8 +307,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timeLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
             x = x + width + seperation;
         }
-
-        //smartButton.setBounds(779,225,64,56);
 
         // addKeyListener, by Doug
         //startButton.addKeyListener(this);
