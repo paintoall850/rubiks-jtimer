@@ -72,10 +72,6 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
     private static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 16);
     private static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
     private static final Color backColor = new Color(200,221,242);
-    private static final Border blackLine = BorderFactory.createLineBorder(Color.black);
-    private static final Border theBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createLoweredBevelBorder(),
-                BorderFactory.createRaisedBevelBorder());
 
 //**********************************************************************************************************************
 

@@ -25,7 +25,7 @@ import java.util.*;
 import java.io.*;
 import javax.swing.border.Border;
 
-public class DetailedView extends JFrame implements ActionListener{
+public class DetailedView extends JFrame implements ActionListener, Constants{
     String printToWindow;
     JButton saveButton;
 
@@ -35,7 +35,6 @@ public class DetailedView extends JFrame implements ActionListener{
         this.printToWindow = printToWindow;
 
         // configure Contentpane
-        Border blackLine = BorderFactory.createLineBorder(Color.black);
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
