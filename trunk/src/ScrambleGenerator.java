@@ -61,10 +61,10 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
         formatImport = new JRadioButton("Format Output for Importing");
         radioGroup = new ButtonGroup();
 
-        puzzleLabel.setBounds(10,5,70,20);
-        puzzleCombo.setBounds(10,25,70,20);
-        numLabel.setBounds(90,5,120,20);
-        numText.setBounds(90,25,120,20);
+        puzzleLabel.setBounds(10,5,80,20);
+        puzzleCombo.setBounds(10,25,80,20);
+        numLabel.setBounds(100,5,110,20);
+        numText.setBounds(100,25,110,20);
         formatPrint.setBounds(10,50,200,20);
         formatImport.setBounds(10,70,200,20);
         generateButton.setBounds(10,95,200,20);
