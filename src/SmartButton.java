@@ -24,6 +24,8 @@ import java.awt.event.*;
 import javax.swing.border.*;
 
 public class SmartButton extends JButton implements FocusListener, MouseListener, ActionListener{
+    private String myTitle;
+    private Border myBorder;
 
     public SmartButton(String title){
         addFocusListener(this);
@@ -62,8 +64,4 @@ public class SmartButton extends JButton implements FocusListener, MouseListener
     }
 
     public void actionPerformed(ActionEvent e){}
-
-
-    private String myTitle;
-    private Border myBorder;
 }
