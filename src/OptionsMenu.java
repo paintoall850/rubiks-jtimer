@@ -28,20 +28,13 @@ import javax.swing.border.Border;
 public class OptionsMenu extends JFrame implements ActionListener, MouseListener, Constants{
     private static final String FACE_NAMES[] = {"Front","Back","Left","Right","Down","Up"};
 
+    // Complete List of Save-able options
     public String puzzleX, countdownX;
     public boolean showResetConfirmX, showMinutesX;
     public Color countdownColorX, timerColorX, textBackgrColorX, currentColorX, fastestColorX, slowestColorX;
     public Color[] faceColorsX = new Color[6];
     public String averageViewFormatX, sessionViewFormatX;
-/*
-    class OptionsObj{
-        public String puzzleX, countdownX;
-        public boolean showResetConfirmX, showMinutesX;
-        public Color countdownColorX, timerColorX, textBackgrColorX, currentColorX, fastestColorX, slowestColorX;
-        public Color[] faceColorsX = new Color[6];
-        public String averageViewFormatX, sessionViewFormatX;
-    }
-*/
+
     private Standalone myStandalone;
     JTabbedPane tabs;
     JPanel generalTab, colorTab, bestTab, sessionTab;
