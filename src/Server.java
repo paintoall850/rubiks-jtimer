@@ -30,8 +30,9 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public class Server extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
-    JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel, useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel,
-            countdownLabel, remoteStatusLabel, bigPicture, smallPicture, userIsTyping;
+    JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel;
+    JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
+    JLabel puzzleLabel, countdownLabel, remoteStatusLabel, bigPicture, smallPicture, userIsTyping;
     JTextField usernameText, serverIpText, serverPortText, handicapText, chatText;
     JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
     JTextPane chatPane;
@@ -40,10 +41,10 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
     AudioClip chatSound, countdownClip, bing1, bing2, readyClip, startupClip;
     JTextField scrambleText;
     String remoteUsername;
-    JComboBox countdownCombo;
+    JComboBox puzzleCombo, countdownCombo;
     JTextArea readyColor;
     JScrollPane chatScrollPane;
-    ScrambleAlgorithm scrambleAlg;
+    ScrambleAlg scrambleAlg;
     java.util.Timer timerThread;
     int countdown;
     double startTime, stopTime;
@@ -68,10 +69,6 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 
     //listening thread
     Thread chatListener;
-
-    private static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 16);
-    private static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
-    private static final Color backColor = new Color(200,221,242);
 
 //**********************************************************************************************************************
 
@@ -162,7 +159,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         scrambleText = new JTextField("");
         useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText.setHorizontalAlignment(SwingConstants.CENTER);
-        scrambleText.setFont(lgAlgFont);
+        //scrambleText.setFont(lgAlgFont);
         scrambleText.setEditable(false);
         scrambleText.setBackground(backColor);
         scrambleText.setBorder(blackLine);
@@ -190,8 +187,10 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         remoteAverageDetailButton = new JButton("View Rolling");
         remoteSessionDetailButton = new JButton("View Session");
 
+        puzzleLabel = new JLabel("Puzzle:");
+        puzzleCombo = new JComboBox(puzzleChoices);
+        puzzleCombo.setSelectedItem("3x3x3");
         countdownLabel = new JLabel("Countdown:");
-        String[] countdownChoices = {"0","3","5","10","15"};
         countdownCombo = new JComboBox(countdownChoices);
         countdownCombo.setSelectedItem("15");
         startButton = new JButton("Start Timer");
@@ -208,7 +207,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         bigPicture.setBorder(blackLine);
         smallPicture.setBorder(blackLine);
 
-        scrambleAlg = new ScrambleAlgorithm();
+        scrambleAlg = new ScrambleAlg();
 
         //set bounds
         usernameLabel.setBounds(10,10,90,20);
@@ -235,6 +234,8 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         localSessionDetailButton.setBounds(235-20,430,120,20);
         remoteAverageDetailButton.setBounds(590-20,405,120,20);
         remoteSessionDetailButton.setBounds(590-20,430,120,20);
+        puzzleLabel.setBounds(520+20,10,190-20-90,20);
+        puzzleCombo.setBounds(520+20,35,190-20-90,20);
         countdownLabel.setBounds(520+20+90,10,190-20-90,20);
         countdownCombo.setBounds(520+20+90,35,190-20-90,20);
         startButton.setBounds(520+20,60,190-20,20);
@@ -270,6 +271,8 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         contentPane.add(localSessionDetailButton);
         contentPane.add(remoteAverageDetailButton);
         contentPane.add(remoteSessionDetailButton);
+        contentPane.add(puzzleLabel);
+        contentPane.add(puzzleCombo);
         contentPane.add(countdownLabel);
         contentPane.add(countdownCombo);
         contentPane.add(startButton);
@@ -289,6 +292,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         localAverageDetailButton.addActionListener(this);
         remoteSessionDetailButton.addActionListener(this);
         remoteAverageDetailButton.addActionListener(this);
+        puzzleCombo.addActionListener(this); // only in server
         countdownCombo.addActionListener(this); // only in server
 
         //GUI preperation
@@ -382,6 +386,10 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
                     out.flush();
                 }
             } catch(BadLocationException f){System.out.println(f);}
+        } else if(source == puzzleCombo){
+            out.println("P" + puzzleCombo.getSelectedItem());
+            out.flush();
+            generateNewScramble();
         } else if(source == countdownCombo){
             out.println("T" + countdownCombo.getSelectedItem());
             out.flush();
@@ -477,16 +485,16 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
                 generateNewScramble();
             }
         } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getLocalSessionView());
+            DetailedView win = new DetailedView("Session Times", getLocalSessionView(), backColor);
             win.setVisible(true);
         } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView());
+            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView(), backColor);
             win.setVisible(true);
         } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getRemoteSessionView());
+            DetailedView win = new DetailedView("Session Times", getRemoteSessionView(), backColor);
             win.setVisible(true);
         } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView());
+            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView(), backColor);
             win.setVisible(true);
         }
     }
@@ -591,6 +599,8 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         userIsTyping.setVisible(false);
         chatText.setVisible(false);
         sendMessageButton.setVisible(false);
+        puzzleLabel.setVisible(false);
+        puzzleCombo.setVisible(false);
         countdownLabel.setVisible(false);
         countdownCombo.setVisible(false);
         startButton.setVisible(false);
@@ -623,6 +633,8 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         userIsTyping.setVisible(true);
         chatText.setVisible(true);
         sendMessageButton.setVisible(true);
+        puzzleLabel.setVisible(true);
+        puzzleCombo.setVisible(true);
         countdownLabel.setVisible(true);
         countdownCombo.setVisible(true);
         startButton.setVisible(true);
@@ -647,9 +659,10 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 //**********************************************************************************************************************
 
     private void generateNewScramble(){
-        String newAlg = scrambleAlg.generateAlg("3x3x3");
+        //scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
+        // cant do this until we do it on client side somehow too
+        String newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
         scrambleText.setText(newAlg);
-
         out.println("S" + newAlg);
         out.flush();
     } // end generateNewScramble
@@ -1091,6 +1104,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         ActionEvent evt = new ActionEvent("Connected", 0, "Connected");
         this.actionPerformed(evt);
     }
+
 //**********************************************************************************************************************
     private class ConnectionListener extends Thread{
         private ServerSocket socket;
