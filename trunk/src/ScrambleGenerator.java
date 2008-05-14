@@ -52,7 +52,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
 
         puzzleLabel = new JLabel("Puzzle:");
         puzzleCombo = new JComboBox(puzzleChoices);
-        puzzleCombo.setSelectedItem("3x3x3");
+        //puzzleCombo.setSelectedItem("3x3x3");
         numLabel = new JLabel("# of Scrambles:");
         numText = new JTextField("13");
         generateButton = new JButton("Generate Scrambles");

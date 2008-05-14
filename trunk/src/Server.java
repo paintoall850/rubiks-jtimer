@@ -72,7 +72,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 
 //**********************************************************************************************************************
 
-    public Server(){
+    public Server(String puzzle, String countdown){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -193,10 +193,10 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 
         puzzleLabel = new JLabel("Puzzle:");
         puzzleCombo = new JComboBox(puzzleChoices);
-        puzzleCombo.setSelectedItem("3x3x3");
+        puzzleCombo.setSelectedItem(puzzle);
         countdownLabel = new JLabel("Countdown:");
         countdownCombo = new JComboBox(countdownChoices);
-        countdownCombo.setSelectedItem("15");
+        countdownCombo.setSelectedItem(countdown);
         startButton = new JButton("Start Timer");
         popButton = new JButton("POP");
 

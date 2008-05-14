@@ -79,7 +79,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     int importedIndex;
 
 //**********************************************************************************************************************
-//**********************************************************************************************************************
 
     public static void main(String[] args){
         // set look and feel to match native OS
@@ -523,12 +522,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == exitItem){
             System.exit(0);
         } else if(source == generatorItem){
-            scrambleGenerator.setVisible(true);
+            if(!scrambleGenerator.isVisible()){
+                scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
+                scrambleGenerator.setVisible(true);
+            }
         } else if(source == instItem){
-            instructionScreen.setVisible(true);
+            if(!instructionScreen.isVisible())
+                instructionScreen.setVisible(true);
         } else if(source == aboutItem){
-            //ScrambleScreen win = new ScrambleScreen(fColor, bColor, lColor, rColor, dColor, uColor);
-            aboutScreen.setVisible(true);
+            if(!aboutScreen.isVisible())
+                aboutScreen.setVisible(true);
         } else if(source == importItem){
             int userChoice = fc.showOpenDialog(Standalone.this);
             if(userChoice == JFileChooser.APPROVE_OPTION){
@@ -593,31 +596,26 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == optionsItem){
             optionsMenu.setVisible(true);
         } else if(source == serverItem){
-            Server win = new Server();
-            win.setVisible(true);
-            this.dispose();
+            int choice = JOptionPane.showConfirmDialog(this,"Switching to Server Mode destroys main window session. Are you sure?","Warning!",0);
+            if(choice == 1){
+                startButton.requestFocus();
+                return;
+            }
+            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"");
+            server.setVisible(true);
+            disposeAll(); //this.dispose();
         } else if(source == clientItem){
-            Client win = new Client();
-            win.setVisible(true);
-            this.dispose();
+            int choice = JOptionPane.showConfirmDialog(this,"Switching to Client Mode destroys main window session. Are you sure?","Warning!",0);
+            if(choice == 1){
+                startButton.requestFocus();
+                return;
+            }
+            Client client = new Client();
+            client.setVisible(true);
+            disposeAll(); //this.dispose();
         }
     } // end actionPerformed
 
-//**********************************************************************************************************************
-/*
-    public void keyPressed(KeyEvent keyevent) {
-    }
-
-//**********************************************************************************************************************
-
-    public void keyReleased(KeyEvent keyevent) {
-    }
-
-//**********************************************************************************************************************
-
-    public void keyTyped(KeyEvent keyevent){}
-*/
-//**********************************************************************************************************************
 //**********************************************************************************************************************
 
     public void run(){
@@ -901,18 +899,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
 
     private String getSessionView(){
-        String timesAndScrambles = "";
-        String timesOnly = "";
-        double deviation = 0.0;
-        double average = 0.0;
+        String timesAndScrambles = "", timesOnly = "";
+        double deviation = 0.0, average = 0.0;
         if(cubesSolved >= 1)
             average = sessionTotalTime/cubesSolved;
 
         String formatedAverage;
-
         if(average>=60 && optionsMenu.showMinutesX){
             int minutes = (int)(average/60);
-            formatedAverage = minutes + ":" + ssxx.format(average-(minutes*60));
+            formatedAverage = minutes + ":" + ssxx.format(average - minutes*60);
         } else
             formatedAverage = ssxx.format(average);
 
@@ -937,13 +932,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         String formatedSlowest;
         if(sessionFastest>=60 && optionsMenu.showMinutesX){
             int minutes = (int)(sessionFastest/60);
-            formatedFastest = minutes + ":" + ssxx.format(sessionFastest-(minutes*60));
+            formatedFastest = minutes + ":" + ssxx.format(sessionFastest - minutes*60);
         } else {
             formatedFastest = ssxx.format(sessionFastest);
         }
         if(sessionSlowest>=60 && optionsMenu.showMinutesX){
             int minutes = (int)(sessionSlowest/60);
-            formatedSlowest = minutes + ":" + ssxx.format(sessionSlowest-(minutes*60));
+            formatedSlowest = minutes + ":" + ssxx.format(sessionSlowest - minutes*60);
         } else {
             formatedSlowest = ssxx.format(sessionSlowest);
         }
@@ -973,25 +968,25 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         }
 
         String formatedAverage;
-
         if(bestAverage>=60 && optionsMenu.showMinutesX){
             int minutes = (int)(bestAverage/60);
-            formatedAverage = minutes + ":" + ssxx.format(bestAverage-(minutes*60));
+            formatedAverage = minutes + ":" + ssxx.format(bestAverage - minutes*60);
         } else {
             formatedAverage = ssxx.format(bestAverage);
         }
 
         String formatedFastest;
-        String formatedSlowest;
         if(bestFastest>=60 && optionsMenu.showMinutesX){
             int minutes = (int)(bestFastest/60);
-            formatedFastest = minutes + ":" + ssxx.format(bestFastest-(minutes*60));
+            formatedFastest = minutes + ":" + ssxx.format(bestFastest - minutes*60);
         } else {
             formatedFastest = ssxx.format(bestFastest);
         }
+
+        String formatedSlowest;
         if(bestSlowest>=60 && optionsMenu.showMinutesX){
             int minutes = (int)(bestSlowest/60);
-            formatedSlowest = minutes + ":" + ssxx.format(bestSlowest-(minutes*60));
+            formatedSlowest = minutes + ":" + ssxx.format(bestSlowest - minutes*60);
         } else {
             formatedSlowest = ssxx.format(bestSlowest);
         }
@@ -1013,7 +1008,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         while(true){
             int index = original.indexOf(find);
             if(index >= 0)
-                original = original.substring(0,index) + replace + original.substring((index+find.length()),(original.length()));
+                original = original.substring(0,index) + replace + original.substring(index+find.length(), original.length());
             else
                 break;
         }
@@ -1100,7 +1095,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             double time = (stopTime-startTime)/1000;
             if(time>=60 && optionsMenu.showMinutesX){
                 int min = (int)(time/60);
-                double sec = time-(min*60);
+                double sec = time - min*60;
                 timerLabel.setText(min + ":" + ((time < 600) ? ssxx.format(sec) : ss.format(sec)));
             } else {
                 timerLabel.setText(ssxx.format(time));
@@ -1128,6 +1123,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
 
+    private void disposeAll(){
+        optionsMenu.dispose();
+        scrambleGenerator.dispose();
+        instructionScreen.dispose();
+        aboutScreen.dispose();
+        this.dispose();
+    }
+
+//**********************************************************************************************************************
+
     public void OptionsToGUI(){
         if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+""))
             puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
@@ -1140,4 +1145,5 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         scrambleText.setBackground(optionsMenu.textBackgrColorX);
         bestAverageText.setBackground(optionsMenu.textBackgrColorX);
     } //OptionsToGUI
+
 }
