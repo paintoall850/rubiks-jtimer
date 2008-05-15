@@ -55,6 +55,10 @@ public class TimerArea extends JButton implements FocusListener, KeyListener, Co
         setBorder(myBorder);
     }
 
+    public void setTimerState(TimerState state){
+        myState = state; // need to do other stuff too!
+    }
+
     public void focusLost(FocusEvent e){
         switch(myState){
             case RESTING:

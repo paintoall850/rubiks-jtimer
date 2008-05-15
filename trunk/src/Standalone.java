@@ -221,7 +221,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
-        scramblePane = new ScramblePane();
+        scramblePane = new ScramblePane(282,216); // needs to be changed in two places
         scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setLayout(null);
 
@@ -277,7 +277,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         scrambleText.setBounds(190,25,363,95);
         timerLabel.setBounds(190,125+12,363,75);
         timerArea.setBounds(190,125,363,75+21);
-        scramblePane.setBounds(563,5,282,216);
+        scramblePane.setBounds(563,5,282,216); // needs to be changed in two places
         sessionStatsLabel.setBounds(10,270+10,412,130);
         rollingAverageLabel.setBounds(432,270+10,412,130);
         bestAverageLabel.setBounds(10,410+5,834,72);

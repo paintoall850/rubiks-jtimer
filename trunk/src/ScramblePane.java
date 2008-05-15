@@ -22,15 +22,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.border.Border;
+import java.awt.image.BufferedImage; //
 
 public class ScramblePane extends JPanel{
     private static final int MIN_ORDER = 2, MAX_ORDER = 5; // constants
     private Color[] xColor = new Color[6];
     private JTextArea[][][][] xFaceN, xPrevN;
+    private int myWidth, myHeight;
 
 //**********************************************************************************************************************
 
-    public ScramblePane(){
+    public ScramblePane(int width, int height){
+        myWidth = width; myHeight = height;
         xFaceN = new JTextArea[MAX_ORDER+1][][][];
         xPrevN = new JTextArea[MAX_ORDER+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
         for(int side=0; side<6; side++) xColor[side] = Color.black; // just incase...
@@ -45,6 +48,7 @@ public class ScramblePane extends JPanel{
                        add(xFaceN[order][side][i][j]);
             visibleNxN(order, false);
         }
+        generateImage();
     }
 
 //**********************************************************************************************************************
@@ -162,14 +166,16 @@ public class ScramblePane extends JPanel{
 //**********************************************************************************************************************
 
     private void setCubeBounds(int order){
-        int x = 15, y = 19; // nudge factors
-        //int margin = 14;
-        //int appWidth = getWidth(), appHeight = getHeight();
+        int margin = 14;
         int face_gap = 4;
-        int face_pixels = 60;
-        //setCubeBoundsMath.min((appWidth - 3*face_gap - 2*margin)/4, (appHeight - 2*face_gap - 2*margin)/3);
+        //int face_pixels = 60;
+        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, (myHeight - 2*face_gap - 2*margin)/3);
         int n = face_pixels + face_gap;
-        //int x = (appWidth - 4*face_pixels - 3*face_gap)/2, y = (appHeight - 3*face_pixels - 2*face_gap)/2;
+        //int x = 15, y = 19; // nudge factors
+        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = (myHeight - 3*face_pixels - 2*face_gap)/2;
+        y += 5; // nudge away from title
+//System.err.println("x=" + x);
+//System.err.println("y=" + y);
 
         setFaceBounds(xFaceN[order][0], order, 1*n + x ,1*n + y, face_pixels/order);
         setFaceBounds(xFaceN[order][1], order, 3*n + x, 1*n + y, face_pixels/order);
@@ -258,4 +264,137 @@ public class ScramblePane extends JPanel{
             }
     }
 
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    private BufferedImage minxImage;
+    private Color[] megaminxColors = {  new Color(255,255,255), // white
+                                        new Color(0,180,255), // powder blue
+                                        new Color(200,128,0), // brown
+                                        new Color(255,0,0), // red
+                                        new Color(255,255,0), // yellow
+                                        new Color(0,255,0), // bright green
+                                        new Color(160,0,255), // purple
+                                        new Color(0,0,170), // dark blue
+                                        new Color(0,128,0), // dark green
+                                        new Color(255,80,80), // pink
+                                        new Color(255,180,180), // light pink
+                                        new Color(255,128,0)}; // orange
+
+    private void generateImage(){
+        minxImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = minxImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setStroke(new BasicStroke(1.6F));
+
+        int minxState[][] = new int[12][11];
+        for(int side=0; side<12; side++)
+            for(int i=0; i<11; i++)
+                minxState[side][i] = side;
+
+        int xCenter = 141, yCenter = 120, big_shift = 141;
+        double radius = 36;
+        double face_gap = 4;
+        double big_radius = 2 * radius * Math.cos(0.2D*Math.PI) + face_gap;
+
+        Polygon big_pent = pentagon(big_radius, true);
+        big_pent.translate(xCenter, yCenter);
+
+        drawMinxFace(g2d, radius, xCenter, yCenter, false, minxState[0]);
+        drawMinxFace(g2d, radius, big_pent.xpoints[0], big_pent.ypoints[0], true, minxState[1]);
+        drawMinxFace(g2d, radius, big_pent.xpoints[1], big_pent.ypoints[1], true, minxState[2]);
+        drawMinxFace(g2d, radius, big_pent.xpoints[2], big_pent.ypoints[2], true, minxState[3]);
+        drawMinxFace(g2d, radius, big_pent.xpoints[3], big_pent.ypoints[3], true, minxState[4]);
+        drawMinxFace(g2d, radius, big_pent.xpoints[4], big_pent.ypoints[4], true, minxState[5]);
+        //drawMinxFace(g2d, radius, xCenter + big_shift, yCenter, false, minxState[6]);
+        //drawMinxFace(g2d, radius, big_pent.xpoints[0] + big_shift, big_pent.ypoints[0], true, minxState[7]);
+        //drawMinxFace(g2d, radius, big_pent.xpoints[1] + big_shift, big_pent.ypoints[1], true, minxState[8]);
+        //drawMinxFace(g2d, radius, big_pent.xpoints[2] + big_shift, big_pent.ypoints[2], true, minxState[9]);
+        //drawMinxFace(g2d, radius, big_pent.xpoints[3] + big_shift, big_pent.ypoints[3], true, minxState[10]);
+        //drawMinxFace(g2d, radius, big_pent.xpoints[4] + big_shift, big_pent.ypoints[4], true, minxState[11]);
+    }
+
+//**********************************************************************************************************************
+
+    private void drawMinxFace(Graphics2D g2d, double r, int x_offset, int y_offset, boolean pointup, int minxState[]){
+        Polygon pent = pentagon(r, pointup);
+        pent.translate(x_offset, y_offset);
+
+        int xs[] = new int[10], ys[] = new int[10]; // the 10 points that are on the edges
+        for(int i=0; i<5; i++){
+            xs[i] = (int)Math.round(0.45D*pent.xpoints[(i+1)%5] + 0.55D*pent.xpoints[i]);
+            ys[i] = (int)Math.round(0.45D*pent.ypoints[(i+1)%5] + 0.55D*pent.ypoints[i]);
+            xs[5+i] = (int)Math.round(0.55D*pent.xpoints[(i+1)%5] + 0.45D*pent.xpoints[i]);
+            ys[5+i] = (int)Math.round(0.55D*pent.ypoints[(i+1)%5] + 0.45D*pent.ypoints[i]);
+        }
+
+        Point inside_pent[] = new Point[5]; // for internal pentagon, i.e. center
+        for(int i=0; i<5; i++)
+            inside_pent[i] = getLineIntersection(   xs[i], ys[i],
+                                                    xs[5 + (3+i)%5], ys[5 + (3+i)%5],
+                                                    xs[(i+1)%5], ys[(i+1)%5],
+                                                    xs[5 + (4+i)%5], ys[5 + (4+i)%5]);
+
+        Polygon stickers[] = new Polygon[11];
+        for(int i=0; i<11; i++) stickers[i] = new Polygon();
+        for(int i=0; i<5; i++){
+            // corner sticker
+            stickers[2*i].addPoint(pent.xpoints[i], pent.ypoints[i]);
+            stickers[2*i].addPoint(xs[i], ys[i]);
+            stickers[2*i].addPoint(inside_pent[i].x, inside_pent[i].y);
+            stickers[2*i].addPoint(xs[5 + (4+i)%5], ys[5 + (4+i)%5]);
+            //edge sticker
+            stickers[2*i+1].addPoint(xs[i], ys[i]);
+            stickers[2*i+1].addPoint(xs[5 + i], ys[5 + i]);
+            stickers[2*i+1].addPoint(inside_pent[(i+1)%5].x, inside_pent[(i+1)%5].y);
+            stickers[2*i+1].addPoint(inside_pent[i].x, inside_pent[i].y);
+            //center sticker
+            stickers[10].addPoint(inside_pent[i].x, inside_pent[i].y);
+        }
+
+        for(int i=0; i<11; i++){
+            g2d.setColor(megaminxColors[minxState[i]]);
+            g2d.fillPolygon(stickers[i]); // fill each sticker
+        }
+        g2d.setColor(Color.black);
+        g2d.drawPolygon(pent); // draw the outer pentagon
+        for(int i=0; i<5; i++) // now draw the 5 lines inside
+            g2d.drawLine(xs[i], ys[i], xs[5 + (3+i)%5], ys[5 + (3+i)%5]);
+    }
+
+//**********************************************************************************************************************
+
+    private Polygon pentagon(double r, boolean pointup){
+        Polygon pent = new Polygon();
+        double offset = (pointup ? -0.5D*Math.PI : 0.5D*Math.PI);
+        for(int i=0; i<5; i++)
+            pent.addPoint((int)Math.round(r*Math.cos(i*0.4D*Math.PI + offset)),
+                          (int)Math.round(r*Math.sin(i*0.4D*Math.PI + offset)));
+        return pent;
+    }
+
+//**********************************************************************************************************************
+
+    private static Point getLineIntersection(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+        double norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
+        double x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
+        double y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
+
+        return new Point((int)Math.round(x_inter), (int)Math.round(y_inter));
+    }
+
+//**********************************************************************************************************************
+
+    private static double DET(double a, double b, double c, double d){
+        return (a*d - b*c);
+    }
+
+//**********************************************************************************************************************
+/*
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.drawImage(minxImage, 0, 0, null);
+    }
+*/
 }
