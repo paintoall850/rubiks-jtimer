@@ -76,6 +76,12 @@ public class ScramblePane extends JPanel{
     }
 
 //**********************************************************************************************************************
+
+    public void setCubeColors(Color[] newColors){
+        cubeColors = newColors;
+    }
+
+//**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
@@ -99,6 +105,34 @@ public class ScramblePane extends JPanel{
 
 //**********************************************************************************************************************
 
+    private void setCubeBounds(int order){
+        int margin = 14;
+        int face_gap = 4;
+        //int face_pixels = 60;
+        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, (myHeight - 2*face_gap - 2*margin)/3);
+        int n = face_pixels + face_gap;
+        //int x = 15, y = 19; // nudge factors
+        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = (myHeight - 3*face_pixels - 2*face_gap)/2;
+        y += 5; // nudge away from title
+//System.err.println("x=" + x);
+//System.err.println("y=" + y);
+
+        setCubeFaceBounds(CubeFace[order][0], order, 1*n + x ,1*n + y, face_pixels/order);
+        setCubeFaceBounds(CubeFace[order][1], order, 3*n + x, 1*n + y, face_pixels/order);
+        setCubeFaceBounds(CubeFace[order][2], order, 0*n + x, 1*n + y, face_pixels/order);
+        setCubeFaceBounds(CubeFace[order][3], order, 2*n + x, 1*n + y, face_pixels/order);
+        setCubeFaceBounds(CubeFace[order][4], order, 1*n + x, 2*n + y, face_pixels/order);
+        setCubeFaceBounds(CubeFace[order][5], order, 1*n + x, 0*n + y, face_pixels/order);
+    }
+
+    private void setCubeFaceBounds(JTextArea[][] aFace, int order, int x, int y, int size){
+        for(int i=0; i<order; i++)
+            for(int j=0; j<order; j++)
+                aFace[i][j].setBounds(j*size+x, i*size+y, size, size);
+    }
+
+//**********************************************************************************************************************
+
     private void resetCube(int order){
         for(int side=0; side<6; side++)
             for(int i=0; i<order; i++)
@@ -106,6 +140,15 @@ public class ScramblePane extends JPanel{
                     CubeFace[order][side][i][j].setBackground(cubeColors[side]);
                     CubePrev[order][side][i][j].setBackground(cubeColors[side]);
                 }
+    }
+
+//**********************************************************************************************************************
+
+    private void setCubeVisible(int order, boolean show){
+        for(int side=0; side<6; side++)
+            for(int i=0; i<order; i++)
+                for(int j=0; j<order; j++)
+                    CubeFace[order][side][i][j].setVisible(show);
     }
 
 //**********************************************************************************************************************
@@ -164,60 +207,6 @@ public class ScramblePane extends JPanel{
 
 //**********************************************************************************************************************
 
-    private void updatePreviousCube(int order){
-        for(int side=0; side<6; side++)
-            for(int i=0; i<order; i++)
-                for(int j=0; j<order; j++)
-                    CubePrev[order][side][i][j].setBackground(CubeFace[order][side][i][j].getBackground());
-    }
-
-//**********************************************************************************************************************
-
-    private void setCubeBounds(int order){
-        int margin = 14;
-        int face_gap = 4;
-        //int face_pixels = 60;
-        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, (myHeight - 2*face_gap - 2*margin)/3);
-        int n = face_pixels + face_gap;
-        //int x = 15, y = 19; // nudge factors
-        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = (myHeight - 3*face_pixels - 2*face_gap)/2;
-        y += 5; // nudge away from title
-//System.err.println("x=" + x);
-//System.err.println("y=" + y);
-
-        setCubeFaceBounds(CubeFace[order][0], order, 1*n + x ,1*n + y, face_pixels/order);
-        setCubeFaceBounds(CubeFace[order][1], order, 3*n + x, 1*n + y, face_pixels/order);
-        setCubeFaceBounds(CubeFace[order][2], order, 0*n + x, 1*n + y, face_pixels/order);
-        setCubeFaceBounds(CubeFace[order][3], order, 2*n + x, 1*n + y, face_pixels/order);
-        setCubeFaceBounds(CubeFace[order][4], order, 1*n + x, 2*n + y, face_pixels/order);
-        setCubeFaceBounds(CubeFace[order][5], order, 1*n + x, 0*n + y, face_pixels/order);
-    }
-
-//**********************************************************************************************************************
-
-    private void setCubeVisible(int order, boolean show){
-        for(int side=0; side<6; side++)
-            for(int i=0; i<order; i++)
-                for(int j=0; j<order; j++)
-                    CubeFace[order][side][i][j].setVisible(show);
-    }
-
-//**********************************************************************************************************************
-
-    public void setCubeColors(Color[] newColors){
-        cubeColors = newColors;
-    }
-
-//**********************************************************************************************************************
-
-    private void setCubeFaceBounds(JTextArea[][] aFace, int order, int x, int y, int size){
-        for(int i=0; i<order; i++)
-            for(int j=0; j<order; j++)
-                aFace[i][j].setBounds(j*size+x, i*size+y, size, size);
-    }
-
-//**********************************************************************************************************************
-
     // dir = 1 for 90 deg, 2 for 180 deg, 3 for 270 deg
     private void doCubeTurn(int order, int side, int slice, int dir){
         if(side<0 || side>5){
@@ -269,6 +258,15 @@ public class ScramblePane extends JPanel{
                         xFace[side][i][j].setBackground(xPrev[side][order-j-1][i].getBackground());
                 updatePreviousCube(order);
             }
+    }
+
+//**********************************************************************************************************************
+
+    private void updatePreviousCube(int order){
+        for(int side=0; side<6; side++)
+            for(int i=0; i<order; i++)
+                for(int j=0; j<order; j++)
+                    CubePrev[order][side][i][j].setBackground(CubeFace[order][side][i][j].getBackground());
     }
 
 //**********************************************************************************************************************
