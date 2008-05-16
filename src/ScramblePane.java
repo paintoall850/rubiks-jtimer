@@ -29,6 +29,7 @@ public class ScramblePane extends JPanel{
     private Color[] cubeColors = new Color[6];
     //private Color[] megaminxColors = new Color[12];
     private JTextArea[][][][] CubeFace, CubePrev;
+    private BufferedImage myImage;
     private int myWidth, myHeight; // would prefer to get these with function calls, but they don't work
 
 //**********************************************************************************************************************
@@ -77,7 +78,7 @@ public class ScramblePane extends JPanel{
     private void clearScreen(){
         for(int order=MIN_ORDER; order<=MAX_ORDER; order++)
             setCubeVisible(order, false);
-        megaminxImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB); // should clear it...
+        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB); // should clear it...
         repaint();
     }
 
@@ -279,7 +280,6 @@ public class ScramblePane extends JPanel{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    private BufferedImage megaminxImage;
     private Color[] megaminxColors = {  new Color(255,255,255), // white
                                         new Color(0,180,255), // powder blue
                                         new Color(200,128,0), // brown
@@ -294,9 +294,8 @@ public class ScramblePane extends JPanel{
                                         new Color(255,128,0)}; // orange
 
     private void drawMegaminx(int state[][][]){
-
-        megaminxImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = megaminxImage.createGraphics();
+        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = myImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(1.5F));
 
@@ -476,13 +475,7 @@ public class ScramblePane extends JPanel{
 
     // dir = number of turns 1/5 turns clockwise
     private void doMinxFaceTurn(int state[][][], int side, int dir){
-        //if(side<0 || side>11){
-        //    JOptionPane.showMessageDialog(this, "Function doMinxTurn called with side=" + side + ".");
-        //    return;
-        //}
         dir %= 5;
-        //if(dir == 0) return;
-
         for(int i=0; i<dir; i++)
             doMinxFaceTurn(state, side);
     }
@@ -490,9 +483,6 @@ public class ScramblePane extends JPanel{
 //**********************************************************************************************************************
 
     private void doMinxFaceTurn(int state[][][], int side){
-//        Integer prevState[][] = new Integer[12][11];
-//        copyMinxState(prevState, state);
-
         int plus6 = (side < 6 ? 0 : 6);
         switch(side % 6){
             case 0:
@@ -546,8 +536,6 @@ public class ScramblePane extends JPanel{
         }
 
         //pure face rotation time
-//        for(int i=0; i<10; i++)
-//            state[side][i] = new Integer((int)prevState[side][(i+8)%10]);
         cycle(state[side][0], state[side][2], state[side][4], state[side][6], state[side][8]); // corners
         cycle(state[side][1], state[side][3], state[side][5], state[side][7], state[side][9]); // edges
     }
@@ -647,14 +635,6 @@ public class ScramblePane extends JPanel{
     }
 
 //**********************************************************************************************************************
-/*
-    private void copyMinxState(Integer oldState[][], Integer newState[][]){
-        for(int face=0; face<12; face++)
-            for(int i=0; i<11; i++)
-                oldState[face][i] = new Integer((int)newState[face][i]);
-    }
-*/
-//**********************************************************************************************************************
 
     private void cycle(int n0[], int n1[], int n2[], int n3[], int n4[]){
         int temp = n4[0];
@@ -669,7 +649,7 @@ public class ScramblePane extends JPanel{
 
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(megaminxImage, 0, 0, null);
+        g.drawImage(myImage, 0, 0, null);
     }
 
 }
