@@ -61,12 +61,12 @@ public class ScrambleMegaminx {
     }
 
     public String generateScramble(){
-        return generateScramble(defaultLength);
-/*
+//        return generateScramble(defaultLength);
+
         String scramble = "";
         int rand;
         for(int line=0; line<7; line++){
-            if(line != 0) scramble = scramble + " ";//"\n";
+            if(line != 0) scramble = scramble + "          ";//"\n";
             for(int i=0; i<10; i++){
                 rand = (int)(Math.random()*2);
                 scramble = scramble + (i%2==1 ? "D" : "R") + (rand==1 ? "++ " : "-- ");
@@ -75,6 +75,6 @@ public class ScrambleMegaminx {
             scramble = scramble + "U" + (rand==1 ? "'" : "");
         }
         return scramble;
-*/
+
     }
 }
