@@ -555,6 +555,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             }
         } else if(source == insertTimeButton){
             String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:");
+            if(input == null){return;}
             if(input.equalsIgnoreCase("POP")){
                 numberOfPops++;
                 if(sessionIndex > sessionTimes.length-1){
