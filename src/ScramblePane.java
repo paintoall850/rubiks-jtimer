@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 public class ScramblePane extends JPanel{
     private static final int MIN_ORDER = 2, MAX_ORDER = 5; // constants
     private Color[] cubeColors = new Color[6];
+    //private Color[] pyraminxColors = new Color[4];
     //private Color[] megaminxColors = new Color[12];
     private JTextArea[][][][] CubeFace, CubePrev;
     private BufferedImage myImage;
@@ -56,24 +57,13 @@ public class ScramblePane extends JPanel{
 //**********************************************************************************************************************
 
     public void newScramble(String puzzle, String scrambleAlg){
-        int order;
         clearScreen();
-
-        if(puzzle.equals("2x2x2")) order = 2;
-        else if(puzzle.equals("3x3x3")) order = 3;
-        else if(puzzle.equals("4x4x4")) order = 4;
-        else if(puzzle.equals("5x5x5")) order = 5;
-        else if(puzzle.equals("Pyraminx")){
-            scramblePyraminx(puzzle, scrambleAlg);
-            return;
-        }
-        else if(puzzle.equals("Megaminx")){
-            scrambleMegaminx(puzzle, scrambleAlg);
-            return;
-        }
-        else return;
-
-        scrambleCube(order, puzzle, scrambleAlg);
+             if(puzzle.equals("2x2x2")) scrambleCube(2, puzzle, scrambleAlg);
+        else if(puzzle.equals("3x3x3")) scrambleCube(3, puzzle, scrambleAlg);
+        else if(puzzle.equals("4x4x4")) scrambleCube(4, puzzle, scrambleAlg);
+        else if(puzzle.equals("5x5x5")) scrambleCube(5, puzzle, scrambleAlg);
+        else if(puzzle.equals("Pyraminx")) scramblePyraminx(puzzle, scrambleAlg);
+        else if(puzzle.equals("Megaminx")) scrambleMegaminx(puzzle, scrambleAlg);
     }
 
 //**********************************************************************************************************************
@@ -85,6 +75,8 @@ public class ScramblePane extends JPanel{
         repaint();
     }
 
+//**********************************************************************************************************************
+//**********************************************************************************************************************
 //**********************************************************************************************************************
 
     private void prepareCube(int order){
@@ -373,22 +365,6 @@ public class ScramblePane extends JPanel{
         g2d.drawPolygon(pent); // draw the outer pentagon
         for(int i=0; i<5; i++) // now draw the 5 lines inside
             g2d.drawLine(xs[i], ys[i], xs[5 + (i+3)%5], ys[5 + (i+3)%5]);
-    }
-
-//**********************************************************************************************************************
-
-    private static Point getLineIntersection(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
-        double norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
-        double x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
-        double y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
-
-        return new Point((int)Math.round(x_inter), (int)Math.round(y_inter));
-    }
-
-//**********************************************************************************************************************
-
-    private static double DET(double a, double b, double c, double d){
-        return (a*d - b*c);
     }
 
 //**********************************************************************************************************************
@@ -743,14 +719,28 @@ public class ScramblePane extends JPanel{
 
 //**********************************************************************************************************************
 
+    private static Point getLineIntersection(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+        double norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
+        double x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
+        double y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
+
+        return new Point((int)Math.round(x_inter), (int)Math.round(y_inter));
+    }
+
+//**********************************************************************************************************************
+
+    private static double DET(double a, double b, double c, double d){
+        return (a*d - b*c);
+    }
+
+//**********************************************************************************************************************
+
     private void cycle(int n0[], int n1[], int n2[]){
         int temp = n2[0];
         n2[0] = n1[0];
         n1[0] = n0[0];
         n0[0] = temp;
     }
-
-//**********************************************************************************************************************
 
     private void cycle(int n0[], int n1[], int n2[], int n3[], int n4[]){
         int temp = n4[0];
