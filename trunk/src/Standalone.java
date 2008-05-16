@@ -1147,7 +1147,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             countdownCombo.setSelectedItem(optionsMenu.countdownX);
 
         timeLabels[placeInAverage].setForeground(optionsMenu.currentColorX);
-        scramblePane.setColors(optionsMenu.faceColorsX);
+        scramblePane.setCubeColors(optionsMenu.faceColorsX);
         updateScramblePane();
         scrambleText.setBackground(optionsMenu.textBackgrColorX);
         bestAverageText.setBackground(optionsMenu.textBackgrColorX);
