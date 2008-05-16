@@ -23,7 +23,7 @@ public class ScrambleAlg{
     Scramble3x3 cube3x3;
     Scramble4x4 cube4x4;
     Scramble5x5 cube5x5;
-    //ScramblePyraminx pyraminx;
+    ScramblePyraminx pyraminx;
     ScrambleMegaminx megaminx;
 
     public ScrambleAlg(){
@@ -31,7 +31,7 @@ public class ScrambleAlg{
         cube3x3 = new Scramble3x3();
         cube4x4 = new Scramble4x4();
         cube5x5 = new Scramble5x5();
-        //pyraminx  = new ScramblePyraminx();
+        pyraminx  = new ScramblePyraminx();
         megaminx  = new ScrambleMegaminx();
     }
 
@@ -44,8 +44,8 @@ public class ScrambleAlg{
             return cube4x4.generateScramble();
         if(puzzle.equals("5x5x5"))
             return cube5x5.generateScramble();
-//        if(puzzle.equals("Pyraminx"))
-//            return pyraminx.generateScramble();
+        if(puzzle.equals("Pyraminx"))
+            return pyraminx.generateScramble();
         if(puzzle.equals("Megaminx"))
             return megaminx.generateScramble();
         return null;

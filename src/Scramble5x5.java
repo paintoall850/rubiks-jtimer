@@ -24,10 +24,6 @@ public class Scramble5x5{
     private String formatedMove;
 
     public Scramble5x5(){
-        fillArrays();
-    }
-
-    private void fillArrays(){
         UandD = new String[3][4];
         UandD[0][0] = "U";
         UandD[0][1] = "u";
@@ -69,7 +65,7 @@ public class Scramble5x5{
         LandR[2][1] = "l2";
         LandR[2][2] = "r2";
         LandR[2][3] = "R2";
-    } // end fillArrays
+    }
 
     private void generateMove(){
         currentArray = (int)(Math.random()*3);

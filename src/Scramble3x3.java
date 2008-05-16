@@ -19,16 +19,14 @@
  */
 
 public class Scramble3x3{
-    private String[]    UandD = {"U","U'","U2",
-                                 "D","D'","D2"},
-                        FandB = {"F","F'","F2",
-                                 "B","B'","B2"},
-                        LandR = {"L","L'","L2",
-                                 "R","R'","R2"};
+    private static final String[]   UandD = {"U","U'","U2","D","D'","D2"},
+                                    FandB = {"F","F'","F2","B","B'","B2"},
+                                    LandR = {"L","L'","L2","R","R'","R2"};
     private int oldArray, oldFace, previousArray, previousFace, currentArray, currentFace;
     private String formatedMove;
 
-    public Scramble3x3(){}
+    public Scramble3x3(){
+    }
 
     private void generateMove(){
         currentArray = (int)(Math.random()*3);

@@ -36,7 +36,7 @@ public interface Constants{
             BorderFactory.createLoweredBevelBorder(),
             BorderFactory.createRaisedBevelBorder());
 
-    static final String[] puzzleChoices = {"2x2x2","3x3x3","4x4x4","5x5x5"/*,"Pyraminx"*/, "Megaminx"};
+    static final String[] puzzleChoices = {"2x2x2","3x3x3","4x4x4","5x5x5","Pyraminx", "Megaminx"};
     static final String[] countdownChoices = {"0","3","5","10","15"};
 
 //    static int randInt(int n){
