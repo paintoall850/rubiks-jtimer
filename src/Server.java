@@ -217,21 +217,21 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         scrambleAlg = new ScrambleAlg();
 
         //set bounds
-        usernameLabel.setBounds(10,10,90,20);
-        serverIpLabel.setBounds(10,35,90,20);
-        serverPortLabel.setBounds(10,60,90,20);
-        handicapLabel.setBounds(10,85,90,20);
-        usernameText.setBounds(100,10,100,20);
-        serverIpText.setBounds(100,35,100,20);
-        serverPortText.setBounds(100,60,100,20);
-        handicapText.setBounds(100,85,100,20);
-        connectButton.setBounds(10,110,190,20);
-        chatScrollPane.setBounds(210,10,320,95);
-        userIsTyping.setBounds(210,110,20,20);
-        chatText.setBounds(235,110,205,20);
+        usernameLabel.setBounds(10,10,80,20);
+        serverIpLabel.setBounds(10,35,80,20);
+        serverPortLabel.setBounds(10,60,80,20);
+        handicapLabel.setBounds(10,85,80,20);
+        usernameText.setBounds(90,10,80,20);
+        serverIpText.setBounds(90,35,80,20);
+        serverPortText.setBounds(90,60,80,20);
+        handicapText.setBounds(90,85,80,20);
+        connectButton.setBounds(10,110,160,20);
+        chatScrollPane.setBounds(180,10,350,95);
+        userIsTyping.setBounds(180,110,20,20);
+        chatText.setBounds(205,110,235,20);
         sendMessageButton.setBounds(450,110,80,20);
-        useThisAlgLabel.setBounds(10,150-10,700,20);
-        scrambleText.setBounds(10,170-10,700,40+10);
+        useThisAlgLabel.setBounds(10,140,700,20);
+        scrambleText.setBounds(10,160,700,50);
         timerLabel.setBounds(10,220,700,75);
         localTimeUsernameLabel.setBounds(10,305,345,200);
         remoteTimeUsernameLabel.setBounds(365,305,345,200);
@@ -315,9 +315,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 
         //set everything to defaults
         reset();
-
         hideGUI();
-
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     } // end constructor
 
@@ -600,6 +598,15 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 //**********************************************************************************************************************
 
     private void hideGUI(){
+        //usernameLabel.setVisible(true);
+        //serverIpLabel.setVisible(true);
+        //serverPortLabel.setVisible(true);
+        //handicapLabel.setVisible(true);
+        //usernameText.setVisible(true);
+        //serverIpText.setVisible(true);
+        //serverPortText.setVisible(true);
+        //handicapText.setVisible(true);
+        //connectButton.setVisible(true);
         bigPicture.setVisible(true);
         smallPicture.setVisible(true);
 
@@ -634,6 +641,15 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 //**********************************************************************************************************************
 
     private void showGUI(){
+        //usernameLabel.setVisible(false);
+        //serverIpLabel.setVisible(false);
+        //serverPortLabel.setVisible(false);
+        //handicapLabel.setVisible(false);
+        //usernameText.setVisible(false);
+        //serverIpText.setVisible(false);
+        //serverPortText.setVisible(false);
+        //handicapText.setVisible(false);
+        //connectButton.setVisible(false);
         bigPicture.setVisible(false);
         smallPicture.setVisible(false);
 
@@ -711,10 +727,10 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
                     try{
                         countdownClip.play();
                     } catch(NullPointerException e){}
-                    timerLabel.setText("" + countdown);
+                    timerLabel.setText(countdown+"");
                     countdown --;
                 } else {
-                    timerLabel.setText("" + countdown);
+                    timerLabel.setText(countdown+"");
                     countdown --;
                 }
             }
