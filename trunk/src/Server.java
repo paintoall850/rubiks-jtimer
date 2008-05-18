@@ -162,7 +162,6 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
         useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText = new JTextArea("");
-        //scrambleText.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText.setFocusable(true);
         scrambleText.setEditable(false);
         scrambleText.setLineWrap(true);
@@ -170,7 +169,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         scrambleText.setBackground(myBackgrColor);
         scrambleText.setForeground(Color.black);
         scrambleText.setBorder(blackLine);
-        scrambleText.setFont(lgAlgFont); // needs to be fixed
+        //scrambleText.setFont(lgAlgFont);
 
         timerLabel = new JLabel("");
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -669,8 +668,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 //**********************************************************************************************************************
 
     private void generateNewScramble(){
-        //scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
-        // cant do this until we do it on client side somehow too
+        scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
         String newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
         scrambleText.setText(newAlg);
         out.println("S" + newAlg);

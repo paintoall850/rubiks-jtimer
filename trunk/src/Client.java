@@ -147,7 +147,6 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
         useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText = new JTextArea("");
-        //scrambleText.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText.setFocusable(true);
         scrambleText.setEditable(false);
         scrambleText.setLineWrap(true);
@@ -155,7 +154,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         scrambleText.setBackground(myBackgrColor);
         scrambleText.setForeground(Color.black);
         scrambleText.setBorder(blackLine);
-        scrambleText.setFont(lgAlgFont); // needs to be fixed
+        //scrambleText.setFont(lgAlgFont);
 
         timerLabel = new JLabel("");
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -493,6 +492,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         } else if(prefix.equalsIgnoreCase("T")){
             countdownCombo.setSelectedItem(data);
         } else if(prefix.equalsIgnoreCase("S")){
+            scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
             scrambleText.setText(data);
         } else if(prefix.equalsIgnoreCase("N")){
             remoteTime = data;

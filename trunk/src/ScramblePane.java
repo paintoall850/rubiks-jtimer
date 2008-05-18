@@ -740,6 +740,14 @@ public class ScramblePane extends JPanel{
         n0[0] = temp;
     }
 
+    private void cycle(int n0[], int n1[], int n2[], int n3[]){
+        int temp = n3[0];
+        n3[0] = n2[0];
+        n2[0] = n1[0];
+        n1[0] = n0[0];
+        n0[0] = temp;
+    }
+
     private void cycle(int n0[], int n1[], int n2[], int n3[], int n4[]){
         int temp = n4[0];
         n4[0] = n3[0];
