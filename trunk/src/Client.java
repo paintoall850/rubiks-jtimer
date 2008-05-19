@@ -44,7 +44,6 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
     JTextArea scrambleText;
     String remoteUsername;
     JComboBox puzzleCombo, countdownCombo;
-    JCheckBox localStatusLabel;
     JScrollPane chatScrollPane;
     java.util.Timer timerThread;
     int countdown;
@@ -53,8 +52,10 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
     NumberFormat nf;
     String remoteTime;
     boolean isTyping, remoteIsTyping;
+    ImageIcon typeOn, typeOff;
 
-    ImageIcon typeOff, typeOn;
+    //stuff not in Server
+    JCheckBox localStatusLabel;
 
     //data storage
     String[] localSessionTimes, remoteSessionTimes, sessionScrambles, localCurrentAverage, remoteCurrentAverage, localCurrentScrambles, remoteCurrentScrambles;
@@ -87,7 +88,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         int appWidth = getSize().width, appHeight = getSize().height;
         setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
-        try { // configure chatSound
+        try { //configure chatSound
             chatSound = Applet.newAudioClip(getClass().getResource("blip.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "blip.wav not found. There will be no audio when a message is recieved.");}
 
@@ -276,7 +277,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         localAverageDetailButton.addActionListener(this);
         remoteSessionDetailButton.addActionListener(this);
         remoteAverageDetailButton.addActionListener(this);
-        localStatusLabel.addActionListener(this); // only in server
+        localStatusLabel.addActionListener(this); // only in client
 
         //GUI preperation
         chatText.setEnabled(false);
@@ -287,14 +288,12 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         localSessionDetailButton.setEnabled(false);
         remoteAverageDetailButton.setEnabled(false);
         remoteSessionDetailButton.setEnabled(false);
-        puzzleCombo.setEnabled(false); // only in server
-        countdownCombo.setEnabled(false); // only in server
+        puzzleCombo.setEnabled(false); // only in client
+        countdownCombo.setEnabled(false); // only in client
 
         //set everything to defaults
         reset();
-
         hideGUI();
-
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     } // end constructor
 
@@ -406,7 +405,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
             out.flush();
 
             //if everyone is done, then stop the timer update stats
-            if(!(remoteTime.equals("none"))){
+            if(!remoteTime.equals("none")){
                 timerThread.cancel();
                 timerLabel.setText("");
                 //change buttons
@@ -421,7 +420,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
                     localAverageDetailButton.setEnabled(true);
                 if(remoteCubesSolved >= 12)
                     remoteAverageDetailButton.setEnabled(true);
-                //move to next solve
+                // move to next solve
                 updateStats();
             }
         } else if(source == localSessionDetailButton){
@@ -512,7 +511,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
                     localAverageDetailButton.setEnabled(true);
                 if(remoteCubesSolved >= 12)
                     remoteAverageDetailButton.setEnabled(true);
-                //move to next solve
+                // move to next solve
                 updateStats();
             }
         } else if(prefix.equalsIgnoreCase("X")){
@@ -677,7 +676,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
 
     class RunTimer extends java.util.TimerTask{
         public void run(){
-            double time = (System.currentTimeMillis()-startTime)/1000;
+            double time = (System.currentTimeMillis() - startTime)/1000;
             timerLabel.setText(timeFormat.format(time));
         }
     } // end RunTimer class
@@ -743,12 +742,12 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
 
         //**********update averages and find fastest and slowest times**********
         // LOCAL if this is the first time, or if this time is faster or slower than fastest and slowest, then store it
-        if(localSessionSlowest==0 && localTime!=0){
+        if(localSessionSlowest == 0 && localTime != 0){
             localSessionSlowest = localTime;
             localSessionFastest = localTime;
-        } else if(localTime>localSessionSlowest && localTime!=0){
+        } else if(localTime > localSessionSlowest && localTime != 0){
             localSessionSlowest = localTime;
-        } else if(localTime<localSessionFastest && localTime!=0){
+        } else if(localTime < localSessionFastest && localTime != 0){
             localSessionFastest = localTime;
         }
 
@@ -756,9 +755,9 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         if(remoteSessionSlowest==0 && remoteTime!=0){
             remoteSessionSlowest = remoteTime;
             remoteSessionFastest = remoteTime;
-        } else if(remoteTime > remoteSessionSlowest && remoteTime!=0){
+        } else if(remoteTime > remoteSessionSlowest && remoteTime != 0){
             remoteSessionSlowest = remoteTime;
-        } else if(remoteTime < remoteSessionFastest && remoteTime!=0){
+        } else if(remoteTime < remoteSessionFastest && remoteTime != 0){
             remoteSessionFastest = remoteTime;
         }
 
@@ -938,7 +937,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         returnMe = findAndReplace(returnMe,"%C",localCubesSolved+"");
         returnMe = findAndReplace(returnMe,"%P",localNumOfPops+"");
         return returnMe;
-    }
+    } // end getLocalSessionView
 
 //**********************************************************************************************************************
 
@@ -963,7 +962,7 @@ public class Client extends JFrame implements ActionListener, KeyListener, Runna
         returnMe = findAndReplace(returnMe,"%F",timeFormat.format(localCurrentFastest));
         returnMe = findAndReplace(returnMe,"%S",timeFormat.format(localCurrentSlowest));
         return returnMe;
-    }
+    } // end getLocalAverageView
 
 //**********************************************************************************************************************
 

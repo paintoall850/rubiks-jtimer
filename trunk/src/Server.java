@@ -34,19 +34,17 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 
     JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel;
     JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
-    JLabel puzzleLabel, countdownLabel, remoteStatusLabel, bigPicture, smallPicture, userIsTyping;
+    JLabel puzzleLabel, countdownLabel, bigPicture, smallPicture, userIsTyping;
     JTextField usernameText, serverIpText, serverPortText, handicapText, chatText;
     JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
     JTextPane chatPane;
     StyledDocument chatDoc;
     Style redStyle, blueStyle, blackStyle;
-    AudioClip chatSound, countdownClip, bing1, bing2, readyClip, startupClip;
+    AudioClip chatSound, countdownClip, bing1, bing2, startupClip;
     JTextArea scrambleText;
     String remoteUsername;
     JComboBox puzzleCombo, countdownCombo;
-    JTextArea readyColor;
     JScrollPane chatScrollPane;
-    ScrambleAlg scrambleAlg;
     java.util.Timer timerThread;
     int countdown;
     double startTime, stopTime;
@@ -54,20 +52,25 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
     NumberFormat nf;
     String remoteTime;
     boolean isTyping, remoteIsTyping;
-    Thread connectionListener;
-
     ImageIcon typeOn, typeOff;
+
+    //stuff not in Client
+    Thread connectionListener;
+    JLabel remoteStatusLabel;
+    AudioClip readyClip;
+    JTextArea readyColor;
+    ScrambleAlg scrambleAlg;
+
+    //data storage
+    String[] localSessionTimes, remoteSessionTimes, sessionScrambles, localCurrentAverage, remoteCurrentAverage, localCurrentScrambles, remoteCurrentScrambles;
+    int localCubesSolved, remoteCubesSolved, sessionIndex, localCurrentPlaceInAverage, remoteCurrentPlaceInAverage, localNumOfPops, remoteNumOfPops, localScore, remoteScore, acceptsSincePop;
+    double localTotalTime, remoteTotalTime, localSessionFastest, remoteSessionFastest, localSessionSlowest, remoteSessionSlowest, localCurrentFastest, remoteCurrentFastest, localCurrentSlowest, remoteCurrentSlowest, localCurrentRollingAverage, remoteCurrentRollingAverage, localCurrentSessionAverage, remoteCurrentSessionAverage;
 
     //network stuff
     ServerSocket serverSocket;
     Socket clientSocket;
     BufferedReader in;
     PrintWriter out;
-
-    //data storage
-    String[] localSessionTimes, remoteSessionTimes, sessionScrambles, localCurrentAverage, remoteCurrentAverage, localCurrentScrambles, remoteCurrentScrambles;
-    int localCubesSolved, remoteCubesSolved, sessionIndex, localCurrentPlaceInAverage, remoteCurrentPlaceInAverage, localNumOfPops, remoteNumOfPops, localScore, remoteScore, acceptsSincePop;
-    double localSessionFastest, remoteSessionFastest, localSessionSlowest, remoteSessionSlowest, localCurrentFastest, remoteCurrentFastest, localCurrentSlowest, remoteCurrentSlowest, localTotalTime, remoteTotalTime, localCurrentRollingAverage, remoteCurrentRollingAverage, localCurrentSessionAverage, remoteCurrentSessionAverage;
 
     //listening thread
     Thread chatListener;
@@ -90,35 +93,27 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         int appWidth = getSize().width, appHeight = getSize().height;
         setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
-        // configure chatSound
-        try {
+        try { //configure chatSound
             chatSound = Applet.newAudioClip(getClass().getResource("blip.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "blip.wav not found. There will be no audio when a message is recieved.");}
 
-        //configure countdownClip
-        try {
+        try { //configure countdownClip
             countdownClip = Applet.newAudioClip(getClass().getResource("count.mid"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no audio during countdown.");}
 
-        //configure bing1
-        try {
+        try { //configure bing1
             bing1 = Applet.newAudioClip(getClass().getResource("bing1.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "bing1.wav not found. There will be no 'ready' sound.");}
 
-        timeFormat = new DecimalFormat("00.00");
-
-        //configure bing2
-        try {
+        try { //configure bing2
             bing2 = Applet.newAudioClip(getClass().getResource("bing2.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "bing2.wav not found. There will be no 'ready' sound.");}
 
-        //configure readyClip
-        try {
+        try { //configure readyClip
             readyClip = Applet.newAudioClip(getClass().getResource("ready.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "ready.wav not found. There will be no 'ready' sound.");}
 
-        //configure startupClip
-        try {
+        try { //configure startupClip
             startupClip = Applet.newAudioClip(getClass().getResource("startup.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "startup.wav not found. There will be no startup sound.");}
 
@@ -728,10 +723,10 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
                         countdownClip.play();
                     } catch(NullPointerException e){}
                     timerLabel.setText(countdown+"");
-                    countdown --;
+                    countdown--;
                 } else {
                     timerLabel.setText(countdown+"");
-                    countdown --;
+                    countdown--;
                 }
             }
         }
@@ -795,14 +790,14 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
             localCurrentScrambles[localCurrentPlaceInAverage] = scrambleText.getText();
             localCurrentPlaceInAverage++;
             if(localCurrentPlaceInAverage == 12)
-                localCurrentPlaceInAverage=0;
+                localCurrentPlaceInAverage = 0;
         }
         if(remoteTime != 0){
             remoteCurrentAverage[remoteCurrentPlaceInAverage] = remoteTimeLabel.getText();
             remoteCurrentScrambles[remoteCurrentPlaceInAverage] = scrambleText.getText();
             remoteCurrentPlaceInAverage++;
             if(remoteCurrentPlaceInAverage == 12)
-                remoteCurrentPlaceInAverage=0;
+                remoteCurrentPlaceInAverage = 0;
         }
 
         //**********update averages and find fastest and slowest times**********
@@ -886,11 +881,9 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
 
             //calculate average of the middle ten times
             double sum = 0;
-
             for(int i=0; i<12; i++)
                 if(i!=fastest && i!=slowest)
                     sum += Double.parseDouble(remoteCurrentAverage[i]);
-
             remoteCurrentRollingAverage = sum/10.0;
         }
 
@@ -933,7 +926,6 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         localTimeUsernameLabel.setText("<html>Rolling Average: <FONT SIZE=\"5\">"+localRollingAverage+"</FONT><br>Session Average: "+localSessionAverage+"<br><br>Score: "+localScore+"<br>Session Fastest Time: "+localSessionFastestTime+"<br>Session Slowest Time: "+localSessionSlowestTime+"</html>");
         remoteTimeUsernameLabel.setText("<html>Rolling Average: <FONT SIZE=\"5\">"+remoteRollingAverage+"</FONT><br>Session Average: "+remoteSessionAverage+"<br><br>Score: "+remoteScore+"<br>Session Fastest Time: "+remoteSessionFastestTime+"<br>Session Slowest Time: "+remoteSessionSlowestTime+"</html>");
     } // end updateStats
-
 
 //**********************************************************************************************************************
 
@@ -981,7 +973,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         localTimeLabel.setText("");
         remoteTimeLabel.setText("");
         chatText.setText("");
-    } //end reset
+    } // end reset
 
 //**********************************************************************************************************************
 
@@ -1079,7 +1071,7 @@ public class Server extends JFrame implements ActionListener, KeyListener, Runna
         returnMe = findAndReplace(returnMe,"%F",timeFormat.format(remoteCurrentFastest));
         returnMe = findAndReplace(returnMe,"%S",timeFormat.format(remoteCurrentSlowest));
         return returnMe;
-    }
+    } // end getRemoteAverageView
 
 //**********************************************************************************************************************
 
