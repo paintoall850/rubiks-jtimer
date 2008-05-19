@@ -254,24 +254,24 @@ public class Client extends NetcubeMode{
 //**********************************************************************************************************************
 
     private void performAction(String prefix, String data){
-        if(prefix.equalsIgnoreCase("C")){
+        if(prefix.equals("C")){ // Connect
             try{
-                chatDoc.insertString(chatDoc.getLength(),remoteUsername + ": ",blueStyle);
-                chatDoc.insertString(chatDoc.getLength(),data + "\n",blackStyle);
+                chatDoc.insertString(chatDoc.getLength(), remoteUsername + ": ", blueStyle);
+                chatDoc.insertString(chatDoc.getLength(), data + "\n", blackStyle);
                 chatPane.setCaretPosition(chatDoc.getLength());
                 chatSound.play();
             } catch(BadLocationException f){System.out.println(f);}
-        }else if(prefix.equalsIgnoreCase("U")){
+        } else if(prefix.equals("U")){ // pass Username
             remoteUsername = data;
             remoteTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, remoteUsername + "'s Statistics"));
-        } else if(prefix.equalsIgnoreCase("P")){
+        } else if(prefix.equals("P")){ // Puzzle comboBox choice
             puzzleCombo.setSelectedItem(data);
-        } else if(prefix.equalsIgnoreCase("T")){
+        } else if(prefix.equals("T")){ // countdown [Time] comboBox choice
             countdownCombo.setSelectedItem(data);
-        } else if(prefix.equalsIgnoreCase("S")){
+        } else if(prefix.equals("S")){ // pass Scramble alg
             scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
             scrambleText.setText(data);
-        } else if(prefix.equalsIgnoreCase("N")){
+        } else if(prefix.equals("N")){ // pass finished time
             remoteTime = data;
             //if everyone is done, then stop the timer update stats
             if(!(localTimeLabel.getText().equals(""))){
@@ -292,7 +292,7 @@ public class Client extends NetcubeMode{
                 // move to next solve
                 updateStats();
             }
-        } else if(prefix.equalsIgnoreCase("X")){
+        } else if(prefix.equals("X")){ // start timing
             //change buttons and clear times
             remoteTime = "none";
             localTimeLabel.setText("");
@@ -311,7 +311,7 @@ public class Client extends NetcubeMode{
             timerLabel.setForeground(Color.red);
             timerThread = new java.util.Timer();
             timerThread.schedule(new RunCountdown(), 0, 1000);
-        } else if(prefix.equalsIgnoreCase("I")){
+        } else if(prefix.equals("I")){ // toggle Is-typing icon
             remoteIsTyping = !remoteIsTyping;
             if(remoteIsTyping) userIsTyping.setIcon(typeOn);
             else userIsTyping.setIcon(typeOff);
