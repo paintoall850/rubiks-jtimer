@@ -146,7 +146,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         aboutItem = new JMenuItem("About Rubik's JTimer"); aboutItem.setMnemonic('A');
         aboutItem.setAccelerator(KeyStroke.getKeyStroke('A',2));
         serverItem = new JMenuItem("Start Server");
+        serverItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3,0));
         clientItem = new JMenuItem("Connect To Server");
+        clientItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4,0));
         fileMenu = new JMenu("File"); fileMenu.setMnemonic('F');
         fileMenu.add(saveBestItem);
         fileMenu.add(saveSessionItem);
