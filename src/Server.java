@@ -37,7 +37,6 @@ public class Server extends NetcubeMode{
     JTextArea readyColor;
     ScrambleAlg scrambleAlg;
     ServerSocket serverSocket;
-    Socket clientSocket;
 
 //**********************************************************************************************************************
 
@@ -56,78 +55,12 @@ public class Server extends NetcubeMode{
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "ready.wav not found. There will be no 'ready' sound.");}
 
         //GUI Object creation
-        usernameLabel = new JLabel("Username:");
-        serverIpLabel = new JLabel("Server IP:");
-        serverPortLabel = new JLabel("Server Port:");
-        handicapLabel = new JLabel("Handicap:");
-        usernameText = new JTextField();
         serverIpText = new JTextField("N/A");
-        serverPortText = new JTextField("52003");
-        handicapText = new JTextField();
         connectButton = new JButton("Start Server");
 
-        typeOff = new ImageIcon(getClass().getResource("typeOff.gif"));
-        typeOn = new ImageIcon(getClass().getResource("typeOn.gif"));
-        userIsTyping = new JLabel(typeOff);
-
-        chatPane = new JTextPane(chatDoc = new DefaultStyledDocument());
-        chatPane.setEditable(false);
-        chatScrollPane = new JScrollPane(chatPane);
-        chatScrollPane.setBorder(blackLine);
-        chatScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        redStyle = chatPane.addStyle("red", null);
-        blueStyle = chatPane.addStyle("blue", null);
-        blackStyle = chatPane.addStyle("black", null);
-        StyleConstants.setForeground(redStyle, Color.red);
-        StyleConstants.setForeground(blueStyle, Color.blue);
-        StyleConstants.setForeground(blackStyle, Color.black);
-
-        chatText = new JTextField();
-        chatText.addKeyListener(this);
-        sendMessageButton = new JButton("Send");
-
-        useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
-        useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        scrambleText = new JTextArea("");
-        scrambleText.setFocusable(true);
-        scrambleText.setEditable(false);
-        scrambleText.setLineWrap(true);
-        scrambleText.setWrapStyleWord(true);
-        scrambleText.setBackground(myBackgrColor);
-        scrambleText.setForeground(Color.black);
-        scrambleText.setBorder(blackLine);
-
-        timerLabel = new JLabel("");
-        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
-
-        localTimeUsernameLabel = new JLabel("<html>Rolling Average: <FONT SIZE=\"5\">N/A</FONT><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
-        remoteTimeUsernameLabel = new JLabel("<html>Rolling Average: <FONT SIZE=\"5\">N/A</FONT><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
-        localTimeLabel = new JLabel("");
-        remoteTimeLabel = new JLabel("");
-        localTimeUsernameLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-        remoteTimeUsernameLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-        localTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        remoteTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        localTimeLabel.setFont(new Font("Serif", Font.PLAIN, 60));
-        remoteTimeLabel.setFont(new Font("Serif", Font.PLAIN, 60));
-
-        localTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Local Statistics"));
-        remoteTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Remote Statistics"));
-
-        localAverageDetailButton = new JButton("View Rolling");
-        localSessionDetailButton = new JButton("View Session");
-        remoteAverageDetailButton = new JButton("View Rolling");
-        remoteSessionDetailButton = new JButton("View Session");
-
-        puzzleLabel = new JLabel("Puzzle:");
-        puzzleCombo = new JComboBox(puzzleChoices);
         puzzleCombo.setSelectedItem(puzzle);
-        countdownLabel = new JLabel("Countdown:");
-        countdownCombo = new JComboBox(countdownChoices);
         countdownCombo.setSelectedItem(countdown);
         startButton = new JButton("Start Timer");
-        popButton = new JButton("POP");
 
         readyColor = new JTextArea();
         readyColor.setEditable(false);
@@ -135,114 +68,29 @@ public class Server extends NetcubeMode{
         readyColor.setBorder(blackLine);
         remoteStatusLabel = new JLabel("Remote Status");
 
-        bigPicture = new JLabel((new ImageIcon(getClass().getResource("bigPicture.jpg"))));
-        smallPicture = new JLabel((new ImageIcon(getClass().getResource("smallPicture.jpg"))));
-        bigPicture.setBorder(blackLine);
-        smallPicture.setBorder(blackLine);
-
         scrambleAlg = new ScrambleAlg();
 
         //set bounds
-        usernameLabel.setBounds(10,10,80,20);
-        serverIpLabel.setBounds(10,35,80,20);
-        serverPortLabel.setBounds(10,60,80,20);
-        handicapLabel.setBounds(10,85,80,20);
-        usernameText.setBounds(90,10,80,20);
-        serverIpText.setBounds(90,35,80,20);
-        serverPortText.setBounds(90,60,80,20);
-        handicapText.setBounds(90,85,80,20);
-        connectButton.setBounds(10,110,160,20);
-        chatScrollPane.setBounds(180,10,350,95);
-        userIsTyping.setBounds(180,110,20,20);
-        chatText.setBounds(205,110,235,20);
-        sendMessageButton.setBounds(450,110,80,20);
-        useThisAlgLabel.setBounds(10,140,700,20);
-        scrambleText.setBounds(10,160,700,50);
-        timerLabel.setBounds(10,220,700,75);
-        localTimeUsernameLabel.setBounds(10,305,345,200);
-        remoteTimeUsernameLabel.setBounds(365,305,345,200);
-        localTimeLabel.setBounds(20,325,325,75);
-        remoteTimeLabel.setBounds(375,325,325,75);
-        localAverageDetailButton.setBounds(215,405,120,20);
-        localSessionDetailButton.setBounds(215,430,120,20);
-        remoteAverageDetailButton.setBounds(570,405,120,20);
-        remoteSessionDetailButton.setBounds(570,430,120,20);
-        puzzleLabel.setBounds(540,15,80,20);
-        puzzleCombo.setBounds(540,35,80,20);
-        countdownLabel.setBounds(540+90,15,80,20);
-        countdownCombo.setBounds(540+90,35,80,20);
-        startButton.setBounds(540,60,170,20);
-        popButton.setBounds(540,85,170,20);
-        smallPicture.setBounds(210,10,500,120);
-        bigPicture.setBounds(10,150,700,355);
-
+        super.setTheBounds();
         readyColor.setBounds(540,110,20,20);
         remoteStatusLabel.setBounds(570,110,140,20);
 
         //add to content pane
-        contentPane.add(usernameLabel);
-        contentPane.add(serverIpLabel);
-        contentPane.add(serverPortLabel);
-        contentPane.add(handicapLabel);
-        contentPane.add(usernameText);
-        contentPane.add(serverIpText);
-        contentPane.add(serverPortText);
-        contentPane.add(handicapText);
-        contentPane.add(connectButton);
-        contentPane.add(chatScrollPane);
-        contentPane.add(userIsTyping);
-        contentPane.add(chatText);
-        contentPane.add(sendMessageButton);
-        contentPane.add(useThisAlgLabel);
-        contentPane.add(scrambleText);
-        contentPane.add(timerLabel);
-        contentPane.add(localTimeUsernameLabel);
-        contentPane.add(remoteTimeUsernameLabel);
-        contentPane.add(localTimeLabel);
-        contentPane.add(remoteTimeLabel);
-        contentPane.add(localAverageDetailButton);
-        contentPane.add(localSessionDetailButton);
-        contentPane.add(remoteAverageDetailButton);
-        contentPane.add(remoteSessionDetailButton);
-        contentPane.add(puzzleLabel);
-        contentPane.add(puzzleCombo);
-        contentPane.add(countdownLabel);
-        contentPane.add(countdownCombo);
-        contentPane.add(startButton);
-        contentPane.add(popButton);
-        //contentPane.add(smallPicture);
-        //contentPane.add(bigPicture);
+        super.addTheContent(contentPane);
         contentPane.add(readyColor);
         contentPane.add(remoteStatusLabel);
 
         //addActionListener
-        connectButton.addActionListener(this);
-        sendMessageButton.addActionListener(this);
-        chatText.addActionListener(this);
-        startButton.addActionListener(this);
-        popButton.addActionListener(this);
-        localSessionDetailButton.addActionListener(this);
-        localAverageDetailButton.addActionListener(this);
-        remoteSessionDetailButton.addActionListener(this);
-        remoteAverageDetailButton.addActionListener(this);
-        puzzleCombo.addActionListener(this); // only in server
-        countdownCombo.addActionListener(this); // only in server
+        super.addActionListeners();
+        puzzleCombo.addActionListener(this);
+        countdownCombo.addActionListener(this);
 
         //GUI preperation
-        chatText.setEnabled(false);
-        sendMessageButton.setEnabled(false);
-        startButton.setEnabled(false);
-        popButton.setEnabled(false);
-        localAverageDetailButton.setEnabled(false);
-        localSessionDetailButton.setEnabled(false);
-        remoteAverageDetailButton.setEnabled(false);
-        remoteSessionDetailButton.setEnabled(false);
-        serverIpText.setEnabled(false); // only in server
+        super.prepGUI();
+        serverIpText.setEnabled(false);
 
-        //set everything to defaults
-        reset();
+        //hide GUI
         hideGUI();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
     } // end constructor
 
 //**********************************************************************************************************************
@@ -523,88 +371,18 @@ public class Server extends NetcubeMode{
 
 //**********************************************************************************************************************
 
-    private void hideGUI(){
-        //usernameLabel.setVisible(true);
-        //serverIpLabel.setVisible(true);
-        //serverPortLabel.setVisible(true);
-        //handicapLabel.setVisible(true);
-        //usernameText.setVisible(true);
-        //serverIpText.setVisible(true);
-        //serverPortText.setVisible(true);
-        //handicapText.setVisible(true);
-        //connectButton.setVisible(true);
-        bigPicture.setVisible(true);
-        smallPicture.setVisible(true);
-
-        //hide everything
-        chatScrollPane.setVisible(false);
-        userIsTyping.setVisible(false);
-        chatText.setVisible(false);
-        sendMessageButton.setVisible(false);
-        puzzleLabel.setVisible(false);
-        puzzleCombo.setVisible(false);
-        countdownLabel.setVisible(false);
-        countdownCombo.setVisible(false);
-        startButton.setVisible(false);
-        popButton.setVisible(false);
+    protected void hideGUI(){
+        super.hideGUI();
         readyColor.setVisible(false);
         remoteStatusLabel.setVisible(false);
-
-        useThisAlgLabel.setVisible(false);
-        scrambleText.setVisible(false);
-        timerLabel.setVisible(false);
-        localTimeLabel.setVisible(false);
-        remoteTimeLabel.setVisible(false);
-        localTimeUsernameLabel.setVisible(false);
-        remoteTimeUsernameLabel.setVisible(false);
-        localAverageDetailButton.setVisible(false);
-        localSessionDetailButton.setVisible(false);
-        remoteSessionDetailButton.setVisible(false);
-        remoteAverageDetailButton.setVisible(false);
-
     } // end hideGUI
 
 //**********************************************************************************************************************
 
-    private void showGUI(){
-        //usernameLabel.setVisible(false);
-        //serverIpLabel.setVisible(false);
-        //serverPortLabel.setVisible(false);
-        //handicapLabel.setVisible(false);
-        //usernameText.setVisible(false);
-        //serverIpText.setVisible(false);
-        //serverPortText.setVisible(false);
-        //handicapText.setVisible(false);
-        //connectButton.setVisible(false);
-        bigPicture.setVisible(false);
-        smallPicture.setVisible(false);
-
-        //show everything
-        chatScrollPane.setVisible(true);
-        userIsTyping.setVisible(true);
-        chatText.setVisible(true);
-        sendMessageButton.setVisible(true);
-        puzzleLabel.setVisible(true);
-        puzzleCombo.setVisible(true);
-        countdownLabel.setVisible(true);
-        countdownCombo.setVisible(true);
-        startButton.setVisible(true);
-        popButton.setVisible(true);
+    protected void showGUI(){
+        super.showGUI();
         readyColor.setVisible(true);
         remoteStatusLabel.setVisible(true);
-
-        useThisAlgLabel.setVisible(true);
-        scrambleText.setVisible(true);
-        timerLabel.setVisible(true);
-        localTimeLabel.setVisible(true);
-        remoteTimeLabel.setVisible(true);
-        localTimeUsernameLabel.setVisible(true);
-        remoteTimeUsernameLabel.setVisible(true);
-        localAverageDetailButton.setVisible(true);
-        localSessionDetailButton.setVisible(true);
-        remoteSessionDetailButton.setVisible(true);
-        remoteAverageDetailButton.setVisible(true);
-
     } // end showGUI
 
 //**********************************************************************************************************************
@@ -630,18 +408,18 @@ public class Server extends NetcubeMode{
 //**********************************************************************************************************************
 
     private class ConnectionListener extends Thread{
-        private ServerSocket socket;
+        private ServerSocket serverSocket;
         private Server server;
         private Socket clientSocket;
 
-        public ConnectionListener(ServerSocket socket, Server server){
-            this.socket = socket;
+        public ConnectionListener(ServerSocket serverSocket, Server server){
+            this.serverSocket = serverSocket;
             this.server = server;
         }
 
         public void run(){
             try{
-                clientSocket = socket.accept();
+                clientSocket = serverSocket.accept();
                 server.connectionMade(clientSocket);
             } catch(Exception e){
                 System.err.println(e.getMessage());
