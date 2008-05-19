@@ -181,6 +181,8 @@ public class Server extends NetcubeMode{
                 localTimeLabel.setText("");
                 remoteTimeLabel.setText("");
                 startButton.setText("Stop Timer");
+                puzzleCombo.setEnabled(false);
+                countdownCombo.setEnabled(false);
                 startButton.setEnabled(false);
                 localSessionDetailButton.setEnabled(false);
                 localAverageDetailButton.setEnabled(false);
@@ -218,6 +220,8 @@ public class Server extends NetcubeMode{
                     //change buttons
                     startButton.setText("Start Timer");
                     readyColor.setBackground(Color.red);
+                    puzzleCombo.setEnabled(true);
+                    countdownCombo.setEnabled(true);
                     popButton.setEnabled(false);
                     chatText.setEnabled(true);
                     sendMessageButton.setEnabled(true);
@@ -252,6 +256,8 @@ public class Server extends NetcubeMode{
                 //change buttons
                 startButton.setText("Start Timer");
                 readyColor.setBackground(Color.red);
+                puzzleCombo.setEnabled(true);
+                countdownCombo.setEnabled(true);
                 popButton.setEnabled(false);
                 chatText.setEnabled(true);
                 sendMessageButton.setEnabled(true);
@@ -319,28 +325,32 @@ public class Server extends NetcubeMode{
 //**********************************************************************************************************************
 
     private void performAction(String prefix, String data){
-        if(prefix.equalsIgnoreCase("C")){
+        if(prefix.equals("C")){ // Connect
             try{
-                chatDoc.insertString(chatDoc.getLength(),remoteUsername + ": ",blueStyle);
-                chatDoc.insertString(chatDoc.getLength(),data + "\n",blackStyle);
+                chatDoc.insertString(chatDoc.getLength(), remoteUsername + ": ", blueStyle);
+                chatDoc.insertString(chatDoc.getLength(), data + "\n", blackStyle);
                 chatPane.setCaretPosition(chatDoc.getLength());
                 chatSound.play();
             } catch(BadLocationException f){System.out.println(f);}
-        }else if(prefix.equalsIgnoreCase("U")){
+        } else if(prefix.equals("U")){ // pass Username
             remoteUsername = data;
             remoteTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, remoteUsername + "'s Statistics"));
             remoteStatusLabel.setText(remoteUsername + "'s Status");
-        }else if(prefix.equalsIgnoreCase("R")){
+        } else if(prefix.equals("R")){ // indicate client is Ready
             if(data.equalsIgnoreCase("true")){
                 readyClip.play();
                 startButton.setEnabled(true);
+                puzzleCombo.setEnabled(false);
+                countdownCombo.setEnabled(false);
                 readyColor.setBackground(new Color(0,180,0)); // was 0,110,0
             } else {
                 readyClip.play();
                 startButton.setEnabled(false);
+                puzzleCombo.setEnabled(true);
+                countdownCombo.setEnabled(true);
                 readyColor.setBackground(Color.red);
             }
-        } else if(prefix.equalsIgnoreCase("N")){
+        } else if(prefix.equals("N")){ // pass finished time
             remoteTime = data;
             //if everyone is done, then stop the timer update stats
             if(!localTimeLabel.getText().equals("")){
@@ -349,6 +359,8 @@ public class Server extends NetcubeMode{
                 //change buttons
                 startButton.setText("Start Timer");
                 readyColor.setBackground(Color.red);
+                puzzleCombo.setEnabled(true);
+                countdownCombo.setEnabled(true);
                 popButton.setEnabled(false);
                 chatText.setEnabled(true);
                 sendMessageButton.setEnabled(true);
@@ -362,7 +374,7 @@ public class Server extends NetcubeMode{
                 updateStats();
                 generateNewScramble();
             }
-        } else if(prefix.equalsIgnoreCase("I")){
+        } else if(prefix.equals("I")){ // toggle Is-typing icon
             remoteIsTyping = !remoteIsTyping;
             if(remoteIsTyping) userIsTyping.setIcon(typeOn);
             else userIsTyping.setIcon(typeOff);
