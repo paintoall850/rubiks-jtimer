@@ -32,7 +32,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     public String puzzleX, countdownX;
     public boolean showResetConfirmX, showMinutesX;
     public Color countdownColorX, timerColorX, textBackgrColorX, currentColorX, fastestColorX, slowestColorX;
-    public Color[] faceColorsX = new Color[6];
+    public Color[] cubeColorsX = new Color[6];
+    public Color[] pyraminxColorsX = new Color[4];
+    public Color[] megaminxColorsX = new Color[12];
     public String averageViewFormatX, sessionViewFormatX;
 
     private Standalone myStandalone;
@@ -96,11 +98,11 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         slowestColorText.setEditable(false);
         slowestColorText.setBorder(blackLine);
 
-        for(int side=0; side<6; side++){
-            faceCLabels[side] = new JLabel(FACE_NAMES[side]);
-            faceColorTexts[side] = new JTextArea();
-            faceColorTexts[side].setEditable(false);
-            faceColorTexts[side].setBorder(blackLine);
+        for(int face=0; face<6; face++){
+            faceCLabels[face] = new JLabel(FACE_NAMES[face]);
+            faceColorTexts[face] = new JTextArea();
+            faceColorTexts[face].setEditable(false);
+            faceColorTexts[face].setBorder(blackLine);
         }
 
         faceColorLabel = new JLabel();
@@ -110,12 +112,13 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         ScramblePreview = new JTextArea[6][3][3];
 
-        for(int side=0; side<6; side++)
+        for(int face=0; face<6; face++)
             for(int i=0; i<3; i++)
                 for(int j=0; j<3; j++){
-                    ScramblePreview[side][i][j] = new JTextArea();
-                    ScramblePreview[side][i][j].setEditable(false);
-                    ScramblePreview[side][i][j].setBorder(blackLine);
+                    ScramblePreview[face][i][j] = new JTextArea();
+                    ScramblePreview[face][i][j].setEditable(false);
+                    ScramblePreview[face][i][j].setFocusable(false);
+                    ScramblePreview[face][i][j].setBorder(blackLine);
                 }
 
         startupLabel = new JLabel();
@@ -169,12 +172,12 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         colorTab.setLayout(null);
         colorTab.add(faceColorLabel);
         colorTab.add(previewLabel);
-        for(int side=0; side<6; side++){
-            colorTab.add(faceColorTexts[side]);
-            colorTab.add(faceCLabels[side]);
+        for(int face=0; face<6; face++){
+            colorTab.add(faceColorTexts[face]);
+            colorTab.add(faceCLabels[face]);
             for(int i=0; i<3; i++)
                 for(int j=0; j<3; j++)
-                    colorTab.add(ScramblePreview[side][i][j]);
+                    colorTab.add(ScramblePreview[face][i][j]);
         }
         bestTab = new JPanel();
         bestTab.setLayout(null);
@@ -261,8 +264,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         currentColorText.addMouseListener(this);
         fastestColorText.addMouseListener(this);
         slowestColorText.addMouseListener(this);
-        for(int side=0; side<6; side++)
-            faceColorTexts[side].addMouseListener(this);
+        for(int face=0; face<6; face++)
+            faceColorTexts[face].addMouseListener(this);
 
         loadOptions();
     } // end constructor
@@ -306,8 +309,12 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         currentColorX = currentColorText.getBackground();
         fastestColorX = fastestColorText.getBackground();
         slowestColorX = slowestColorText.getBackground();
-        for(int side=0; side<6; side++)
-            faceColorsX[side] = faceColorTexts[side].getBackground();
+        for(int face=0; face<6; face++)
+            cubeColorsX[face] = faceColorTexts[face].getBackground();
+//        for(int face=0; face<4; face++)
+//            pyraminxColorsX[face] = ???[face].getBackground();
+//        for(int face=0; face<12; face++)
+//            megaminxColorsX[face] = ???[face].getBackground();
         averageViewFormatX = averageText.getText();
         sessionViewFormatX = sessionText.getText();
 
@@ -322,8 +329,12 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         printToFile = printToFile + currentColorX.getRGB() + "~";
         printToFile = printToFile + fastestColorX.getRGB() + "~";
         printToFile = printToFile + slowestColorX.getRGB() + "~";
-        for(int side=0; side<6; side++)
-            printToFile = printToFile + faceColorsX[side].getRGB() + "~";
+        for(int face=0; face<6; face++)
+            printToFile = printToFile + cubeColorsX[face].getRGB() + "~";
+        for(int face=0; face<4; face++)
+            printToFile = printToFile + pyraminxColorsX[face].getRGB() + "~";
+        for(int face=0; face<12; face++)
+            printToFile = printToFile + megaminxColorsX[face].getRGB() + "~";
         printToFile = printToFile + averageViewFormatX + "~";
         printToFile = printToFile + sessionViewFormatX;
 
@@ -361,8 +372,12 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             currentColorX = new Color(Integer.parseInt(st.nextToken()));
             fastestColorX = new Color(Integer.parseInt(st.nextToken()));
             slowestColorX = new Color(Integer.parseInt(st.nextToken()));
-            for(int side=0; side<6; side++)
-                faceColorsX[side] = new Color(Integer.parseInt(st.nextToken()));
+            for(int face=0; face<6; face++)
+                cubeColorsX[face] = new Color(Integer.parseInt(st.nextToken()));
+            for(int face=0; face<4; face++)
+                pyraminxColorsX[face] = new Color(Integer.parseInt(st.nextToken()));
+            for(int face=0; face<12; face++)
+                megaminxColorsX[face] = new Color(Integer.parseInt(st.nextToken()));
             averageViewFormatX = st.nextToken();
             sessionViewFormatX = st.nextToken();
 
@@ -386,12 +401,32 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         currentColorX = new Color(0,180,0);
         fastestColorX = Color.blue;
         slowestColorX = Color.red;
-        faceColorsX[0] = new Color(255,255,255);
-        faceColorsX[1] = new Color(255,255,0);
-        faceColorsX[2] = new Color(255,0,0);
-        faceColorsX[3] = new Color(255,128,0);
-        faceColorsX[4] = new Color(0,0,255);
-        faceColorsX[5] = new Color(0,196,0);
+
+        cubeColorsX[0] = new Color(0,0,255); // blue
+        cubeColorsX[1] = new Color(0,196,0); // green
+        cubeColorsX[2] = new Color(255,0,0); // red
+        cubeColorsX[3] = new Color(255,128,0); // orange
+        cubeColorsX[4] = new Color(255,255,0); // yellow
+        cubeColorsX[5] = new Color(255,255,255); // white
+
+        pyraminxColorsX[0] = new Color(0,180,255); // powder blue
+        pyraminxColorsX[1] = new Color(255,0,0); // red
+        pyraminxColorsX[2] = new Color(255,255,0); // yellow
+        pyraminxColorsX[3] = new Color(0,255,0); // bright green
+
+        megaminxColorsX[0] = new Color(255,255,255); // white
+        megaminxColorsX[1] = new Color(0,180,255); // powder blue
+        megaminxColorsX[2] = new Color(200,128,0); // brown
+        megaminxColorsX[3] = new Color(255,0,0); // red
+        megaminxColorsX[4] = new Color(255,255,0); // yellow
+        megaminxColorsX[5] = new Color(0,255,0); // bright green
+        megaminxColorsX[6] = new Color(160,0,255); // purple
+        megaminxColorsX[7] = new Color(0,0,210); // dark blue
+        megaminxColorsX[8] = new Color(0,128,0); // dark green
+        megaminxColorsX[9] = new Color(255,80,80); // pink
+        megaminxColorsX[10] = new Color(255,180,180); // light pink
+        megaminxColorsX[11] = new Color(255,128,0); // orange
+
         averageViewFormatX = "----- Rubik's JTimer Best Average for %T -----\r\n\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\nStandard Deviation: %D\r\n\r\nIndividual Times:\r\n%I";
         sessionViewFormatX = "----- Rubik's JTimer Session Statistics for %T -----\r\n\r\nCubes Solved: %C\r\nTotal Pops: %P\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\nStandard Deviation: %D\r\n\r\nIndividual Times:\r\n%I";
 
@@ -413,8 +448,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         currentColorText.setBackground(currentColorX);
         fastestColorText.setBackground(fastestColorX);
         slowestColorText.setBackground(slowestColorX);
-        for(int side=0; side<6; side++)
-            faceColorTexts[side].setBackground(faceColorsX[side]);
+        for(int face=0; face<6; face++)
+            faceColorTexts[face].setBackground(cubeColorsX[face]);
         updateScramblePreview();
         averageText.setText(averageViewFormatX); averageText.setCaretPosition(0);
         sessionText.setText(sessionViewFormatX); sessionText.setCaretPosition(0);
@@ -474,9 +509,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 //**********************************************************************************************************************
 
     private void updateScramblePreview(){
-        for(int side=0; side<6; side++)
+        for(int face=0; face<6; face++)
             for(int i=0; i<3; i++)
                 for(int j=0; j<3; j++)
-                    ScramblePreview[side][i][j].setBackground(faceColorTexts[side].getBackground());
+                    ScramblePreview[face][i][j].setBackground(faceColorTexts[face].getBackground());
     }
 }

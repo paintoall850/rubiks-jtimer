@@ -287,7 +287,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         insertTimeButton.setBounds(311-70,311+20,160,20);
         sessionResetButton.setBounds(311-70,336+20,160,20);
 
-        // total width is 834 if there is a 10 margine on each side
+        // total width is 834 if there is a 10 margin on each side
         // so use formula: margin = (834-12*width-11*separation)/2 + 10
         // initial x value is left margine
         int x = 14;
@@ -1148,7 +1148,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             countdownCombo.setSelectedItem(optionsMenu.countdownX);
 
         timeLabels[placeInAverage].setForeground(optionsMenu.currentColorX);
-        scramblePane.setCubeColors(optionsMenu.faceColorsX);
+        scramblePane.setCubeColors(optionsMenu.cubeColorsX);
+        scramblePane.setPyraminxColors(optionsMenu.pyraminxColorsX);
+        scramblePane.setMegaminxColors(optionsMenu.megaminxColorsX);
         updateScramblePane();
         scrambleText.setBackground(optionsMenu.textBackgrColorX);
         bestAverageText.setBackground(optionsMenu.textBackgrColorX);
