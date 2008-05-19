@@ -58,10 +58,10 @@ public class ScramblePane extends JPanel implements Constants{
 
     public void newScramble(String puzzle, String scrambleAlg){
         clearScreen();
-             if(puzzle.equals("2x2x2")) scrambleCube(2, puzzle, scrambleAlg);
-        else if(puzzle.equals("3x3x3")) scrambleCube(3, puzzle, scrambleAlg);
-        else if(puzzle.equals("4x4x4")) scrambleCube(4, puzzle, scrambleAlg);
-        else if(puzzle.equals("5x5x5")) scrambleCube(5, puzzle, scrambleAlg);
+             if(puzzle.equals("2x2x2")) scrambleCubeX(2, puzzle, scrambleAlg);
+        else if(puzzle.equals("3x3x3")) scrambleCubeX(3, puzzle, scrambleAlg);
+        else if(puzzle.equals("4x4x4")) scrambleCubeX(4, puzzle, scrambleAlg);
+        else if(puzzle.equals("5x5x5")) scrambleCubeX(5, puzzle, scrambleAlg);
         else if(puzzle.equals("Pyraminx")) scramblePyraminx(puzzle, scrambleAlg);
         else if(puzzle.equals("Megaminx")) scrambleMegaminx(puzzle, scrambleAlg);
     }
@@ -155,53 +155,53 @@ public class ScramblePane extends JPanel implements Constants{
 
     private void scrambleCube(int size, String puzzle, String scrambleAlg){
         StringTokenizer moves = new StringTokenizer(scrambleAlg);
-        String currentMove = "null";
+        String move = "null";
         boolean failed = false;
         resetCube(size);
 
         while(moves.hasMoreTokens()){
-            currentMove = moves.nextToken();
+            move = moves.nextToken();
             int dir = 1;
-            if(currentMove.endsWith("'")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 3;}
-            if(currentMove.endsWith("2")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 2;}
-            //JOptionPane.showMessageDialog(this, "For " + puzzle + ": <" + currentMove + "> gives " + dir + ".");
+            if(move.endsWith("'")){move = move.substring(0, move.length()-1); dir = 3;}
+            if(move.endsWith("2")){move = move.substring(0, move.length()-1); dir = 2;}
+            //JOptionPane.showMessageDialog(this, "For " + puzzle + ": <" + move + "> gives " + dir + ".");
 
-                 if(currentMove.equals("F")){doCubeTurn(size, 0, 0, dir);}
-            else if(currentMove.equals("B")){doCubeTurn(size, 1, 0, dir);}
-            else if(currentMove.equals("L")){doCubeTurn(size, 2, 0, dir);}
-            else if(currentMove.equals("R")){doCubeTurn(size, 3, 0, dir);}
-            else if(currentMove.equals("D")){doCubeTurn(size, 4, 0, dir);}
-            else if(currentMove.equals("U")){doCubeTurn(size, 5, 0, dir);}
-            else if(currentMove.equals("x")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 3, slice, dir);}
-            else if(currentMove.equals("y")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 5, slice, dir);}
-            else if(currentMove.equals("z")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 0, slice, dir);}
+                 if(move.equals("F")){doCubeTurn(size, 0, 0, dir);}
+            else if(move.equals("B")){doCubeTurn(size, 1, 0, dir);}
+            else if(move.equals("L")){doCubeTurn(size, 2, 0, dir);}
+            else if(move.equals("R")){doCubeTurn(size, 3, 0, dir);}
+            else if(move.equals("D")){doCubeTurn(size, 4, 0, dir);}
+            else if(move.equals("U")){doCubeTurn(size, 5, 0, dir);}
+            else if(move.equals("x")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 3, slice, dir);}
+            else if(move.equals("y")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 5, slice, dir);}
+            else if(move.equals("z")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 0, slice, dir);}
 
             else if(size < 3){failed = true; break;}
-            else if(currentMove.equals("f")){doCubeTurn(size, 0, 1, dir); if(size == 3) doCubeTurn(size, 0, 0, dir);}
-            else if(currentMove.equals("b")){doCubeTurn(size, 1, 1, dir); if(size == 3) doCubeTurn(size, 1, 0, dir);}
-            else if(currentMove.equals("l")){doCubeTurn(size, 2, 1, dir); if(size == 3) doCubeTurn(size, 2, 0, dir);}
-            else if(currentMove.equals("r")){doCubeTurn(size, 3, 1, dir); if(size == 3) doCubeTurn(size, 3, 0, dir);}
-            else if(currentMove.equals("d")){doCubeTurn(size, 4, 1, dir); if(size == 3) doCubeTurn(size, 4, 0, dir);}
-            else if(currentMove.equals("u")){doCubeTurn(size, 5, 1, dir); if(size == 3) doCubeTurn(size, 5, 0, dir);}
-            else if(currentMove.equals("M")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 2, slice, dir);}
-            else if(currentMove.equals("E")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 4, slice, dir);}
-            else if(currentMove.equals("S")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 0, slice, dir);}
-            else if(currentMove.equals("Fw")){doCubeTurn(size, 0, 0, dir); doCubeTurn(size, 0, 1, dir);}
-            else if(currentMove.equals("Bw")){doCubeTurn(size, 1, 0, dir); doCubeTurn(size, 1, 1, dir);}
-            else if(currentMove.equals("Lw")){doCubeTurn(size, 2, 0, dir); doCubeTurn(size, 2, 1, dir);}
-            else if(currentMove.equals("Rw")){doCubeTurn(size, 3, 0, dir); doCubeTurn(size, 3, 1, dir);}
-            else if(currentMove.equals("Dw")){doCubeTurn(size, 4, 0, dir); doCubeTurn(size, 4, 1, dir);}
-            else if(currentMove.equals("Uw")){doCubeTurn(size, 5, 0, dir); doCubeTurn(size, 5, 1, dir);}
+            else if(move.equals("f")){doCubeTurn(size, 0, 1, dir); if(size == 3) doCubeTurn(size, 0, 0, dir);}
+            else if(move.equals("b")){doCubeTurn(size, 1, 1, dir); if(size == 3) doCubeTurn(size, 1, 0, dir);}
+            else if(move.equals("l")){doCubeTurn(size, 2, 1, dir); if(size == 3) doCubeTurn(size, 2, 0, dir);}
+            else if(move.equals("r")){doCubeTurn(size, 3, 1, dir); if(size == 3) doCubeTurn(size, 3, 0, dir);}
+            else if(move.equals("d")){doCubeTurn(size, 4, 1, dir); if(size == 3) doCubeTurn(size, 4, 0, dir);}
+            else if(move.equals("u")){doCubeTurn(size, 5, 1, dir); if(size == 3) doCubeTurn(size, 5, 0, dir);}
+            else if(move.equals("M")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 2, slice, dir);}
+            else if(move.equals("E")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 4, slice, dir);}
+            else if(move.equals("S")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 0, slice, dir);}
+            else if(move.equals("Fw")){doCubeTurn(size, 0, 0, dir); doCubeTurn(size, 0, 1, dir);}
+            else if(move.equals("Bw")){doCubeTurn(size, 1, 0, dir); doCubeTurn(size, 1, 1, dir);}
+            else if(move.equals("Lw")){doCubeTurn(size, 2, 0, dir); doCubeTurn(size, 2, 1, dir);}
+            else if(move.equals("Rw")){doCubeTurn(size, 3, 0, dir); doCubeTurn(size, 3, 1, dir);}
+            else if(move.equals("Dw")){doCubeTurn(size, 4, 0, dir); doCubeTurn(size, 4, 1, dir);}
+            else if(move.equals("Uw")){doCubeTurn(size, 5, 0, dir); doCubeTurn(size, 5, 1, dir);}
 
             else if((size < 5) || (size%2 == 0)){failed = true; break;}
-            else if(currentMove.equals("m")){doCubeTurn(size, 2, (size-1)/2, dir);}
-            else if(currentMove.equals("e")){doCubeTurn(size, 4, (size-1)/2, dir);}
-            else if(currentMove.equals("s")){doCubeTurn(size, 0, (size-1)/2, dir);}
+            else if(move.equals("m")){doCubeTurn(size, 2, (size-1)/2, dir);}
+            else if(move.equals("e")){doCubeTurn(size, 4, (size-1)/2, dir);}
+            else if(move.equals("s")){doCubeTurn(size, 0, (size-1)/2, dir);}
             else{failed = true; break;}
         }
 
         if(failed)
-            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ currentMove + ">.");
+            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
         setCubeVisible(size, !failed);
     }
 
@@ -267,6 +267,118 @@ public class ScramblePane extends JPanel implements Constants{
             for(int i=0; i<size; i++)
                 for(int j=0; j<size; j++)
                     CubePrev[size][face][i][j].setBackground(CubeFace[size][face][i][j].getBackground());
+    }
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//Experimental cube area
+
+    private void drawCubeX(int size, int state[][][][]){
+        for(int face=0; face<6; face++)
+            for(int i=0; i<size; i++)
+                for(int j=0; j<size; j++){
+                    Color c = cubeColors[state[face][i][j][0]];
+                    CubeFace[size][face][i][j].setBackground(c);
+                }
+
+        setCubeVisible(size, true);
+    }
+
+//**********************************************************************************************************************
+
+    private void scrambleCubeX(int size, String puzzle, String scrambleAlg){
+        StringTokenizer moves = new StringTokenizer(scrambleAlg);
+        String move = "null";
+        boolean failed = false;
+
+        int state[][][][] = new int[6][size][size][1];
+        for(int face=0; face<6; face++)
+            for(int i=0; i<size; i++)
+                for(int j=0; j<size; j++)
+                    state[face][i][j][0] = face;
+
+        while(moves.hasMoreTokens()){
+            move = moves.nextToken();
+            int dir = 1;
+            if(move.endsWith("'")){move = move.substring(0, move.length()-1); dir = 3;}
+            if(move.endsWith("2")){move = move.substring(0, move.length()-1); dir = 2;}
+            //JOptionPane.showMessageDialog(this, "For " + puzzle + ": <" + move + "> gives " + dir + ".");
+
+                 if(move.equals("F")){doCubeTurnX(size, state, 0, 0, dir);}
+            else if(move.equals("B")){doCubeTurnX(size, state, 1, 0, dir);}
+            else if(move.equals("L")){doCubeTurnX(size, state, 2, 0, dir);}
+            else if(move.equals("R")){doCubeTurnX(size, state, 3, 0, dir);}
+            else if(move.equals("D")){doCubeTurnX(size, state, 4, 0, dir);}
+            else if(move.equals("U")){doCubeTurnX(size, state, 5, 0, dir);}
+            else if(move.equals("x")){for(int slice=0; slice<size; slice++) doCubeTurnX(size, state, 3, slice, dir);}
+            else if(move.equals("y")){for(int slice=0; slice<size; slice++) doCubeTurnX(size, state, 5, slice, dir);}
+            else if(move.equals("z")){for(int slice=0; slice<size; slice++) doCubeTurnX(size, state, 0, slice, dir);}
+
+            else if(size < 3){failed = true; break;}
+            else if(move.equals("f")){doCubeTurnX(size, state, 0, 1, dir); if(size == 3) doCubeTurnX(size, state, 0, 0, dir);}
+            else if(move.equals("b")){doCubeTurnX(size, state, 1, 1, dir); if(size == 3) doCubeTurnX(size, state, 1, 0, dir);}
+            else if(move.equals("l")){doCubeTurnX(size, state, 2, 1, dir); if(size == 3) doCubeTurnX(size, state, 2, 0, dir);}
+            else if(move.equals("r")){doCubeTurnX(size, state, 3, 1, dir); if(size == 3) doCubeTurnX(size, state, 3, 0, dir);}
+            else if(move.equals("d")){doCubeTurnX(size, state, 4, 1, dir); if(size == 3) doCubeTurnX(size, state, 4, 0, dir);}
+            else if(move.equals("u")){doCubeTurnX(size, state, 5, 1, dir); if(size == 3) doCubeTurnX(size, state, 5, 0, dir);}
+            else if(move.equals("M")){for(int slice=1; slice<size-1; slice++) doCubeTurnX(size, state, 2, slice, dir);}
+            else if(move.equals("E")){for(int slice=1; slice<size-1; slice++) doCubeTurnX(size, state, 4, slice, dir);}
+            else if(move.equals("S")){for(int slice=1; slice<size-1; slice++) doCubeTurnX(size, state, 0, slice, dir);}
+            else if(move.equals("Fw")){doCubeTurnX(size, state, 0, 0, dir); doCubeTurnX(size, state, 0, 1, dir);}
+            else if(move.equals("Bw")){doCubeTurnX(size, state, 1, 0, dir); doCubeTurnX(size, state, 1, 1, dir);}
+            else if(move.equals("Lw")){doCubeTurnX(size, state, 2, 0, dir); doCubeTurnX(size, state, 2, 1, dir);}
+            else if(move.equals("Rw")){doCubeTurnX(size, state, 3, 0, dir); doCubeTurnX(size, state, 3, 1, dir);}
+            else if(move.equals("Dw")){doCubeTurnX(size, state, 4, 0, dir); doCubeTurnX(size, state, 4, 1, dir);}
+            else if(move.equals("Uw")){doCubeTurnX(size, state, 5, 0, dir); doCubeTurnX(size, state, 5, 1, dir);}
+
+            else if((size < 5) || (size%2 == 0)){failed = true; break;}
+            else if(move.equals("m")){doCubeTurnX(size, state, 2, (size-1)/2, dir);}
+            else if(move.equals("e")){doCubeTurnX(size, state, 4, (size-1)/2, dir);}
+            else if(move.equals("s")){doCubeTurnX(size, state, 0, (size-1)/2, dir);}
+            else{failed = true; break;}
+        }
+
+        if(failed)
+            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
+        else
+            drawCubeX(size, state);
+    }
+
+//**********************************************************************************************************************
+
+    // dir = 1 for 90 deg, 2 for 180 deg, 3 for 270 deg
+    private void doCubeTurnX(int size, int state[][][][], int face, int slice, int dir){
+        dir %= 4;
+        if(slice > size-1) return;
+        if(slice == size-1){ //far slice, mostly to help handle whole cube rotation
+            doCubeTurn(size, (face%2 == 1 ? face-1 : face+1), 0, 4-dir); //recursion for that far slice
+            return;
+        }
+
+        int tface = face, tslice = slice, tdir = dir;
+        if(face%2 == 1){
+            tface = face-1;
+            tslice = size-slice-1;
+            tdir = 4-dir;
+        }
+
+        for(int d=0; d<tdir; d++){
+            for(int i=0; i<size; i++){
+                if(tface == 0) //doing F
+                    cycle(state[5][size-tslice-1][size-i-1], state[3][size-i-1][tslice], state[4][tslice][i], state[2][i][size-tslice-1]);
+                else if(tface == 2) // doing L
+                    cycle(state[5][i][tslice], state[0][i][tslice], state[4][i][tslice], state[1][size-i-1][size-tslice-1]);
+                else if(tface == 4) // doing D
+                    cycle(state[0][size-tslice-1][i], state[3][size-tslice-1][i], state[1][size-tslice-1][i], state[2][size-tslice-1][i]);
+            }
+        }
+
+        if(slice == 0) // this means we need to do some pure face rotation
+            for(int d=0; d<dir; d++)
+                for(int i=0; i<((size+1)/2); i++)
+                    for(int j=0; j<(size/2); j++)
+                        cycle(state[face][i][j], state[face][j][size-i-1], state[face][size-i-1][size-j-1], state[face][size-j-1][i]);
     }
 
 //**********************************************************************************************************************
@@ -369,7 +481,7 @@ public class ScramblePane extends JPanel implements Constants{
 
     private void scrambleMegaminx(String puzzle, String scrambleAlg){
         StringTokenizer moves = new StringTokenizer(scrambleAlg);
-        String currentMove = "null";
+        String move = "null";
         boolean failed = false;
 
         int state[][][] = new int[12][11][1];
@@ -378,63 +490,63 @@ public class ScramblePane extends JPanel implements Constants{
                 state[face][i][0] = face;
 
         while(moves.hasMoreTokens()){
-            currentMove = moves.nextToken();
+            move = moves.nextToken();
             int dir = 1;
-            //     if(currentMove.endsWith("++")){currentMove = currentMove.substring(0, currentMove.length()-2); dir = 2;}
-            //else if(currentMove.endsWith("+")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 1;}
-            //else if(currentMove.endsWith("--")){currentMove = currentMove.substring(0, currentMove.length()-2); dir = 3;}
-            //else if(currentMove.endsWith("-")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 4;}
-                 if(currentMove.endsWith("1")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 1;}
-            else if(currentMove.endsWith("2")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 2;}
-            else if(currentMove.endsWith("3")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 3;}
-            else if(currentMove.endsWith("4")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 4;}
-            //else if(currentMove.endsWith("'")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 4;}
+            //     if(move.endsWith("++")){move = move.substring(0, move.length()-2); dir = 2;}
+            //else if(move.endsWith("+")){move = move.substring(0, move.length()-1); dir = 1;}
+            //else if(move.endsWith("--")){move = move.substring(0, move.length()-2); dir = 3;}
+            //else if(move.endsWith("-")){move = move.substring(0, move.length()-1); dir = 4;}
+                 if(move.endsWith("1")){move = move.substring(0, move.length()-1); dir = 1;}
+            else if(move.endsWith("2")){move = move.substring(0, move.length()-1); dir = 2;}
+            else if(move.endsWith("3")){move = move.substring(0, move.length()-1); dir = 3;}
+            else if(move.endsWith("4")){move = move.substring(0, move.length()-1); dir = 4;}
+            //else if(move.endsWith("'")){move = move.substring(0, move.length()-1); dir = 4;}
 
-            if(currentMove.equals("R+")){
+            if(move.equals("R+")){
                 doMinxFaceTurn(state, 8, 1); doMinxSliceAssist(state, 8, 1); doMinxSliceAssist(state, 5, 4);
             }
-            else if(currentMove.equals("R++")){
+            else if(move.equals("R++")){
                 doMinxFaceTurn(state, 8, 2); doMinxSliceAssist(state, 8, 2); doMinxSliceAssist(state, 5, 3);
             }
-            else if(currentMove.equals("R--")){
+            else if(move.equals("R--")){
                 doMinxFaceTurn(state, 8, 3); doMinxSliceAssist(state, 8, 3); doMinxSliceAssist(state, 5, 2);
             }
-            else if(currentMove.equals("R-")){
+            else if(move.equals("R-")){
                 doMinxFaceTurn(state, 8, 4); doMinxSliceAssist(state, 8, 4); doMinxSliceAssist(state, 5, 1);
             }
-            else if(currentMove.equals("D+")){
+            else if(move.equals("D+")){
                 doMinxFaceTurn(state, 7, 1); doMinxSliceAssist(state, 7, 1); doMinxSliceAssist(state, 1, 4);
             }
-            else if(currentMove.equals("D++")){
+            else if(move.equals("D++")){
                 doMinxFaceTurn(state, 7, 2); doMinxSliceAssist(state, 7, 2); doMinxSliceAssist(state, 1, 3);
             }
-            else if(currentMove.equals("D--")){
+            else if(move.equals("D--")){
                 doMinxFaceTurn(state, 7, 3); doMinxSliceAssist(state, 7, 3); doMinxSliceAssist(state, 1, 2);
             }
-            else if(currentMove.equals("D-")){
+            else if(move.equals("D-")){
                 doMinxFaceTurn(state, 7, 4); doMinxSliceAssist(state, 7, 4); doMinxSliceAssist(state, 1, 1);
             }
-            else if(currentMove.equals("U") || currentMove.equals("Y+")) doMinxFaceTurn(state, 1, 1);
-            else if(currentMove.equals("U'") || currentMove.equals("Y-")) doMinxFaceTurn(state, 1, 4);
-            else if(currentMove.equals("Y++")) doMinxFaceTurn(state, 1, 2);
-            else if(currentMove.equals("Y--")) doMinxFaceTurn(state, 1, 3);
-            else if(currentMove.equals("A")) doMinxFaceTurn(state, 0, dir);
-            else if(currentMove.equals("B")) doMinxFaceTurn(state, 1, dir);
-            else if(currentMove.equals("C")) doMinxFaceTurn(state, 2, dir);
-            else if(currentMove.equals("D")) doMinxFaceTurn(state, 3, dir);
-            else if(currentMove.equals("E")) doMinxFaceTurn(state, 4, dir);
-            else if(currentMove.equals("F")) doMinxFaceTurn(state, 5, dir);
-            else if(currentMove.equals("a")) doMinxFaceTurn(state, 6, dir);
-            else if(currentMove.equals("b")) doMinxFaceTurn(state, 7, dir);
-            else if(currentMove.equals("f")) doMinxFaceTurn(state, 8, dir); // c,d,e,f reversed on CCT, this is right
-            else if(currentMove.equals("e")) doMinxFaceTurn(state, 9, dir);
-            else if(currentMove.equals("d")) doMinxFaceTurn(state,10, dir);
-            else if(currentMove.equals("c")) doMinxFaceTurn(state,11, dir);
+            else if(move.equals("U") || move.equals("Y+")) doMinxFaceTurn(state, 1, 1);
+            else if(move.equals("U'") || move.equals("Y-")) doMinxFaceTurn(state, 1, 4);
+            else if(move.equals("Y++")) doMinxFaceTurn(state, 1, 2);
+            else if(move.equals("Y--")) doMinxFaceTurn(state, 1, 3);
+            else if(move.equals("A")) doMinxFaceTurn(state, 0, dir);
+            else if(move.equals("B")) doMinxFaceTurn(state, 1, dir);
+            else if(move.equals("C")) doMinxFaceTurn(state, 2, dir);
+            else if(move.equals("D")) doMinxFaceTurn(state, 3, dir);
+            else if(move.equals("E")) doMinxFaceTurn(state, 4, dir);
+            else if(move.equals("F")) doMinxFaceTurn(state, 5, dir);
+            else if(move.equals("a")) doMinxFaceTurn(state, 6, dir);
+            else if(move.equals("b")) doMinxFaceTurn(state, 7, dir);
+            else if(move.equals("f")) doMinxFaceTurn(state, 8, dir); // c,d,e,f reversed on CCT, this is right
+            else if(move.equals("e")) doMinxFaceTurn(state, 9, dir);
+            else if(move.equals("d")) doMinxFaceTurn(state,10, dir);
+            else if(move.equals("c")) doMinxFaceTurn(state,11, dir);
             else{failed = true; break;}
         }
 
         if(failed)
-            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ currentMove + ">.");
+            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
         else
             drawMegaminx(state);
     }
@@ -628,7 +740,7 @@ public class ScramblePane extends JPanel implements Constants{
 
     private void scramblePyraminx(String puzzle, String scrambleAlg){
         StringTokenizer moves = new StringTokenizer(scrambleAlg);
-        String currentMove = "null";
+        String move = "null";
         boolean failed = false;
 
         // 6,7,8 are tip stickers, other evens are face stickers, odds are edge stickers
@@ -638,24 +750,24 @@ public class ScramblePane extends JPanel implements Constants{
                 state[face][i][0] = face;
 
         while(moves.hasMoreTokens()){
-            currentMove = moves.nextToken();
+            move = moves.nextToken();
             int dir = 1;
-            if(currentMove.endsWith("'")){currentMove = currentMove.substring(0, currentMove.length()-1); dir = 2;}
+            if(move.endsWith("'")){move = move.substring(0, move.length()-1); dir = 2;}
 
-                 if(currentMove.equals("U")) doPyraCoreTurn(state, 0, dir);
-            else if(currentMove.equals("L")) doPyraCoreTurn(state, 1, dir);
-            else if(currentMove.equals("R")) doPyraCoreTurn(state, 2, dir);
-            else if(currentMove.equals("B")) doPyraCoreTurn(state, 3, dir);
+                 if(move.equals("U")) doPyraCoreTurn(state, 0, dir);
+            else if(move.equals("L")) doPyraCoreTurn(state, 1, dir);
+            else if(move.equals("R")) doPyraCoreTurn(state, 2, dir);
+            else if(move.equals("B")) doPyraCoreTurn(state, 3, dir);
 
-            else if(currentMove.equals("u")) doPyraTipsTurn(state, 0, dir);
-            else if(currentMove.equals("l")) doPyraTipsTurn(state, 1, dir);
-            else if(currentMove.equals("r")) doPyraTipsTurn(state, 2, dir);
-            else if(currentMove.equals("b")) doPyraTipsTurn(state, 3, dir);
+            else if(move.equals("u")) doPyraTipsTurn(state, 0, dir);
+            else if(move.equals("l")) doPyraTipsTurn(state, 1, dir);
+            else if(move.equals("r")) doPyraTipsTurn(state, 2, dir);
+            else if(move.equals("b")) doPyraTipsTurn(state, 3, dir);
             else{failed = true; break;}
         }
 
         if(failed)
-            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ currentMove + ">.");
+            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
         else
             drawPyraminx(state);
     }
