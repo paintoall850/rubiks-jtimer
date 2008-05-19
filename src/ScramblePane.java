@@ -29,7 +29,7 @@ public class ScramblePane extends JPanel implements Constants{
     private Color[] cubeColors = new Color[6];
     //private Color[] pyraminxColors = new Color[4];
     //private Color[] megaminxColors = new Color[12];
-    private JTextArea[][][][] CubeFace, CubePrev;
+    private JTextArea[][][][] CubeFace;
     private BufferedImage myImage;
     private int myWidth, myHeight; // would prefer to get these with function calls, but they don't work
 
@@ -37,8 +37,7 @@ public class ScramblePane extends JPanel implements Constants{
 
     public ScramblePane(int width, int height){
         myWidth = width; myHeight = height; // needs gettin' rid of
-        CubeFace = new JTextArea[MAX_CUBE_SIZE+1][][][];
-        CubePrev = new JTextArea[MAX_CUBE_SIZE+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
+        CubeFace = new JTextArea[MAX_CUBE_SIZE+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
         for(int face=0; face<6; face++) cubeColors[face] = Color.black; // just incase...
         //for(int face=0; face<12; face++) megaminxColors[face] = Color.black; // just incase...
 
@@ -58,10 +57,10 @@ public class ScramblePane extends JPanel implements Constants{
 
     public void newScramble(String puzzle, String scrambleAlg){
         clearScreen();
-             if(puzzle.equals("2x2x2")) scrambleCubeX(2, puzzle, scrambleAlg);
-        else if(puzzle.equals("3x3x3")) scrambleCubeX(3, puzzle, scrambleAlg);
-        else if(puzzle.equals("4x4x4")) scrambleCubeX(4, puzzle, scrambleAlg);
-        else if(puzzle.equals("5x5x5")) scrambleCubeX(5, puzzle, scrambleAlg);
+             if(puzzle.equals("2x2x2")) scrambleCube(2, puzzle, scrambleAlg);
+        else if(puzzle.equals("3x3x3")) scrambleCube(3, puzzle, scrambleAlg);
+        else if(puzzle.equals("4x4x4")) scrambleCube(4, puzzle, scrambleAlg);
+        else if(puzzle.equals("5x5x5")) scrambleCube(5, puzzle, scrambleAlg);
         else if(puzzle.equals("Pyraminx")) scramblePyraminx(puzzle, scrambleAlg);
         else if(puzzle.equals("Megaminx")) scrambleMegaminx(puzzle, scrambleAlg);
     }
@@ -87,7 +86,6 @@ public class ScramblePane extends JPanel implements Constants{
 
     private void prepareCube(int size){
         CubeFace[size] = new JTextArea[6][size][size];
-        CubePrev[size] = new JTextArea[6][size][size];
 
         for(int face=0; face<6; face++)
             for(int i=0; i<size; i++)
@@ -96,10 +94,6 @@ public class ScramblePane extends JPanel implements Constants{
                     CubeFace[size][face][i][j].setEditable(false);
                     CubeFace[size][face][i][j].setFocusable(false);
                     CubeFace[size][face][i][j].setBorder(blackLine);
-                    CubePrev[size][face][i][j] = new JTextArea();
-                    CubePrev[size][face][i][j].setEditable(false);
-                    CubePrev[size][face][i][j].setFocusable(false);
-                    CubePrev[size][face][i][j].setBorder(blackLine);
                 }
     }
 
@@ -114,8 +108,6 @@ public class ScramblePane extends JPanel implements Constants{
         //int x = 15, y = 19; // nudge factors
         int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = (myHeight - 3*face_pixels - 2*face_gap)/2;
         y += 5; // nudge away from title
-//System.err.println("x=" + x);
-//System.err.println("y=" + y);
 
         setCubeFaceBounds(CubeFace[size][0], size, 1*n + x ,1*n + y, face_pixels/size);
         setCubeFaceBounds(CubeFace[size][1], size, 3*n + x, 1*n + y, face_pixels/size);
@@ -136,10 +128,8 @@ public class ScramblePane extends JPanel implements Constants{
     private void resetCube(int size){
         for(int face=0; face<6; face++)
             for(int i=0; i<size; i++)
-                for(int j=0; j<size; j++){
+                for(int j=0; j<size; j++)
                     CubeFace[size][face][i][j].setBackground(cubeColors[face]);
-                    CubePrev[size][face][i][j].setBackground(cubeColors[face]);
-                }
     }
 
 //**********************************************************************************************************************
@@ -152,142 +142,23 @@ public class ScramblePane extends JPanel implements Constants{
     }
 
 //**********************************************************************************************************************
-
-    private void scrambleCube(int size, String puzzle, String scrambleAlg){
-        StringTokenizer moves = new StringTokenizer(scrambleAlg);
-        String move = "null";
-        boolean failed = false;
-        resetCube(size);
-
-        while(moves.hasMoreTokens()){
-            move = moves.nextToken();
-            int dir = 1;
-            if(move.endsWith("'")){move = move.substring(0, move.length()-1); dir = 3;}
-            if(move.endsWith("2")){move = move.substring(0, move.length()-1); dir = 2;}
-            //JOptionPane.showMessageDialog(this, "For " + puzzle + ": <" + move + "> gives " + dir + ".");
-
-                 if(move.equals("F")){doCubeTurn(size, 0, 0, dir);}
-            else if(move.equals("B")){doCubeTurn(size, 1, 0, dir);}
-            else if(move.equals("L")){doCubeTurn(size, 2, 0, dir);}
-            else if(move.equals("R")){doCubeTurn(size, 3, 0, dir);}
-            else if(move.equals("D")){doCubeTurn(size, 4, 0, dir);}
-            else if(move.equals("U")){doCubeTurn(size, 5, 0, dir);}
-            else if(move.equals("x")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 3, slice, dir);}
-            else if(move.equals("y")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 5, slice, dir);}
-            else if(move.equals("z")){for(int slice=0; slice<size; slice++) doCubeTurn(size, 0, slice, dir);}
-
-            else if(size < 3){failed = true; break;}
-            else if(move.equals("f")){doCubeTurn(size, 0, 1, dir); if(size == 3) doCubeTurn(size, 0, 0, dir);}
-            else if(move.equals("b")){doCubeTurn(size, 1, 1, dir); if(size == 3) doCubeTurn(size, 1, 0, dir);}
-            else if(move.equals("l")){doCubeTurn(size, 2, 1, dir); if(size == 3) doCubeTurn(size, 2, 0, dir);}
-            else if(move.equals("r")){doCubeTurn(size, 3, 1, dir); if(size == 3) doCubeTurn(size, 3, 0, dir);}
-            else if(move.equals("d")){doCubeTurn(size, 4, 1, dir); if(size == 3) doCubeTurn(size, 4, 0, dir);}
-            else if(move.equals("u")){doCubeTurn(size, 5, 1, dir); if(size == 3) doCubeTurn(size, 5, 0, dir);}
-            else if(move.equals("M")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 2, slice, dir);}
-            else if(move.equals("E")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 4, slice, dir);}
-            else if(move.equals("S")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, 0, slice, dir);}
-            else if(move.equals("Fw")){doCubeTurn(size, 0, 0, dir); doCubeTurn(size, 0, 1, dir);}
-            else if(move.equals("Bw")){doCubeTurn(size, 1, 0, dir); doCubeTurn(size, 1, 1, dir);}
-            else if(move.equals("Lw")){doCubeTurn(size, 2, 0, dir); doCubeTurn(size, 2, 1, dir);}
-            else if(move.equals("Rw")){doCubeTurn(size, 3, 0, dir); doCubeTurn(size, 3, 1, dir);}
-            else if(move.equals("Dw")){doCubeTurn(size, 4, 0, dir); doCubeTurn(size, 4, 1, dir);}
-            else if(move.equals("Uw")){doCubeTurn(size, 5, 0, dir); doCubeTurn(size, 5, 1, dir);}
-
-            else if((size < 5) || (size%2 == 0)){failed = true; break;}
-            else if(move.equals("m")){doCubeTurn(size, 2, (size-1)/2, dir);}
-            else if(move.equals("e")){doCubeTurn(size, 4, (size-1)/2, dir);}
-            else if(move.equals("s")){doCubeTurn(size, 0, (size-1)/2, dir);}
-            else{failed = true; break;}
-        }
-
-        if(failed)
-            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
-        setCubeVisible(size, !failed);
-    }
-
-//**********************************************************************************************************************
-
-    // dir = 1 for 90 deg, 2 for 180 deg, 3 for 270 deg
-    private void doCubeTurn(int size, int face, int slice, int dir){
-        if(face<0 || face>5){
-            JOptionPane.showMessageDialog(this, "Function doCubeTurn called with face=" + face + ".");
-            return;
-        }
-        dir %= 4;
-        if(dir == 0) return;
-        if(slice > size-1) return;
-        if(slice == size-1){ //far slice, mostly to help handle whole cube rotation
-            doCubeTurn(size, (face%2 == 1 ? face-1 : face+1), 0, 4-dir); //recursion for that far slice
-            return;
-        }
-
-        int tface = face, tslice = slice, tdir = dir;
-        if(face%2 == 1){
-            tface = face-1;
-            tslice = size-slice-1;
-            tdir = 4-dir;
-        }
-
-        JTextArea[][][] xFace = CubeFace[size];
-        JTextArea[][][] xPrev = CubePrev[size];
-        for(int d=0; d<tdir; d++){
-            for(int i=0; i<size; i++)
-                if(tface == 0){ //doing F
-                    xFace[2][i][size-tslice-1].setBackground(xPrev[4][tslice][i].getBackground()); // L is what D was
-                    xFace[3][size-i-1][tslice].setBackground(xPrev[5][size-tslice-1][size-i-1].getBackground()); // R is what U was
-                    xFace[4][tslice][i].setBackground(xPrev[3][size-i-1][tslice].getBackground()); // D is what R was
-                    xFace[5][size-tslice-1][size-i-1].setBackground(xPrev[2][i][size-tslice-1].getBackground()); // U is what L was
-                } else if(tface == 2){ // doing L
-                    xFace[0][i][tslice].setBackground(xPrev[5][i][tslice].getBackground()); // F is what U was
-                    xFace[1][size-i-1][size-tslice-1].setBackground(xPrev[4][i][tslice].getBackground()); // B is what D was
-                    xFace[4][i][tslice].setBackground(xPrev[0][i][tslice].getBackground()); // D is what F was
-                    xFace[5][i][tslice].setBackground(xPrev[1][size-i-1][size-tslice-1].getBackground()); // U is what B was
-                } else if(tface == 4){ // doing D
-                    xFace[0][size-tslice-1][i].setBackground(xPrev[2][size-tslice-1][i].getBackground()); // F is what L was
-                    xFace[1][size-tslice-1][i].setBackground(xPrev[3][size-tslice-1][i].getBackground()); // B is what R was
-                    xFace[2][size-tslice-1][i].setBackground(xPrev[1][size-tslice-1][i].getBackground()); // L is what B was
-                    xFace[3][size-tslice-1][i].setBackground(xPrev[0][size-tslice-1][i].getBackground()); // R is what F was
-                }
-            updatePreviousCube(size);
-        }
-
-        if(slice == 0) // this means we need to do some pure face rotation
-            for(int d=0; d<dir; d++){
-                for(int i=0; i<size; i++)
-                    for(int j=0; j<size; j++)
-                        xFace[face][i][j].setBackground(xPrev[face][size-j-1][i].getBackground());
-                updatePreviousCube(size);
-            }
-    }
-
-//**********************************************************************************************************************
-
-    private void updatePreviousCube(int size){
-        for(int face=0; face<6; face++)
-            for(int i=0; i<size; i++)
-                for(int j=0; j<size; j++)
-                    CubePrev[size][face][i][j].setBackground(CubeFace[size][face][i][j].getBackground());
-    }
-
 //**********************************************************************************************************************
 //**********************************************************************************************************************
-//**********************************************************************************************************************
-//Experimental cube area
+// new Cube routines that don't rely on JTextArea manips
 
-    private void drawCubeX(int size, int state[][][][]){
+    private void drawCube(int size, int state[][][][]){
         for(int face=0; face<6; face++)
             for(int i=0; i<size; i++)
                 for(int j=0; j<size; j++){
                     Color c = cubeColors[state[face][i][j][0]];
                     CubeFace[size][face][i][j].setBackground(c);
                 }
-
         setCubeVisible(size, true);
     }
 
 //**********************************************************************************************************************
 
-    private void scrambleCubeX(int size, String puzzle, String scrambleAlg){
+    private void scrambleCube(int size, String puzzle, String scrambleAlg){
         StringTokenizer moves = new StringTokenizer(scrambleAlg);
         String move = "null";
         boolean failed = false;
@@ -305,54 +176,54 @@ public class ScramblePane extends JPanel implements Constants{
             if(move.endsWith("2")){move = move.substring(0, move.length()-1); dir = 2;}
             //JOptionPane.showMessageDialog(this, "For " + puzzle + ": <" + move + "> gives " + dir + ".");
 
-                 if(move.equals("F")){doCubeTurnX(size, state, 0, 0, dir);}
-            else if(move.equals("B")){doCubeTurnX(size, state, 1, 0, dir);}
-            else if(move.equals("L")){doCubeTurnX(size, state, 2, 0, dir);}
-            else if(move.equals("R")){doCubeTurnX(size, state, 3, 0, dir);}
-            else if(move.equals("D")){doCubeTurnX(size, state, 4, 0, dir);}
-            else if(move.equals("U")){doCubeTurnX(size, state, 5, 0, dir);}
-            else if(move.equals("x")){for(int slice=0; slice<size; slice++) doCubeTurnX(size, state, 3, slice, dir);}
-            else if(move.equals("y")){for(int slice=0; slice<size; slice++) doCubeTurnX(size, state, 5, slice, dir);}
-            else if(move.equals("z")){for(int slice=0; slice<size; slice++) doCubeTurnX(size, state, 0, slice, dir);}
+                 if(move.equals("F")){doCubeTurn(size, state, 0, 0, dir);}
+            else if(move.equals("B")){doCubeTurn(size, state, 1, 0, dir);}
+            else if(move.equals("L")){doCubeTurn(size, state, 2, 0, dir);}
+            else if(move.equals("R")){doCubeTurn(size, state, 3, 0, dir);}
+            else if(move.equals("D")){doCubeTurn(size, state, 4, 0, dir);}
+            else if(move.equals("U")){doCubeTurn(size, state, 5, 0, dir);}
+            else if(move.equals("x")){for(int slice=0; slice<size; slice++) doCubeTurn(size, state, 3, slice, dir);}
+            else if(move.equals("y")){for(int slice=0; slice<size; slice++) doCubeTurn(size, state, 5, slice, dir);}
+            else if(move.equals("z")){for(int slice=0; slice<size; slice++) doCubeTurn(size, state, 0, slice, dir);}
 
             else if(size < 3){failed = true; break;}
-            else if(move.equals("f")){doCubeTurnX(size, state, 0, 1, dir); if(size == 3) doCubeTurnX(size, state, 0, 0, dir);}
-            else if(move.equals("b")){doCubeTurnX(size, state, 1, 1, dir); if(size == 3) doCubeTurnX(size, state, 1, 0, dir);}
-            else if(move.equals("l")){doCubeTurnX(size, state, 2, 1, dir); if(size == 3) doCubeTurnX(size, state, 2, 0, dir);}
-            else if(move.equals("r")){doCubeTurnX(size, state, 3, 1, dir); if(size == 3) doCubeTurnX(size, state, 3, 0, dir);}
-            else if(move.equals("d")){doCubeTurnX(size, state, 4, 1, dir); if(size == 3) doCubeTurnX(size, state, 4, 0, dir);}
-            else if(move.equals("u")){doCubeTurnX(size, state, 5, 1, dir); if(size == 3) doCubeTurnX(size, state, 5, 0, dir);}
-            else if(move.equals("M")){for(int slice=1; slice<size-1; slice++) doCubeTurnX(size, state, 2, slice, dir);}
-            else if(move.equals("E")){for(int slice=1; slice<size-1; slice++) doCubeTurnX(size, state, 4, slice, dir);}
-            else if(move.equals("S")){for(int slice=1; slice<size-1; slice++) doCubeTurnX(size, state, 0, slice, dir);}
-            else if(move.equals("Fw")){doCubeTurnX(size, state, 0, 0, dir); doCubeTurnX(size, state, 0, 1, dir);}
-            else if(move.equals("Bw")){doCubeTurnX(size, state, 1, 0, dir); doCubeTurnX(size, state, 1, 1, dir);}
-            else if(move.equals("Lw")){doCubeTurnX(size, state, 2, 0, dir); doCubeTurnX(size, state, 2, 1, dir);}
-            else if(move.equals("Rw")){doCubeTurnX(size, state, 3, 0, dir); doCubeTurnX(size, state, 3, 1, dir);}
-            else if(move.equals("Dw")){doCubeTurnX(size, state, 4, 0, dir); doCubeTurnX(size, state, 4, 1, dir);}
-            else if(move.equals("Uw")){doCubeTurnX(size, state, 5, 0, dir); doCubeTurnX(size, state, 5, 1, dir);}
+            else if(move.equals("f")){doCubeTurn(size, state, 0, 1, dir); if(size == 3) doCubeTurn(size, state, 0, 0, dir);}
+            else if(move.equals("b")){doCubeTurn(size, state, 1, 1, dir); if(size == 3) doCubeTurn(size, state, 1, 0, dir);}
+            else if(move.equals("l")){doCubeTurn(size, state, 2, 1, dir); if(size == 3) doCubeTurn(size, state, 2, 0, dir);}
+            else if(move.equals("r")){doCubeTurn(size, state, 3, 1, dir); if(size == 3) doCubeTurn(size, state, 3, 0, dir);}
+            else if(move.equals("d")){doCubeTurn(size, state, 4, 1, dir); if(size == 3) doCubeTurn(size, state, 4, 0, dir);}
+            else if(move.equals("u")){doCubeTurn(size, state, 5, 1, dir); if(size == 3) doCubeTurn(size, state, 5, 0, dir);}
+            else if(move.equals("M")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, state, 2, slice, dir);}
+            else if(move.equals("E")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, state, 4, slice, dir);}
+            else if(move.equals("S")){for(int slice=1; slice<size-1; slice++) doCubeTurn(size, state, 0, slice, dir);}
+            else if(move.equals("Fw")){doCubeTurn(size, state, 0, 0, dir); doCubeTurn(size, state, 0, 1, dir);}
+            else if(move.equals("Bw")){doCubeTurn(size, state, 1, 0, dir); doCubeTurn(size, state, 1, 1, dir);}
+            else if(move.equals("Lw")){doCubeTurn(size, state, 2, 0, dir); doCubeTurn(size, state, 2, 1, dir);}
+            else if(move.equals("Rw")){doCubeTurn(size, state, 3, 0, dir); doCubeTurn(size, state, 3, 1, dir);}
+            else if(move.equals("Dw")){doCubeTurn(size, state, 4, 0, dir); doCubeTurn(size, state, 4, 1, dir);}
+            else if(move.equals("Uw")){doCubeTurn(size, state, 5, 0, dir); doCubeTurn(size, state, 5, 1, dir);}
 
             else if((size < 5) || (size%2 == 0)){failed = true; break;}
-            else if(move.equals("m")){doCubeTurnX(size, state, 2, (size-1)/2, dir);}
-            else if(move.equals("e")){doCubeTurnX(size, state, 4, (size-1)/2, dir);}
-            else if(move.equals("s")){doCubeTurnX(size, state, 0, (size-1)/2, dir);}
+            else if(move.equals("m")){doCubeTurn(size, state, 2, (size-1)/2, dir);}
+            else if(move.equals("e")){doCubeTurn(size, state, 4, (size-1)/2, dir);}
+            else if(move.equals("s")){doCubeTurn(size, state, 0, (size-1)/2, dir);}
             else{failed = true; break;}
         }
 
         if(failed)
             JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
         else
-            drawCubeX(size, state);
+            drawCube(size, state);
     }
 
 //**********************************************************************************************************************
 
     // dir = 1 for 90 deg, 2 for 180 deg, 3 for 270 deg
-    private void doCubeTurnX(int size, int state[][][][], int face, int slice, int dir){
+    private void doCubeTurn(int size, int state[][][][], int face, int slice, int dir){
         dir %= 4;
         if(slice > size-1) return;
         if(slice == size-1){ //far slice, mostly to help handle whole cube rotation
-            doCubeTurn(size, (face%2 == 1 ? face-1 : face+1), 0, 4-dir); //recursion for that far slice
+            doCubeTurn(size, state, (face%2 == 1 ? face-1 : face+1), 0, 4-dir); //recursion for that far slice
             return;
         }
 
@@ -676,9 +547,6 @@ public class ScramblePane extends JPanel implements Constants{
         int xCenter = 141;//myWidth/2;
         int yCenter = 88;//myHeight/2 - 20;
         double radius = 52;//Math.min(myWidth, myHeight) * 0.2;
-//System.err.println("xCenter = " + xCenter);
-//System.err.println("yCenter = " + yCenter);
-//System.err.println("radius = " + radius);
         double face_gap = 6;
         double big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
 
