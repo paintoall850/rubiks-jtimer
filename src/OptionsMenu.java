@@ -277,10 +277,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         if(source == saveButton){
             saveOptions();
-            myStandalone.OptionsToGUI();//Standalone.loadOptions();
-            setVisible(false);//this.dispose();
+            myStandalone.OptionsToGUI();
+            setVisible(false); //this.dispose();
         } else if(source == cancelButton){
-            setVisible(false);//this.dispose();
+            setVisible(false); //this.dispose();
         } else if(source == resetButton){
             resetOptions();
             averageText.setCaretPosition(0);

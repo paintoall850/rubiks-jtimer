@@ -1144,10 +1144,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
 
     public void OptionsToGUI(){
-        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+""))
-            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
-        if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+""))
-            countdownCombo.setSelectedItem(optionsMenu.countdownX);
+        //if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+""))
+        //    puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
+        //if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+""))
+        //    countdownCombo.setSelectedItem(optionsMenu.countdownX);
 
         timeLabels[placeInAverage].setForeground(optionsMenu.currentColorX);
         scramblePane.setCubeColors(optionsMenu.cubeColorsX);
