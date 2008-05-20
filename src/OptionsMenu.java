@@ -559,13 +559,16 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
     // to override key ordering, so that it's alphabetical on stores
     public static class SortedProperties extends Properties{
-        public synchronized Enumeration keys(){
-            Enumeration keysEnum = super.keys();
-            Vector keyList = new Vector();
+        public Enumeration<Object> keys(){
+            Enumeration<Object> keysEnum = super.keys();
+            Vector<String> keyStrings = new Vector<String>();
+
             while(keysEnum.hasMoreElements())
-                keyList.add(keysEnum.nextElement());
-            Collections.sort(keyList);
-            return keyList.elements();
+                keyStrings.add((String)keysEnum.nextElement());
+            Collections.sort(keyStrings);
+
+            Vector<Object> keyObjects = new Vector<Object>(keyStrings);
+            return keyObjects.elements();
         }
     }
 }
