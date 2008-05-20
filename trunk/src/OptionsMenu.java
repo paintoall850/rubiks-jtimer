@@ -501,43 +501,36 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     public void mouseClicked(MouseEvent e){
         Object source = e.getSource();
 
-        if(source == countdownColorText){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Countdown Display",countdownColorText.getBackground());
-            if(newColor != null) countdownColorText.setBackground(newColor);
-        } else if(source == timerColorText){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Timing Display",timerColorText.getBackground());
-            if(newColor != null) timerColorText.setBackground(newColor);
-        } else if(source == textBackgrColorText){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Alg Background",textBackgrColorText.getBackground());
-            if(newColor != null) textBackgrColorText.setBackground(newColor);
-        } else if(source == currentColorText){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Current Place In Average",currentColorText.getBackground());
-            if(newColor != null) currentColorText.setBackground(newColor);
-        } else if(source == fastestColorText){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Fastest Time In Average",fastestColorText.getBackground());
-            if(newColor != null) fastestColorText.setBackground(newColor);
-        } else if(source == slowestColorText){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Slowest Time In Average",slowestColorText.getBackground());
-            if(newColor != null) slowestColorText.setBackground(newColor);
-        } else if(source == faceColorTexts[0]){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Front Face",faceColorTexts[0].getBackground());
-            if(newColor != null){faceColorTexts[0].setBackground(newColor); updateScramblePreview();}
-        } else if(source == faceColorTexts[1]){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Back Face",faceColorTexts[1].getBackground());
-            if(newColor != null){faceColorTexts[1].setBackground(newColor); updateScramblePreview();}
-        } else if(source == faceColorTexts[2]){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Left Face",faceColorTexts[2].getBackground());
-            if(newColor != null){faceColorTexts[2].setBackground(newColor); updateScramblePreview();}
-        } else if(source == faceColorTexts[3]){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Right Face",faceColorTexts[3].getBackground());
-            if(newColor != null){faceColorTexts[3].setBackground(newColor); updateScramblePreview();}
-        } else if(source == faceColorTexts[4]){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Down Face",faceColorTexts[4].getBackground());
-            if(newColor != null){faceColorTexts[4].setBackground(newColor); updateScramblePreview();}
-        } else if(source == faceColorTexts[5]){
-            Color newColor = JColorChooser.showDialog(this,"Choose Color for Up Face",faceColorTexts[5].getBackground());
-            if(newColor != null){faceColorTexts[5].setBackground(newColor); updateScramblePreview();}
+        if(source == countdownColorText) makeColorChooser(countdownColorText, "Countdown Display");
+        else if(source == timerColorText) makeColorChooser(timerColorText, "Timing Display");
+        else if(source == textBackgrColorText) makeColorChooser(textBackgrColorText, "Alg Background");
+        else if(source == currentColorText) makeColorChooser(currentColorText, "Current Place In Average");
+        else if(source == fastestColorText) makeColorChooser(fastestColorText, "Fastest Time In Average");
+        else if(source == slowestColorText) makeColorChooser(slowestColorText, "Slowest Time In Average");
+        else if(source == faceColorTexts[0])
+            {if(makeColorChooser(faceColorTexts[0], "Front Face")) updateScramblePreview();}
+        else if(source == faceColorTexts[1])
+            {if(makeColorChooser(faceColorTexts[1],  "Back Face")) updateScramblePreview();}
+        else if(source == faceColorTexts[2])
+            {if(makeColorChooser(faceColorTexts[2],  "Left Face")) updateScramblePreview();}
+        else if(source == faceColorTexts[3])
+            {if(makeColorChooser(faceColorTexts[3], "Right Face")) updateScramblePreview();}
+        else if(source == faceColorTexts[4])
+            {if(makeColorChooser(faceColorTexts[4],  "Down Face")) updateScramblePreview();}
+        else if(source == faceColorTexts[5])
+            {if(makeColorChooser(faceColorTexts[5],    "Up Face")) updateScramblePreview();}
+    }
+
+//**********************************************************************************************************************
+
+    private boolean makeColorChooser(JTextArea area, String s){
+        Color newColor = JColorChooser.showDialog(this, "Choose Color for "+s, area.getBackground());
+        if(newColor != null){
+            area.setBackground(newColor);
+            return true;
         }
+        else
+            return false;
     }
 
 //**********************************************************************************************************************
