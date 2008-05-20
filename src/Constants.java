@@ -29,7 +29,6 @@ import javax.swing.border.Border;
 public interface Constants{
     static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 18);
     static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
-    //static final Color backColor = new Color(200,221,242); // eventually want to kill off
 
     static final Border blackLine = BorderFactory.createLineBorder(Color.black);
     static final Border theBorder = BorderFactory.createCompoundBorder(
@@ -38,8 +37,4 @@ public interface Constants{
 
     static final String[] puzzleChoices = {"2x2x2","3x3x3","4x4x4","5x5x5","Pyraminx", "Megaminx"};
     static final String[] countdownChoices = {"0","3","5","10","15"};
-
-//    static int randInt(int n){
-//        return (int)(Math.random()*n);
-//    }
 }

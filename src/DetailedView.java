@@ -38,7 +38,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
 
         // configure JFrame
         setTitle(windowTitle);
-        setSize(526, 455);
+        setSize(625, 340);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
 
@@ -50,11 +50,11 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         // main textArea
         JTextArea window = new JTextArea();
         window.setEditable(false);
-        window.setFont(new Font("Serif", Font.PLAIN, 12));
+        window.setFont(new Font("Serif", Font.PLAIN, 14));
         window.setBackground(textBackgrColor);
         JScrollPane scrollPane = new JScrollPane(window);
         scrollPane.setBorder(blackLine);
-        scrollPane.setBounds(10,10,500,380);
+        scrollPane.setBounds(10,10,600,260);
         contentPane.add(scrollPane);
         window.setText(printToWindow);
         window.setCaretPosition(0);
@@ -62,7 +62,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         // save Button
         saveButton = new JButton("Save " + windowTitle);
         saveButton.addActionListener(this);
-        saveButton.setBounds(10,400,500,20);
+        saveButton.setBounds(10,280,600,20);
         contentPane.add(saveButton);
     } // end constructor
 
