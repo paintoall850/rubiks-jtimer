@@ -421,10 +421,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         fastestColorX = Color.blue;
         slowestColorX = Color.red;
 
-        cubeColorsX[0] = new Color(0,0,255); // blue
-        cubeColorsX[1] = new Color(0,196,0); // green
-        cubeColorsX[2] = new Color(255,0,0); // red
-        cubeColorsX[3] = new Color(255,128,0); // orange
+        cubeColorsX[0] = new Color(0,196,0); // green
+        cubeColorsX[1] = new Color(0,0,255); // blue
+        cubeColorsX[2] = new Color(255,128,0); // orange
+        cubeColorsX[3] = new Color(255,0,0); // red
         cubeColorsX[4] = new Color(255,255,0); // yellow
         cubeColorsX[5] = new Color(255,255,255); // white
 
