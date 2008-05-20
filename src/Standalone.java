@@ -362,8 +362,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         // inital load of options
         optionsMenu.loadOptions();
-        puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
-        countdownCombo.setSelectedItem(optionsMenu.countdownX);
+        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
+            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
+        if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+"")) // less glitchier
+            countdownCombo.setSelectedItem(optionsMenu.countdownX);
         OptionsToGUI();
 
         // set some stuff up
