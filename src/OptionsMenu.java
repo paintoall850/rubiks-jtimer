@@ -51,6 +51,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     JTextArea countdownColorText, timerColorText, textBackgrColorText, fastestColorText, slowestColorText, currentColorText;
     JTextArea[] faceColorTexts = new JTextArea[6];
     JTextArea averageText, sessionText;
+    JScrollPane averageScrollPane, sessionScrollPane;
     JTextArea[][][] ScramblePreview;
 
 //**********************************************************************************************************************
@@ -111,7 +112,6 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         previewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Preview"));
 
         ScramblePreview = new JTextArea[6][3][3];
-
         for(int face=0; face<6; face++)
             for(int i=0; i<3; i++)
                 for(int j=0; j<3; j++){
@@ -140,58 +140,34 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         confirmBox = new JCheckBox("Session Reset Warning Window");
         showMinutesBox = new JCheckBox("Use mm:ss.xx Format");
         averageText = new JTextArea();
-        JScrollPane averageScrollPane = new JScrollPane(averageText);
+        averageScrollPane = new JScrollPane(averageText);
         averageScrollPane.setBorder(blackLine);
         sessionText = new JTextArea();
-        JScrollPane sessionScrollPane = new JScrollPane(sessionText);
+        sessionScrollPane = new JScrollPane(sessionText);
         sessionScrollPane.setBorder(blackLine);
 
-        generalTab = new JPanel();
-        generalTab.setLayout(null);
-        generalTab.add(startupLabel);
-        generalTab.add(colorLabel);
-        generalTab.add(puzzleLabel);
-        generalTab.add(countdownLabel);
-        generalTab.add(puzzleCombo);
-        generalTab.add(countdownCombo);
-        generalTab.add(confirmBox);
-        generalTab.add(showMinutesBox);
-        generalTab.add(timerColorText);
-        generalTab.add(timerCLabel);
-        generalTab.add(countdownColorText);
-        generalTab.add(countdownCLabel);
-        generalTab.add(textBackgrColorText);
-        generalTab.add(textBackgrCLabel);
-        generalTab.add(currentColorText);
-        generalTab.add(currentCLabel);
-        generalTab.add(fastestColorText);
-        generalTab.add(fastestCLabel);
-        generalTab.add(slowestColorText);
-        generalTab.add(slowestCLabel);
-        colorTab = new JPanel();
-        colorTab.setLayout(null);
-        colorTab.add(faceColorLabel);
-        colorTab.add(previewLabel);
-        for(int face=0; face<6; face++){
-            colorTab.add(faceColorTexts[face]);
-            colorTab.add(faceCLabels[face]);
-            for(int i=0; i<3; i++)
-                for(int j=0; j<3; j++)
-                    colorTab.add(ScramblePreview[face][i][j]);
-        }
-        bestTab = new JPanel();
-        bestTab.setLayout(null);
-        bestTab.add(averageSyntaxLabel);
-        bestTab.add(averageScrollPane);
-        sessionTab = new JPanel();
-        sessionTab.setLayout(null);
-        sessionTab.add(sessionSyntaxLabel);
-        sessionTab.add(sessionScrollPane);
-        tabs = new JTabbedPane();
-        tabs.add(generalTab, "General Options");
-        tabs.add(colorTab, "Color Scheme");
-        tabs.add(bestTab, "Best Average Output");
-        tabs.add(sessionTab, "Session Times Output");
+        // call big add tabs and content function
+        addTabsAndContent(contentPane);
+
+        saveButton.addActionListener(this);
+        resetButton.addActionListener(this);
+        cancelButton.addActionListener(this);
+
+        countdownColorText.addMouseListener(this);
+        timerColorText.addMouseListener(this);
+        textBackgrColorText.addMouseListener(this);
+        currentColorText.addMouseListener(this);
+        fastestColorText.addMouseListener(this);
+        slowestColorText.addMouseListener(this);
+        for(int face=0; face<6; face++)
+            faceColorTexts[face].addMouseListener(this);
+
+        loadOptions();
+    } // end constructor
+
+//**********************************************************************************************************************
+
+    private void setTheBounds(){
 
         tabs.setBounds(10,5,679-100,240);
         saveButton.setBounds(10,255,186,30);
@@ -248,27 +224,71 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         setFaceBounds(ScramblePreview[3], 3, 500+x, 75+y, 15);
         setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
         setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
+}
+
+//**********************************************************************************************************************
+
+    private void addTabsAndContent(Container contentPane){
+
+        generalTab = new JPanel();
+        generalTab.setLayout(null);
+        generalTab.add(startupLabel);
+        generalTab.add(colorLabel);
+        generalTab.add(puzzleLabel);
+        generalTab.add(countdownLabel);
+        generalTab.add(puzzleCombo);
+        generalTab.add(countdownCombo);
+        generalTab.add(confirmBox);
+        generalTab.add(showMinutesBox);
+        generalTab.add(timerColorText);
+        generalTab.add(timerCLabel);
+        generalTab.add(countdownColorText);
+        generalTab.add(countdownCLabel);
+        generalTab.add(textBackgrColorText);
+        generalTab.add(textBackgrCLabel);
+        generalTab.add(currentColorText);
+        generalTab.add(currentCLabel);
+        generalTab.add(fastestColorText);
+        generalTab.add(fastestCLabel);
+        generalTab.add(slowestColorText);
+        generalTab.add(slowestCLabel);
+
+        colorTab = new JPanel();
+        colorTab.setLayout(null);
+        colorTab.add(faceColorLabel);
+        colorTab.add(previewLabel);
+        for(int face=0; face<6; face++){
+            colorTab.add(faceColorTexts[face]);
+            colorTab.add(faceCLabels[face]);
+            for(int i=0; i<3; i++)
+                for(int j=0; j<3; j++)
+                    colorTab.add(ScramblePreview[face][i][j]);
+        }
+
+        bestTab = new JPanel();
+        bestTab.setLayout(null);
+        bestTab.add(averageSyntaxLabel);
+        bestTab.add(averageScrollPane);
+
+        sessionTab = new JPanel();
+        sessionTab.setLayout(null);
+        sessionTab.add(sessionSyntaxLabel);
+        sessionTab.add(sessionScrollPane);
+
+        tabs = new JTabbedPane();
+        tabs.add(generalTab, "General Options");
+        tabs.add(colorTab, "Color Scheme");
+        tabs.add(bestTab, "Best Average Output");
+        tabs.add(sessionTab, "Session Times Output");
+
+        // call big setBounds function
+        setTheBounds();
 
         contentPane.add(tabs);
         contentPane.add(saveButton);
         contentPane.add(resetButton);
         contentPane.add(cancelButton);
-
-        saveButton.addActionListener(this);
-        resetButton.addActionListener(this);
-        cancelButton.addActionListener(this);
-
-        countdownColorText.addMouseListener(this);
-        timerColorText.addMouseListener(this);
-        textBackgrColorText.addMouseListener(this);
-        currentColorText.addMouseListener(this);
-        fastestColorText.addMouseListener(this);
-        slowestColorText.addMouseListener(this);
-        for(int face=0; face<6; face++)
-            faceColorTexts[face].addMouseListener(this);
-
-        loadOptions();
-    } // end constructor
+}
 
 //**********************************************************************************************************************
 
