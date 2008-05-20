@@ -40,7 +40,8 @@ public class InstructionScreen extends JFrame{
         int appWidth = getSize().width, appHeight = getSize().height;
         setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
-        JLabel instLabel = new JLabel("Rubik's JTimer instructions go here... awhgaasdf kagewkyfgawkasdhgfw ykyeckwayfkaegfaksjdhgfs");
+        JLabel instLabel = new JLabel("<html>Rubik's JTimer instructions go here...</html>");
+        instLabel.setVerticalAlignment(SwingConstants.TOP);
         instLabel.setBounds(10,10,300,400);
         contentPane.add(instLabel);
     } // end InstructionScreen
