@@ -297,8 +297,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         int seperation = 2;
         for(int i=0; i<12; i++){
             smartButton[i].setBounds(x, 225, width, 56);
-            //averageLabels[i].setBounds(x, 225, width, 20);
-            //averageLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
+            averageLabels[i].setBounds(x, 225, width, 20);
+            averageLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
             timeLabels[i].setBounds(x, 245, width, 20);
             timeLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
             x = x + width + seperation;
@@ -343,7 +343,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         contentPane.add(useThisAlgLabel);
         contentPane.add(scrambleText);
         contentPane.add(timerLabel);
-        contentPane.add(timerArea);
+        //contentPane.add(timerArea);
         contentPane.add(scramblePane);
         contentPane.add(sessionStatsLabel);
         contentPane.add(rollingAverageLabel);
@@ -355,8 +355,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         contentPane.add(insertTimeButton);
 
         for(int i=0; i<12; i++){
-            contentPane.add(smartButton[i]);
-            //contentPane.add(averageLabels[i]);
+            //contentPane.add(smartButton[i]);
+            contentPane.add(averageLabels[i]);
             contentPane.add(timeLabels[i]);
         }
 
