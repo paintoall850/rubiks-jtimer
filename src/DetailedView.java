@@ -50,7 +50,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         // main textArea
         JTextArea window = new JTextArea();
         window.setEditable(false);
-        window.setFont(new Font("Serif", Font.PLAIN, 14));
+        window.setFont(regFont);
         window.setBackground(textBackgrColor);
         JScrollPane scrollPane = new JScrollPane(window);
         scrollPane.setBorder(blackLine);
