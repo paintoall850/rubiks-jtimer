@@ -343,18 +343,18 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         printToFile = printToFile + countdownX + "~";
         printToFile = printToFile + showResetConfirmX + "~";
         printToFile = printToFile + showMinutesX + "~";
-        printToFile = printToFile + countdownColorX.getRGB() + "~";
-        printToFile = printToFile + timerColorX.getRGB() + "~";
-        printToFile = printToFile + textBackgrColorX.getRGB() + "~";
-        printToFile = printToFile + currentColorX.getRGB() + "~";
-        printToFile = printToFile + fastestColorX.getRGB() + "~";
-        printToFile = printToFile + slowestColorX.getRGB() + "~";
+        printToFile = printToFile + colorToString(countdownColorX) + "~";
+        printToFile = printToFile + colorToString(timerColorX) + "~";
+        printToFile = printToFile + colorToString(textBackgrColorX) + "~";
+        printToFile = printToFile + colorToString(currentColorX) + "~";
+        printToFile = printToFile + colorToString(fastestColorX) + "~";
+        printToFile = printToFile + colorToString(slowestColorX) + "~";
         for(int face=0; face<6; face++)
-            printToFile = printToFile + cubeColorsX[face].getRGB() + "~";
+            printToFile = printToFile + colorToString(cubeColorsX[face]) + "~";
         for(int face=0; face<4; face++)
-            printToFile = printToFile + pyraminxColorsX[face].getRGB() + "~";
+            printToFile = printToFile + colorToString(pyraminxColorsX[face]) + "~";
         for(int face=0; face<12; face++)
-            printToFile = printToFile + megaminxColorsX[face].getRGB() + "~";
+            printToFile = printToFile + colorToString(megaminxColorsX[face]) + "~";
         printToFile = printToFile + averageViewFormatX + "~";
         printToFile = printToFile + sessionViewFormatX;
 
@@ -386,18 +386,18 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             countdownX = st.nextToken();
             showResetConfirmX = st.nextToken().equalsIgnoreCase("true");
             showMinutesX = st.nextToken().equalsIgnoreCase("true");
-            countdownColorX = new Color(Integer.parseInt(st.nextToken()));
-            timerColorX = new Color(Integer.parseInt(st.nextToken()));
-            textBackgrColorX = new Color(Integer.parseInt(st.nextToken()));
-            currentColorX = new Color(Integer.parseInt(st.nextToken()));
-            fastestColorX = new Color(Integer.parseInt(st.nextToken()));
-            slowestColorX = new Color(Integer.parseInt(st.nextToken()));
+            countdownColorX = stringToColor(st.nextToken());
+            timerColorX = stringToColor(st.nextToken());
+            textBackgrColorX = stringToColor(st.nextToken());
+            currentColorX = stringToColor(st.nextToken());
+            fastestColorX = stringToColor(st.nextToken());
+            slowestColorX = stringToColor(st.nextToken());
             for(int face=0; face<6; face++)
-                cubeColorsX[face] = new Color(Integer.parseInt(st.nextToken()));
+                cubeColorsX[face] = stringToColor(st.nextToken());
             for(int face=0; face<4; face++)
-                pyraminxColorsX[face] = new Color(Integer.parseInt(st.nextToken()));
+                pyraminxColorsX[face] = stringToColor(st.nextToken());
             for(int face=0; face<12; face++)
-                megaminxColorsX[face] = new Color(Integer.parseInt(st.nextToken()));
+                megaminxColorsX[face] = stringToColor(st.nextToken());
             averageViewFormatX = st.nextToken();
             sessionViewFormatX = st.nextToken();
 
@@ -474,6 +474,23 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         averageText.setText(averageViewFormatX); averageText.setCaretPosition(0);
         sessionText.setText(sessionViewFormatX); sessionText.setCaretPosition(0);
     } // end OptionsToGUI
+
+//**********************************************************************************************************************
+
+    private static Color stringToColor(String s){
+        return new Color(Integer.parseInt(s, 16));
+    }
+
+//**********************************************************************************************************************
+
+    private static String colorToString(Color c){
+        String s = Integer.toHexString(c.getRGB() & 0xffffff);
+        int pad = 6 - s.length();
+        if(pad>0)
+            for(int i=0; i<pad; i++)
+                s = "0" + s;
+        return s;
+    }
 
 //**********************************************************************************************************************
 
