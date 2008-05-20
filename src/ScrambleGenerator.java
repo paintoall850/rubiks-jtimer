@@ -101,15 +101,15 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
             }
 
             String printToFile = "";
-
             if(formatPrint.isSelected()){
-                printToFile = "----- Rubik's JTimer Generated Scrambles -----\r\n\r\nCube Type: " + puzzleCombo.getSelectedItem() + "\r\nNumber of Scrambles: " + numberOfScrambles + "\r\n\r\nScrambles:\r\n";
+                printToFile = "----- Rubik's JTimer Generated Scrambles -----\n\nCube Type: " + puzzleCombo.getSelectedItem() + "\nNumber of Scrambles: " + numberOfScrambles + "\n\nScrambles:\n";
                 for(int i=0; i<numberOfScrambles; i++)
-                    printToFile = printToFile + (i+1) + ")          " + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\r\n";
+                    printToFile = printToFile + (i+1) + ")          " + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\n";
             } else {
                 for(int i=0; i<numberOfScrambles; i++)
-                    printToFile = printToFile + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\r\n";
+                    printToFile = printToFile + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\n";
             }
+            printToFile = printToFile.replaceAll("\n", System.getProperty("line.separator"));
 
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new TextFileFilter());
