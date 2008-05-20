@@ -360,8 +360,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             contentPane.add(timeLabels[i]);
         }
 
+        // inital load of options
+        optionsMenu.loadOptions();
+        puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
+        countdownCombo.setSelectedItem(optionsMenu.countdownX);
+        OptionsToGUI();
+
         // set some stuff up
-        optionsMenu.loadOptions(); OptionsToGUI();
         importedIndex = 0;
         hasImported = false;
         updateScrambleAlgs();
