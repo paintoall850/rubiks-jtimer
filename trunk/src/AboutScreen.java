@@ -41,7 +41,8 @@ public class AboutScreen extends JFrame{
 
         JLabel cowPic = new JLabel(new ImageIcon(getClass().getResource("Cow.jpg")));
         cowPic.setBorder(BorderFactory.createLineBorder(Color.black));
-        JLabel aboutLabel = new JLabel("<html><br><font size=\"7\">Rubik's JTimer</font><br><b>Package Updated: May 14, 2008</b><br><br>Derived from JNetCube which was designed and written by Chris Hunt (<u>huntca@plu.edu</u>) for the cubing community. May the cube rule your life...<br><br>5x5 Scramble Viewer, \"re-Skin\", various bug fixes, and minor changes contributed by Doug Li.<br>Contact him for feature requests and possible bugs at <u>DougCube@gmail.com</u>.</html>");
+        JLabel aboutLabel = new JLabel("<html><font size=\"7\">Rubik's JTimer</font><br>Package Updated: May 19, 2008<br><br>Derived from JNetCube which was designed and written by Chris Hunt (<u>huntca@plu.edu</u>) for the cubing community.<br><br>5x5 Scramble Viewer, \"re-skin\", various bug fixes, and minor changes contributed by Doug Li.<br>Contact him for feature requests and possible bugs at <u>DougCube@gmail.com</u>.</html>");
+        aboutLabel.setVerticalAlignment(SwingConstants.TOP);
 
         cowPic.setBounds(10,10,215,200);
         aboutLabel.setBounds(235,10,420,200);
