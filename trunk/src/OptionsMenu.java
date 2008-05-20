@@ -343,29 +343,29 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         averageViewFormatX = averageText.getText();
         sessionViewFormatX = sessionText.getText();
 
-        Properties props = new Properties();
-        props.setProperty("puzzle", puzzleX);
-        props.setProperty("countdown", countdownX);
-        props.setProperty("showResetConfirm", showResetConfirmX+"");
-        props.setProperty("showMinutes", showMinutesX+"");
-        props.setProperty("countdownColor", colorToString(countdownColorX));
-        props.setProperty("timerColor", colorToString(timerColorX));
-        props.setProperty("textBackgrColor", colorToString(textBackgrColorX));
-        props.setProperty("currentColor", colorToString(currentColorX));
-        props.setProperty("fastestColor", colorToString(fastestColorX));
-        props.setProperty("slowestColor", colorToString(slowestColorX));
+        SortedProperties props = new SortedProperties();
+        props.setProperty("01.puzzle", puzzleX);
+        props.setProperty("02.countdown", countdownX);
+        props.setProperty("03.showResetConfirm", showResetConfirmX+"");
+        props.setProperty("04.showMinutes", showMinutesX+"");
+        props.setProperty("05.countdownColor", colorToString(countdownColorX));
+        props.setProperty("06.timerColor", colorToString(timerColorX));
+        props.setProperty("07.textBackgrColor", colorToString(textBackgrColorX));
+        props.setProperty("08.currentColor", colorToString(currentColorX));
+        props.setProperty("09.fastestColor", colorToString(fastestColorX));
+        props.setProperty("10.slowestColor", colorToString(slowestColorX));
         for(int face=0; face<6; face++)
-            props.setProperty("cubeColors_" + face, colorToString(cubeColorsX[face]));
+            props.setProperty("11.cubeColors_" + padNum(face), colorToString(cubeColorsX[face]));
         for(int face=0; face<4; face++)
-            props.setProperty("pyraminxColors_" + face, colorToString(pyraminxColorsX[face]));
+            props.setProperty("12.pyraminxColors_" + padNum(face), colorToString(pyraminxColorsX[face]));
         for(int face=0; face<12; face++)
-            props.setProperty("megaminxColors_" + face, colorToString(megaminxColorsX[face]));
-        props.setProperty("averageViewFormat", averageViewFormatX);
-        props.setProperty("sessionViewFormat", sessionViewFormatX);
+            props.setProperty("13.megaminxColors_" + padNum(face), colorToString(megaminxColorsX[face]));
+        props.setProperty("14.averageViewFormat", averageViewFormatX);
+        props.setProperty("15.sessionViewFormat", sessionViewFormatX);
 
         try{
             FileOutputStream out = new FileOutputStream(FILENAME);
-            props.store(out, "Rubik's JTimer Configuration File (sorry, Java Properties are unordered Hash Tables...)");
+            props.store(out, "Rubik's JTimer Configuration File");
             out.close();
         }
         catch(IOException g){
@@ -376,29 +376,29 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 //**********************************************************************************************************************
     public void loadOptions(){
         try{
-            Properties props = new Properties();
+            SortedProperties props = new SortedProperties();
             FileInputStream in = new FileInputStream(FILENAME);
             props.load(in);
             in.close();
 
-            puzzleX = props.getProperty("puzzle");
-            countdownX = props.getProperty("countdown");
-            showResetConfirmX = Boolean.parseBoolean(props.getProperty("showResetConfirm"));
-            showMinutesX = Boolean.parseBoolean(props.getProperty("showMinutes"));
-            countdownColorX = stringToColor(props.getProperty("countdownColor"));
-            timerColorX = stringToColor(props.getProperty("timerColor"));
-            textBackgrColorX = stringToColor(props.getProperty("textBackgrColor"));
-            currentColorX = stringToColor(props.getProperty("currentColor"));
-            fastestColorX = stringToColor(props.getProperty("fastestColor"));
-            slowestColorX = stringToColor(props.getProperty("slowestColor"));
+            puzzleX = props.getProperty("01.puzzle");
+            countdownX = props.getProperty("02.countdown");
+            showResetConfirmX = Boolean.parseBoolean(props.getProperty("03.showResetConfirm"));
+            showMinutesX = Boolean.parseBoolean(props.getProperty("04.showMinutes"));
+            countdownColorX = stringToColor(props.getProperty("05.countdownColor"));
+            timerColorX = stringToColor(props.getProperty("06.timerColor"));
+            textBackgrColorX = stringToColor(props.getProperty("07.textBackgrColor"));
+            currentColorX = stringToColor(props.getProperty("08.currentColor"));
+            fastestColorX = stringToColor(props.getProperty("09.fastestColor"));
+            slowestColorX = stringToColor(props.getProperty("10.slowestColor"));
             for(int face=0; face<6; face++)
-                cubeColorsX[face] = stringToColor(props.getProperty("cubeColors_" + face));
+                cubeColorsX[face] = stringToColor(props.getProperty("11.cubeColors_" + padNum(face)));
             for(int face=0; face<4; face++)
-                pyraminxColorsX[face] = stringToColor(props.getProperty("pyraminxColors_" + face));
+                pyraminxColorsX[face] = stringToColor(props.getProperty("12.pyraminxColors_" + padNum(face)));
             for(int face=0; face<12; face++)
-                megaminxColorsX[face] = stringToColor(props.getProperty("megaminxColors_" + face));
-            averageViewFormatX = props.getProperty("averageViewFormat");
-            sessionViewFormatX = props.getProperty("sessionViewFormat");
+                megaminxColorsX[face] = stringToColor(props.getProperty("13.megaminxColors_" + padNum(face)));
+            averageViewFormatX = props.getProperty("14.averageViewFormat");
+            sessionViewFormatX = props.getProperty("15.sessionViewFormat");
 
             OptionsToGUI();
         } catch(IOException g){
@@ -484,10 +484,21 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
     private static String colorToString(Color c){
         String s = Integer.toHexString(c.getRGB() & 0xffffff);
-        int pad = 6 - s.length();
+        int pad = 6-s.length();
         if(pad>0)
             for(int i=0; i<pad; i++)
-                s = "0" + s;
+                s = "0"+s;
+        return s;
+    }
+
+//**********************************************************************************************************************
+
+    private static String padNum(int n){
+        String s = n+"";
+        int pad = 2-s.length();
+        if(pad>0)
+            for(int i=0; i<pad; i++)
+                s = "0"+s;
         return s;
     }
 
@@ -542,5 +553,19 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             for(int i=0; i<3; i++)
                 for(int j=0; j<3; j++)
                     ScramblePreview[face][i][j].setBackground(faceColorTexts[face].getBackground());
+    }
+
+//**********************************************************************************************************************
+
+    // to override key ordering, so that it's alphabetical on stores
+    public static class SortedProperties extends Properties{
+        public synchronized Enumeration keys(){
+            Enumeration keysEnum = super.keys();
+            Vector keyList = new Vector();
+            while(keysEnum.hasMoreElements())
+                keyList.add(keysEnum.nextElement());
+            Collections.sort(keyList);
+            return keyList.elements();
+        }
     }
 }
