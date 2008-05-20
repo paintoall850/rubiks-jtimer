@@ -236,7 +236,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         bestAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Best Average"));
 
         bestAverageText = new JTextArea("Average: N/A\nIndividual Times: N/A");
-        bestAverageText.setFont(new Font("Serif", Font.PLAIN, 14));
+        bestAverageText.setFont(regFont);
         bestAverageText.setBorder(blackLine);
         bestAverageText.setEditable(false);
 
@@ -264,8 +264,37 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timeLabels[i] = new JLabel("<html><font size=\"5\">" + timeString[i] + "</font></html>");
         }
 
-
         // setBounds
+        setTheBounds();
+
+        // add ActionListeners
+        addTheActionListeners();
+
+        // add to contentPane
+        addTheContent(contentPane);
+
+        // inital load of options
+        optionsMenu.loadOptions();
+        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
+            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
+        if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+"")) // less glitchier
+            countdownCombo.setSelectedItem(optionsMenu.countdownX);
+        OptionsToGUI();
+
+        // set some stuff up
+        importedIndex = 0;
+        hasImported = false;
+        updateScrambleAlgs();
+        timeLabels[0].setForeground(optionsMenu.currentColorX);
+        returnFocus();
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    } // end constructor
+
+//**********************************************************************************************************************
+
+    private void setTheBounds(){
+
         puzzleLabel.setBounds(10,5,80,20);
         puzzleCombo.setBounds(10,25,80,20);
         countdownLabel.setBounds(100,5,80,20);
@@ -303,11 +332,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timeLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
             x = x + width + seperation;
         }
+    }
 
-        // addKeyListener, by Doug
-        //startButton.addKeyListener(this);
+//**********************************************************************************************************************
 
-        // addActionListener
+    private void addTheActionListeners(){
+
         saveBestItem.addActionListener(this);
         saveSessionItem.addActionListener(this);
         optionsItem.addActionListener(this);
@@ -329,8 +359,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         averageDetailedViewButton.addActionListener(this);
         sessionResetButton.addActionListener(this);
         insertTimeButton.addActionListener(this);
+    }
 
-        // add to contentPane
+//**********************************************************************************************************************
+
+    private void addTheContent(Container contentPane){
+
         contentPane.add(puzzleLabel);
         contentPane.add(puzzleCombo);
         contentPane.add(countdownLabel);
@@ -359,24 +393,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             contentPane.add(averageLabels[i]);
             contentPane.add(timeLabels[i]);
         }
-
-        // inital load of options
-        optionsMenu.loadOptions();
-        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
-            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
-        if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+"")) // less glitchier
-            countdownCombo.setSelectedItem(optionsMenu.countdownX);
-        OptionsToGUI();
-
-        // set some stuff up
-        importedIndex = 0;
-        hasImported = false;
-        updateScrambleAlgs();
-        timeLabels[0].setForeground(optionsMenu.currentColorX);
-        returnFocus();
-
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-    } // end constructor
+    }
 
 //**********************************************************************************************************************
 // Public Methods

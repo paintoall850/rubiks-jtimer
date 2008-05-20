@@ -141,12 +141,12 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         confirmBox = new JCheckBox("Session Reset Warning Window");
         showMinutesBox = new JCheckBox("Use mm:ss.xx Format");
         averageText = new JTextArea();
-        averageText.setFont(new Font("Serif", Font.PLAIN, 14));
+        averageText.setFont(regFont);
         averageText.setEditable(true);
         averageScrollPane = new JScrollPane(averageText);
         averageScrollPane.setBorder(blackLine);
         sessionText = new JTextArea();
-        sessionText.setFont(new Font("Serif", Font.PLAIN, 14));
+        sessionText.setFont(regFont);
         sessionText.setEditable(true);
         sessionScrollPane = new JScrollPane(sessionText);
         sessionScrollPane.setBorder(blackLine);
