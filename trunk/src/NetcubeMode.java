@@ -665,98 +665,102 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getLocalSessionView(){
-        String sessionViewFormat = "----- Rubik's JTimer Session Statistics for %T -----\r\n\r\nUsername: %U\r\n\r\nCubes Solved: %C\r\nTotal Pops: %P\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\n\r\nIndividual Times:\r\n%I";
+        String sessionViewFormat = "----- Rubik's JTimer Session Statistics for %T -----\n\nUsername: %U\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<sessionIndex; i++){
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + localSessionTimes[i] + "          " + sessionScrambles[i] + "\r\n";
-            timesOnly = timesOnly + localSessionTimes[i] + "\r\n";
+            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + localSessionTimes[i] + "          " + sessionScrambles[i] + "\n";
+            timesOnly = timesOnly + localSessionTimes[i] + "\n";
         }
 
         String returnMe = sessionViewFormat;
-        returnMe = findAndReplace(returnMe,"%T",new Date()+"");
-        returnMe = findAndReplace(returnMe,"%U",usernameText.getText());
-        returnMe = findAndReplace(returnMe,"%A",timeFormat.format(localCurrentSessionAverage));
-        returnMe = findAndReplace(returnMe,"%I",timesAndScrambles);
-        returnMe = findAndReplace(returnMe,"%O",timesOnly);
-        returnMe = findAndReplace(returnMe,"%F",timeFormat.format(localSessionFastest));
-        returnMe = findAndReplace(returnMe,"%S",timeFormat.format(localSessionSlowest));
-        returnMe = findAndReplace(returnMe,"%C",localCubesSolved+"");
-        returnMe = findAndReplace(returnMe,"%P",localNumOfPops+"");
+        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+        returnMe = findAndReplace(returnMe, "%U", usernameText.getText());
+        returnMe = findAndReplace(returnMe, "%A", timeFormat.format(localCurrentSessionAverage));
+        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+        returnMe = findAndReplace(returnMe, "%F", timeFormat.format(localSessionFastest));
+        returnMe = findAndReplace(returnMe, "%S", timeFormat.format(localSessionSlowest));
+        returnMe = findAndReplace(returnMe, "%C", localCubesSolved+"");
+        returnMe = findAndReplace(returnMe, "%P", localNumOfPops+"");
+        returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getLocalSessionView
 
 //**********************************************************************************************************************
 
     protected final String getLocalAverageView(){
-        String averageViewFormat = "----- Rubik's JTimer Best Average for %T -----\r\n\r\nUsername: %U\r\n\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\n\r\nIndividual Times:\r\n%I";
+        String averageViewFormat = "----- Rubik's JTimer Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){
             String currentTime = localCurrentAverage[i];
             if(Double.parseDouble(currentTime) == localCurrentFastest || Double.parseDouble(currentTime) == localCurrentSlowest)
                 currentTime = "(" + currentTime + ")";
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + localCurrentScrambles[i] + "\r\n";
-            timesOnly = timesOnly + currentTime + "\r\n";
+            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + localCurrentScrambles[i] + "\n";
+            timesOnly = timesOnly + currentTime + "\n";
         }
 
         String returnMe = averageViewFormat;
-        returnMe = findAndReplace(returnMe,"%T",new Date()+"");
-        returnMe = findAndReplace(returnMe,"%U",usernameText.getText());
-        returnMe = findAndReplace(returnMe,"%A",timeFormat.format(localCurrentRollingAverage));
-        returnMe = findAndReplace(returnMe,"%I",timesAndScrambles);
-        returnMe = findAndReplace(returnMe,"%O",timesOnly);
-        returnMe = findAndReplace(returnMe,"%F",timeFormat.format(localCurrentFastest));
-        returnMe = findAndReplace(returnMe,"%S",timeFormat.format(localCurrentSlowest));
+        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+        returnMe = findAndReplace(returnMe, "%U", usernameText.getText());
+        returnMe = findAndReplace(returnMe, "%A", timeFormat.format(localCurrentRollingAverage));
+        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+        returnMe = findAndReplace(returnMe, "%F", timeFormat.format(localCurrentFastest));
+        returnMe = findAndReplace(returnMe, "%S", timeFormat.format(localCurrentSlowest));
+        returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getLocalAverageView
 
 //**********************************************************************************************************************
 
     protected final String getRemoteSessionView(){
-        String sessionViewFormat = "----- Rubik's JTimer Session Statistics for %T -----\r\n\r\nUsername: %U\r\n\r\nCubes Solved: %C\r\nTotal Pops: %P\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\n\r\nIndividual Times:\r\n%I";
+        String sessionViewFormat = "----- Rubik's JTimer Session Statistics for %T -----\n\nUsername: %U\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<sessionIndex; i++){
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + remoteSessionTimes[i] + "          " + sessionScrambles[i] + "\r\n";
-            timesOnly = timesOnly + remoteSessionTimes[i] + "\r\n";
+            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + remoteSessionTimes[i] + "          " + sessionScrambles[i] + "\n";
+            timesOnly = timesOnly + remoteSessionTimes[i] + "\n";
         }
 
         String returnMe = sessionViewFormat;
-        returnMe = findAndReplace(returnMe,"%T",new Date()+"");
-        returnMe = findAndReplace(returnMe,"%U",remoteUsername);
-        returnMe = findAndReplace(returnMe,"%A",timeFormat.format(remoteCurrentSessionAverage));
-        returnMe = findAndReplace(returnMe,"%I",timesAndScrambles);
-        returnMe = findAndReplace(returnMe,"%O",timesOnly);
-        returnMe = findAndReplace(returnMe,"%F",timeFormat.format(remoteSessionFastest));
-        returnMe = findAndReplace(returnMe,"%S",timeFormat.format(remoteSessionSlowest));
-        returnMe = findAndReplace(returnMe,"%C",remoteCubesSolved+"");
-        returnMe = findAndReplace(returnMe,"%P",remoteNumOfPops+"");
+        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+        returnMe = findAndReplace(returnMe, "%U", remoteUsername);
+        returnMe = findAndReplace(returnMe, "%A", timeFormat.format(remoteCurrentSessionAverage));
+        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+        returnMe = findAndReplace(returnMe, "%F", timeFormat.format(remoteSessionFastest));
+        returnMe = findAndReplace(returnMe, "%S", timeFormat.format(remoteSessionSlowest));
+        returnMe = findAndReplace(returnMe, "%C", remoteCubesSolved+"");
+        returnMe = findAndReplace(returnMe, "%P", remoteNumOfPops+"");
+        returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getRemoteSessionView
 
 //**********************************************************************************************************************
 
     protected final String getRemoteAverageView(){
-        String averageViewFormat = "----- Rubik's JTimer Best Average for %T -----\r\n\r\nUsername: %U\r\n\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\n\r\nIndividual Times:\r\n%I";
+        String averageViewFormat = "----- Rubik's JTimer Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){
             String currentTime = remoteCurrentAverage[i];
             if(Double.parseDouble(currentTime) == remoteCurrentFastest || Double.parseDouble(currentTime) == remoteCurrentSlowest)
                 currentTime = "(" + currentTime + ")";
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + remoteCurrentScrambles[i] + "\r\n";
-            timesOnly = timesOnly + currentTime + "\r\n";
+            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + remoteCurrentScrambles[i] + "\n";
+            timesOnly = timesOnly + currentTime + "\n";
         }
 
         String returnMe = averageViewFormat;
-        returnMe = findAndReplace(returnMe,"%T",new Date()+"");
-        returnMe = findAndReplace(returnMe,"%U",remoteUsername);
-        returnMe = findAndReplace(returnMe,"%A",timeFormat.format(remoteCurrentRollingAverage));
-        returnMe = findAndReplace(returnMe,"%I",timesAndScrambles);
-        returnMe = findAndReplace(returnMe,"%O",timesOnly);
-        returnMe = findAndReplace(returnMe,"%F",timeFormat.format(remoteCurrentFastest));
-        returnMe = findAndReplace(returnMe,"%S",timeFormat.format(remoteCurrentSlowest));
+        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+        returnMe = findAndReplace(returnMe, "%U", remoteUsername);
+        returnMe = findAndReplace(returnMe, "%A", timeFormat.format(remoteCurrentRollingAverage));
+        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+        returnMe = findAndReplace(returnMe, "%F", timeFormat.format(remoteCurrentFastest));
+        returnMe = findAndReplace(returnMe, "%S", timeFormat.format(remoteCurrentSlowest));
+        returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getRemoteAverageView
 

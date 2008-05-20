@@ -928,8 +928,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 currentTime = minutes + ":" + ssxx.format(Double.parseDouble(sessionTimes[i])-(minutes*60));
             } else
                 currentTime = sessionTimes[i];
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + sessionScrambles[i] + "\r\n";
-            timesOnly = timesOnly + currentTime + "\r\n";
+            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + sessionScrambles[i] + "\n";
+            timesOnly = timesOnly + currentTime + "\n";
             if(cubesSolved >= 2){
                 if(!(sessionTimes[i].equals("POP")))
                     deviation = deviation + ((average-Double.parseDouble(sessionTimes[i]))*(average-Double.parseDouble(sessionTimes[i])));
@@ -954,15 +954,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         }
 
         String returnMe = optionsMenu.sessionViewFormatX;
-        returnMe = findAndReplace(returnMe,"%T",new Date()+"");
-        returnMe = findAndReplace(returnMe,"%A",formatedAverage);
-        returnMe = findAndReplace(returnMe,"%I",timesAndScrambles);
-        returnMe = findAndReplace(returnMe,"%O",timesOnly);
-        returnMe = findAndReplace(returnMe,"%F",formatedFastest);
-        returnMe = findAndReplace(returnMe,"%S",formatedSlowest);
-        returnMe = findAndReplace(returnMe,"%D",ssxx.format(deviation));
-        returnMe = findAndReplace(returnMe,"%C",cubesSolved+"");
-        returnMe = findAndReplace(returnMe,"%P",numberOfPops+"");
+        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
+        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
+        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
+        returnMe = findAndReplace(returnMe, "%D", ssxx.format(deviation));
+        returnMe = findAndReplace(returnMe, "%C", cubesSolved+"");
+        returnMe = findAndReplace(returnMe, "%P", numberOfPops+"");
+        returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getSessionView
 
@@ -973,8 +974,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         String timesOnly = "";
 
         for(int i=0; i<12; i++){
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + bestAverageTimes[i] + "          " + bestAverageScrambles[i] + "\r\n";
-            timesOnly = timesOnly + bestAverageTimes[i] + "\r\n";
+            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + bestAverageTimes[i] + "          " + bestAverageScrambles[i] + "\n";
+            timesOnly = timesOnly + bestAverageTimes[i] + "\n";
         }
 
         String formatedAverage;
@@ -1002,13 +1003,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         }
 
         String returnMe = optionsMenu.averageViewFormatX;
-        returnMe = findAndReplace(returnMe,"%T",new Date()+"");
-        returnMe = findAndReplace(returnMe,"%A",formatedAverage);
-        returnMe = findAndReplace(returnMe,"%I",timesAndScrambles);
-        returnMe = findAndReplace(returnMe,"%O",timesOnly);
-        returnMe = findAndReplace(returnMe,"%D",ssxx.format(bestStandardDeviation));
-        returnMe = findAndReplace(returnMe,"%F",formatedFastest);
-        returnMe = findAndReplace(returnMe,"%S",formatedSlowest);
+        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
+        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+        returnMe = findAndReplace(returnMe, "%D", ssxx.format(bestStandardDeviation));
+        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
+        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
+        returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getAverageView
 

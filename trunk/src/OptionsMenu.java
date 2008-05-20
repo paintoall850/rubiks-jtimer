@@ -27,6 +27,7 @@ import javax.swing.border.Border;
 
 public class OptionsMenu extends JFrame implements ActionListener, MouseListener, Constants{
     private static final String FACE_NAMES[] = {"Front","Back","Left","Right","Down","Up"};
+    private static final String FILENAME = "rjt.properties";
 
     // Complete List of Save-able options
     public String puzzleX, countdownX;
@@ -62,7 +63,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         contentPane.setLayout(null);
 
         // configure JFrame
-        setTitle("Options for Rubik's JTimer (stored in rjt.conf)");
+        setTitle("Options for Rubik's JTimer (stored in " + FILENAME + ")");
         setSize(604, 325);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
@@ -342,68 +343,62 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         averageViewFormatX = averageText.getText();
         sessionViewFormatX = sessionText.getText();
 
-        String printToFile = "";
-        printToFile = printToFile + puzzleX + "~";
-        printToFile = printToFile + countdownX + "~";
-        printToFile = printToFile + showResetConfirmX + "~";
-        printToFile = printToFile + showMinutesX + "~";
-        printToFile = printToFile + colorToString(countdownColorX) + "~";
-        printToFile = printToFile + colorToString(timerColorX) + "~";
-        printToFile = printToFile + colorToString(textBackgrColorX) + "~";
-        printToFile = printToFile + colorToString(currentColorX) + "~";
-        printToFile = printToFile + colorToString(fastestColorX) + "~";
-        printToFile = printToFile + colorToString(slowestColorX) + "~";
+        Properties props = new Properties();
+        props.setProperty("puzzle", puzzleX);
+        props.setProperty("countdown", countdownX);
+        props.setProperty("showResetConfirm", showResetConfirmX+"");
+        props.setProperty("showMinutes", showMinutesX+"");
+        props.setProperty("countdownColor", colorToString(countdownColorX));
+        props.setProperty("timerColor", colorToString(timerColorX));
+        props.setProperty("textBackgrColor", colorToString(textBackgrColorX));
+        props.setProperty("currentColor", colorToString(currentColorX));
+        props.setProperty("fastestColor", colorToString(fastestColorX));
+        props.setProperty("slowestColor", colorToString(slowestColorX));
         for(int face=0; face<6; face++)
-            printToFile = printToFile + colorToString(cubeColorsX[face]) + "~";
+            props.setProperty("cubeColors_" + face, colorToString(cubeColorsX[face]));
         for(int face=0; face<4; face++)
-            printToFile = printToFile + colorToString(pyraminxColorsX[face]) + "~";
+            props.setProperty("pyraminxColors_" + face, colorToString(pyraminxColorsX[face]));
         for(int face=0; face<12; face++)
-            printToFile = printToFile + colorToString(megaminxColorsX[face]) + "~";
-        printToFile = printToFile + averageViewFormatX + "~";
-        printToFile = printToFile + sessionViewFormatX;
+            props.setProperty("megaminxColors_" + face, colorToString(megaminxColorsX[face]));
+        props.setProperty("averageViewFormat", averageViewFormatX);
+        props.setProperty("sessionViewFormat", sessionViewFormatX);
 
         try{
-            FileWriter fw = new FileWriter("rjt.conf");
-            BufferedWriter out = new BufferedWriter(fw);
-            out.write(printToFile);
+            FileOutputStream out = new FileOutputStream(FILENAME);
+            props.store(out, "Rubik's JTimer Configuration File (sorry, Java Properties are unordered Hash Tables...)");
             out.close();
-        } catch(IOException g){
+        }
+        catch(IOException g){
             JOptionPane.showMessageDialog(this,"There was an error saving. You may not have write permissions.");
         }
     }
 
 //**********************************************************************************************************************
-
     public void loadOptions(){
-        String input = "";
         try{
-            FileReader fr = new FileReader("rjt.conf");
-            BufferedReader in = new BufferedReader(fr);
-            String read;
-            while((read = in.readLine()) != null)
-                input = input + read + "\n";
+            Properties props = new Properties();
+            FileInputStream in = new FileInputStream(FILENAME);
+            props.load(in);
             in.close();
-            input = input.substring(0, input.length()-1);
 
-            StringTokenizer st = new StringTokenizer(input, "~");
-            puzzleX = st.nextToken();
-            countdownX = st.nextToken();
-            showResetConfirmX = st.nextToken().equalsIgnoreCase("true");
-            showMinutesX = st.nextToken().equalsIgnoreCase("true");
-            countdownColorX = stringToColor(st.nextToken());
-            timerColorX = stringToColor(st.nextToken());
-            textBackgrColorX = stringToColor(st.nextToken());
-            currentColorX = stringToColor(st.nextToken());
-            fastestColorX = stringToColor(st.nextToken());
-            slowestColorX = stringToColor(st.nextToken());
+            puzzleX = props.getProperty("puzzle");
+            countdownX = props.getProperty("countdown");
+            showResetConfirmX = Boolean.parseBoolean(props.getProperty("showResetConfirm"));
+            showMinutesX = Boolean.parseBoolean(props.getProperty("showMinutes"));
+            countdownColorX = stringToColor(props.getProperty("countdownColor"));
+            timerColorX = stringToColor(props.getProperty("timerColor"));
+            textBackgrColorX = stringToColor(props.getProperty("textBackgrColor"));
+            currentColorX = stringToColor(props.getProperty("currentColor"));
+            fastestColorX = stringToColor(props.getProperty("fastestColor"));
+            slowestColorX = stringToColor(props.getProperty("slowestColor"));
             for(int face=0; face<6; face++)
-                cubeColorsX[face] = stringToColor(st.nextToken());
+                cubeColorsX[face] = stringToColor(props.getProperty("cubeColors_" + face));
             for(int face=0; face<4; face++)
-                pyraminxColorsX[face] = stringToColor(st.nextToken());
+                pyraminxColorsX[face] = stringToColor(props.getProperty("pyraminxColors_" + face));
             for(int face=0; face<12; face++)
-                megaminxColorsX[face] = stringToColor(st.nextToken());
-            averageViewFormatX = st.nextToken();
-            sessionViewFormatX = st.nextToken();
+                megaminxColorsX[face] = stringToColor(props.getProperty("megaminxColors_" + face));
+            averageViewFormatX = props.getProperty("averageViewFormat");
+            sessionViewFormatX = props.getProperty("sessionViewFormat");
 
             OptionsToGUI();
         } catch(IOException g){
@@ -451,8 +446,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         megaminxColorsX[10] = new Color(255,180,180); // light pink
         megaminxColorsX[11] = new Color(255,128,0); // orange
 
-        averageViewFormatX = "----- Rubik's JTimer Best Average for %T -----\r\n\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\nStandard Deviation: %D\r\n\r\nIndividual Times:\r\n%I";
-        sessionViewFormatX = "----- Rubik's JTimer Session Statistics for %T -----\r\n\r\nCubes Solved: %C\r\nTotal Pops: %P\r\nAverage: %A\r\n\r\nFastest Time: %F\r\nSlowest Time: %S\r\nStandard Deviation: %D\r\n\r\nIndividual Times:\r\n%I";
+        averageViewFormatX = "----- Rubik's JTimer Best Average for %T -----\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+        sessionViewFormatX = "----- Rubik's JTimer Session Statistics for %T -----\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
 
         OptionsToGUI();
     } // end resetOptions
