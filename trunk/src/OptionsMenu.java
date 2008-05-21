@@ -63,7 +63,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         contentPane.setLayout(null);
 
         // configure JFrame
-        setTitle("Options for Rubik's JTimer (stored in " + FILENAME + ")");
+        setTitle("Options for " + APP_TITLE + " (stored in " + FILENAME + ")");
         centerFrameOnScreen(604, 325);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
@@ -369,7 +369,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         try{
             FileOutputStream out = new FileOutputStream(FILENAME);
-            props.store(out, "Rubik's JTimer Configuration File");
+            props.store(out, APP_TITLE + " Configuration File");
             out.close();
         }
         catch(IOException g){
@@ -450,8 +450,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         megaminxColorsX[10] = new Color(255,180,180); // light pink
         megaminxColorsX[11] = new Color(255,128,0); // orange
 
-        averageViewFormatX = "----- Rubik's JTimer Best Average for %T -----\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
-        sessionViewFormatX = "----- Rubik's JTimer Session Statistics for %T -----\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+        averageViewFormatX = "----- " + APP_TITLE + " Best Average for %T -----\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+        sessionViewFormatX = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
 
         OptionsToGUI();
     } // end resetOptions

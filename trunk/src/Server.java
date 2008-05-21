@@ -46,7 +46,7 @@ public class Server extends NetcubeMode{
         contentPane.setLayout(null);
 
         // configure JFrame
-        setTitle("Rubik's JTimer Server");
+        setTitle(APP_TITLE + " Server");
 
         try { //configure readyClip
             readyClip = Applet.newAudioClip(getClass().getResource("ready.wav"));

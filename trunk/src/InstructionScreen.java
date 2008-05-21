@@ -22,7 +22,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class InstructionScreen extends JFrame{
+public class InstructionScreen extends JFrame implements Constants{
 
     public InstructionScreen(){
         // configure Contentpane
@@ -30,7 +30,7 @@ public class InstructionScreen extends JFrame{
         contentPane.setLayout(null);
 
         // configure JFrame
-        setTitle("Instructions for Rubik's JTimer");
+        setTitle("Instructions for " + APP_TITLE);
         setSize(325, 425);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
@@ -40,7 +40,7 @@ public class InstructionScreen extends JFrame{
         int appWidth = getSize().width, appHeight = getSize().height;
         setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
-        JLabel instLabel = new JLabel("<html>Rubik's JTimer instructions go here...</html>");
+        JLabel instLabel = new JLabel("<html>instructions go here...</html>");
         instLabel.setVerticalAlignment(SwingConstants.TOP);
         instLabel.setBounds(10,10,300,400);
         contentPane.add(instLabel);
