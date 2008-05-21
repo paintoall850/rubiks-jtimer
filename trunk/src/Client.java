@@ -30,8 +30,6 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public class Client extends NetcubeMode{
-    //stuff not in Server
-    JCheckBox localStatusLabel;
 
 //**********************************************************************************************************************
 
@@ -45,34 +43,31 @@ public class Client extends NetcubeMode{
         // configure JFrame
         setTitle("Rubik's JTimer Client");
 
-        //GUI Object creation
-        serverIpText = new JTextField("127.0.0.1");
-        connectButton = new JButton("Connect To Server");
+        // GUI Object creation
+        serverIpText.setText("127.0.0.1");
+        connectButton.setText("Connect To Server");
 
         //puzzleCombo.setSelectedItem("3x3x3");
         //countdownCombo.setSelectedItem("15");
-        startButton = new JButton("Stop Timer");
+        startButton.setText("Stop Timer");
 
-        localStatusLabel = new JCheckBox("I'm ready!");
-
-        //set bounds
+        // set bounds
         super.setTheBounds();
-        localStatusLabel.setBounds(540,110,170,20);
 
-        //add to content pane
+        // add to contentPane
         super.addTheContent(contentPane);
         contentPane.add(localStatusLabel);
 
-        //addActionListener
+        // add ActionListeners
         super.addActionListeners();
         localStatusLabel.addActionListener(this);
 
-        //GUI preperation
+        // GUI preperation
         super.prepGUI();
         puzzleCombo.setEnabled(false);
         countdownCombo.setEnabled(false);
 
-        //hide GUI
+        // hide GUI
         hideGUI();
     } // end constructor
 
@@ -101,7 +96,7 @@ public class Client extends NetcubeMode{
                 serverIpText.setEnabled(false);
                 usernameText.setEnabled(false);
                 serverPortText.setEnabled(false);
-                handicapText.setEnabled(false);
+                //handicapText.setEnabled(false);
                 sendMessageButton.setEnabled(true);
                 chatText.setEnabled(true);
             } catch(Exception f){
@@ -112,7 +107,7 @@ public class Client extends NetcubeMode{
                 serverIpText.setEnabled(true);
                 usernameText.setEnabled(true);
                 serverPortText.setEnabled(true);
-                handicapText.setEnabled(true);
+                //handicapText.setEnabled(true);
                 sendMessageButton.setEnabled(false);
                 chatText.setEnabled(false);
                 return;
@@ -235,7 +230,7 @@ public class Client extends NetcubeMode{
             connectButton.setEnabled(true);
             usernameText.setEnabled(true);
             serverPortText.setEnabled(true);
-            handicapText.setEnabled(true);
+            //handicapText.setEnabled(true);
             sendMessageButton.setEnabled(false);
             chatText.setEnabled(false);
         } finally {
