@@ -245,10 +245,10 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         remoteTimeUsernameLabel.setBounds(535+40,240,310+40,185);
         localTimeLabel.setBounds(215,250,310+40,60);
         remoteTimeLabel.setBounds(535+40,250,310+40,60);
-        localAverageDetailButton.setBounds(385,330,120,20);
-        localSessionDetailButton.setBounds(385,355,120,20);
-        remoteAverageDetailButton.setBounds(705+40,330,120,20);
-        remoteSessionDetailButton.setBounds(705+40,355,120,20);
+        localAverageDetailButton.setBounds(385+40,330,120,20);
+        localSessionDetailButton.setBounds(385+40,355,120,20);
+        remoteAverageDetailButton.setBounds(705+80,330,120,20);
+        remoteSessionDetailButton.setBounds(705+80,355,120,20);
 
         smallPicture.setBounds(180,10,500,120);
         bigPicture.setBounds(10,150,700,355);
