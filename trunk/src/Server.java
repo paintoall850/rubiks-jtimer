@@ -348,7 +348,7 @@ public class Server extends NetcubeMode{
     private void generateNewScramble(){
         scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
         newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
-        scrambleText.setText(newAlg.replaceAll("@", "\n"));
+        scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         out.println("S" + newAlg);
         out.flush();
     } // end generateNewScramble

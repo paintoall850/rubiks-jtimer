@@ -412,7 +412,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         public void run(){
             if(readyTime == 2){
                 bing2.play();
-                timerLabel.setFont(new Font("Serif", Font.PLAIN, 64));
+                timerLabel.setFont(new Font("Serif", Font.PLAIN, 56)); // was 64
                 timerLabel.setText("Get Ready!...2");
                 readyTime--;
             } else if(readyTime == 1){
