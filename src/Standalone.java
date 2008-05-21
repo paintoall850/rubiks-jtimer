@@ -83,7 +83,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     public static void main(String[] args){
         // set look and feel to match native OS
         System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Rubik's JTimer");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", APP_TITLE);
         String nativeLF = UIManager.getSystemLookAndFeelClassName();
         try{
             //UIManager.setLookAndFeel(nativeLF);
@@ -109,7 +109,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         contentPane.setLayout(null);
 
         // configure JFrame
-        setTitle("Rubik's JTimer");
+        setTitle(APP_TITLE);
         centerFrameOnScreen(860, 570);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
@@ -139,7 +139,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
         instItem = new JMenuItem("Instuctions");
         instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        aboutItem = new JMenuItem("About Rubik's JTimer"); aboutItem.setMnemonic('A');
+        aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
         aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
         serverItem = new JMenuItem("Start Server");
         serverItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
@@ -199,7 +199,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             smartButton[i] = new SmartButton("#" + (i+1));
 
         useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
-        //useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         scrambleText = new JTextArea("");
         scrambleText.setFocusable(true);

@@ -41,4 +41,5 @@ public interface Constants{
 
     // needs to be changed in ScrambleMegaminx.java too
     static final String ALG_BREAK = "[.]"; // was "@" (not it's treated as regular expression)
+    static final String APP_TITLE = "Rubik's JTimer";
 }

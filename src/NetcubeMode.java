@@ -709,7 +709,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getLocalSessionView(){
-        String sessionViewFormat = "----- Rubik's JTimer Session Statistics for %T -----\n\nUsername: %U\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
+        String sessionViewFormat = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nUsername: %U\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<sessionIndex; i++){
@@ -734,7 +734,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getLocalAverageView(){
-        String averageViewFormat = "----- Rubik's JTimer Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
+        String averageViewFormat = "----- " + APP_TITLE + " Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){
@@ -760,7 +760,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getRemoteSessionView(){
-        String sessionViewFormat = "----- Rubik's JTimer Session Statistics for %T -----\n\nUsername: %U\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
+        String sessionViewFormat = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nUsername: %U\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<sessionIndex; i++){
@@ -785,7 +785,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getRemoteAverageView(){
-        String averageViewFormat = "----- Rubik's JTimer Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
+        String averageViewFormat = "----- " + APP_TITLE + " Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){

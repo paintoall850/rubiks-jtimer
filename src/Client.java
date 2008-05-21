@@ -41,7 +41,7 @@ public class Client extends NetcubeMode{
         contentPane.setLayout(null);
 
         // configure JFrame
-        setTitle("Rubik's JTimer Client");
+        setTitle(APP_TITLE + " Client");
 
         // GUI Object creation
         serverIpText.setText("127.0.0.1");
