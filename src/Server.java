@@ -30,13 +30,11 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public class Server extends NetcubeMode{
-    //stuff not in Client
-    Thread connectionListener;
-    JLabel remoteStatusLabel;
+    // stuff not in Client
     AudioClip readyClip;
-    JTextArea readyColor;
     ScrambleAlg scrambleAlg;
     ServerSocket serverSocket;
+    Thread connectionListener;
 
 //**********************************************************************************************************************
 
@@ -54,42 +52,34 @@ public class Server extends NetcubeMode{
             readyClip = Applet.newAudioClip(getClass().getResource("ready.wav"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "ready.wav not found. There will be no 'ready' sound.");}
 
-        //GUI Object creation
-        serverIpText = new JTextField("N/A");
-        connectButton = new JButton("Start Server");
+        // GUI Object creation
+        serverIpText.setText("N/A");
+        connectButton.setText("Start Server");
 
         puzzleCombo.setSelectedItem(puzzle);
         countdownCombo.setSelectedItem(countdown);
-        startButton = new JButton("Start Timer");
-
-        readyColor = new JTextArea();
-        readyColor.setEditable(false);
-        readyColor.setBackground(Color.red);
-        readyColor.setBorder(blackLine);
-        remoteStatusLabel = new JLabel("Remote Status");
+        startButton.setText("Start Timer");
 
         scrambleAlg = new ScrambleAlg();
 
-        //set bounds
+        // set bounds
         super.setTheBounds();
-        readyColor.setBounds(540,110,20,20);
-        remoteStatusLabel.setBounds(570,110,140,20);
 
-        //add to content pane
+        // add to contentPane
         super.addTheContent(contentPane);
         contentPane.add(readyColor);
         contentPane.add(remoteStatusLabel);
 
-        //addActionListener
+        // add ActionListeners
         super.addActionListeners();
         puzzleCombo.addActionListener(this);
         countdownCombo.addActionListener(this);
 
-        //GUI preperation
+        // GUI preperation
         super.prepGUI();
         serverIpText.setEnabled(false);
 
-        //hide GUI
+        // hide GUI
         hideGUI();
     } // end constructor
 
@@ -104,7 +94,7 @@ public class Server extends NetcubeMode{
                 connectButton.setEnabled(false);
                 usernameText.setEnabled(false);
                 serverPortText.setEnabled(false);
-                handicapText.setEnabled(false);
+                //handicapText.setEnabled(false);
 
                 serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
                 connectionListener = new ConnectionListener(serverSocket, this);
@@ -118,7 +108,7 @@ public class Server extends NetcubeMode{
                 // client only: serverIpText.setEnabled(true);
                 usernameText.setEnabled(true);
                 serverPortText.setEnabled(true);
-                handicapText.setEnabled(true);
+                //handicapText.setEnabled(true);
                 sendMessageButton.setEnabled(false);
                 chatText.setEnabled(false);
                 return;
@@ -144,7 +134,7 @@ public class Server extends NetcubeMode{
                 //client only: serverIpText.setEnabled(false);
                 usernameText.setEnabled(false);
                 serverPortText.setEnabled(false);
-                handicapText.setEnabled(false);
+                //handicapText.setEnabled(false);
                 sendMessageButton.setEnabled(true);
                 chatText.setEnabled(true);
             } catch(Exception f){
@@ -305,7 +295,7 @@ public class Server extends NetcubeMode{
             connectButton.setEnabled(true);
             usernameText.setEnabled(true);
             serverPortText.setEnabled(true);
-            handicapText.setEnabled(true);
+            //handicapText.setEnabled(true);
             sendMessageButton.setEnabled(false);
             chatText.setEnabled(false);
         } finally {

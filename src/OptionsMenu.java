@@ -64,14 +64,11 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         // configure JFrame
         setTitle("Options for Rubik's JTimer (stored in " + FILENAME + ")");
-        setSize(604, 325);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
 
         // center frame on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+        centerFrameOnScreen(604, 325);
 
         myStandalone = standalone;
 
@@ -169,6 +166,15 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         loadOptions();
     } // end constructor
+
+//**********************************************************************************************************************
+
+    private void centerFrameOnScreen(int width, int height){
+        setSize(width, height);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int appWidth = getSize().width, appHeight = getSize().height;
+        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+    }
 
 //**********************************************************************************************************************
 

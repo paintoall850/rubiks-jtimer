@@ -32,10 +32,11 @@ import javax.swing.border.Border;
 public abstract class NetcubeMode extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
     protected Color myBackgrColor;
 
-    JLabel usernameLabel, serverIpLabel, serverPortLabel, handicapLabel;
+    JLabel usernameLabel, serverIpLabel, serverPortLabel;//, handicapLabel;
     JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
     JLabel puzzleLabel, countdownLabel, bigPicture, smallPicture, userIsTyping;
-    JTextField usernameText, serverIpText, serverPortText, handicapText, chatText;
+    JTextField usernameText, serverIpText, serverPortText;//, handicapText;
+    JTextField chatText;
     JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
     JTextPane chatPane;
     StyledDocument chatDoc;
@@ -54,31 +55,31 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     boolean isTyping, remoteIsTyping;
     ImageIcon typeOn, typeOff;
 
-    //data storage
+    // mixed stuff
+    JLabel remoteStatusLabel; // not used in Client
+    JTextArea readyColor; // not used in Client
+    JCheckBox localStatusLabel; // not used in Server
+
+    // data storage
     String[] localSessionTimes, remoteSessionTimes, sessionScrambles, localCurrentAverage, remoteCurrentAverage, localCurrentScrambles, remoteCurrentScrambles;
     int localCubesSolved, remoteCubesSolved, sessionIndex, localCurrentPlaceInAverage, remoteCurrentPlaceInAverage, localNumOfPops, remoteNumOfPops, localScore, remoteScore, acceptsSincePop;
     double localTotalTime, remoteTotalTime, localSessionFastest, remoteSessionFastest, localSessionSlowest, remoteSessionSlowest, localCurrentFastest, remoteCurrentFastest, localCurrentSlowest, remoteCurrentSlowest, localCurrentRollingAverage, remoteCurrentRollingAverage, localCurrentSessionAverage, remoteCurrentSessionAverage;
 
-    //network stuff
+    // network stuff
     Socket clientSocket;
     BufferedReader in;
     PrintWriter out;
 
-    //listening thread
+    // listening thread
     Thread chatListener;
 
 //**********************************************************************************************************************
 
     public NetcubeMode(Color textBackgrColor){
         // configure JFrame
-        setSize(727, 544);
+        centerFrameOnScreen(725, 544);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
-
-        // center frame on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
         try { //configure chatSound
             chatSound = Applet.newAudioClip(getClass().getResource("blip.wav"));
@@ -106,15 +107,15 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         myBackgrColor = textBackgrColor;
 
-        //GUI Object creation
+        // GUI Object creation
         usernameLabel = new JLabel("Username:");
         serverIpLabel = new JLabel("Server IP:");
         serverPortLabel = new JLabel("Server Port:");
-        handicapLabel = new JLabel("Handicap:");
+        //handicapLabel = new JLabel("Handicap:");
         usernameText = new JTextField();
         serverIpText = new JTextField(); // override in sub-class
         serverPortText = new JTextField("52003");
-        handicapText = new JTextField();
+        //handicapText = new JTextField();
         connectButton = new JButton(); // override in sub-class
 
         typeOff = new ImageIcon(getClass().getResource("typeOff.gif"));
@@ -178,6 +179,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         startButton = new JButton(); // will override
         popButton = new JButton("POP");
 
+        // mixed stuff
+        readyColor = new JTextArea();
+        readyColor.setEditable(false);
+        readyColor.setBackground(Color.red);
+        readyColor.setBorder(blackLine);
+        remoteStatusLabel = new JLabel("Remote Status");
+        localStatusLabel = new JCheckBox("I'm ready!");
+
         bigPicture = new JLabel((new ImageIcon(getClass().getResource("bigPicture.jpg"))));
         smallPicture = new JLabel((new ImageIcon(getClass().getResource("smallPicture.jpg"))));
         bigPicture.setBorder(blackLine);
@@ -190,24 +199,36 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
 //**********************************************************************************************************************
 
+    private void centerFrameOnScreen(int width, int height){
+        setSize(width, height);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int appWidth = getSize().width, appHeight = getSize().height;
+        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+    }
+
+//**********************************************************************************************************************
+
     protected void setTheBounds(){
 
         usernameLabel.setBounds(10,10,80,20);
         serverIpLabel.setBounds(10,35,80,20);
         serverPortLabel.setBounds(10,60,80,20);
-        handicapLabel.setBounds(10,85,80,20);
+        //handicapLabel.setBounds(10,85,80,20);
         usernameText.setBounds(90,10,80,20);
         serverIpText.setBounds(90,35,80,20);
         serverPortText.setBounds(90,60,80,20);
-        handicapText.setBounds(90,85,80,20);
-        connectButton.setBounds(10,110,160,20);
+        //handicapText.setBounds(90,85,80,20);
+        connectButton.setBounds(10,110-25,160,20+25);
+
         chatScrollPane.setBounds(180,10,350,95);
         userIsTyping.setBounds(180,110,20,20);
         chatText.setBounds(205,110,235,20);
         sendMessageButton.setBounds(450,110,80,20);
+
         useThisAlgLabel.setBounds(10,140,700,20);
         scrambleText.setBounds(10,160,700,50);
         timerLabel.setBounds(10,220,700,75);
+
         localTimeUsernameLabel.setBounds(10,305,345,200);
         remoteTimeUsernameLabel.setBounds(365,305,345,200);
         localTimeLabel.setBounds(20,325,325,75);
@@ -216,14 +237,21 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         localSessionDetailButton.setBounds(215,430,120,20);
         remoteAverageDetailButton.setBounds(570,405,120,20);
         remoteSessionDetailButton.setBounds(570,430,120,20);
+
         puzzleLabel.setBounds(540,15,80,20);
         puzzleCombo.setBounds(540,35,80,20);
         countdownLabel.setBounds(540+90,15,80,20);
         countdownCombo.setBounds(540+90,35,80,20);
         startButton.setBounds(540,60,170,20);
         popButton.setBounds(540,85,170,20);
-        smallPicture.setBounds(210,10,500,120);
+
+        readyColor.setBounds(540,110,20,20); // not used in Client
+        remoteStatusLabel.setBounds(570,110,140,20); // not used in Client
+        localStatusLabel.setBounds(540,110,170,20); // not used in Server
+
+        smallPicture.setBounds(210-30,10,500,120);
         bigPicture.setBounds(10,150,700,355);
+
     }
 
 //**********************************************************************************************************************
@@ -233,11 +261,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(usernameLabel);
         contentPane.add(serverIpLabel);
         contentPane.add(serverPortLabel);
-        contentPane.add(handicapLabel);
+        //contentPane.add(handicapLabel);
         contentPane.add(usernameText);
         contentPane.add(serverIpText);
         contentPane.add(serverPortText);
-        contentPane.add(handicapText);
+        //contentPane.add(handicapText);
         contentPane.add(connectButton);
         contentPane.add(chatScrollPane);
         contentPane.add(userIsTyping);
@@ -260,7 +288,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(countdownCombo);
         contentPane.add(startButton);
         contentPane.add(popButton);
-        //contentPane.add(smallPicture);
+        contentPane.add(smallPicture);
         //contentPane.add(bigPicture);
     }
 
@@ -294,15 +322,17 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected void hideGUI(){
-        //usernameLabel.setVisible(true);
-        //serverIpLabel.setVisible(true);
-        //serverPortLabel.setVisible(true);
+        centerFrameOnScreen(695, 170);//185, 170);
+
+        usernameLabel.setVisible(true);
+        serverIpLabel.setVisible(true);
+        serverPortLabel.setVisible(true);
         //handicapLabel.setVisible(true);
-        //usernameText.setVisible(true);
-        //serverIpText.setVisible(true);
-        //serverPortText.setVisible(true);
+        usernameText.setVisible(true);
+        serverIpText.setVisible(true);
+        serverPortText.setVisible(true);
         //handicapText.setVisible(true);
-        //connectButton.setVisible(true);
+        connectButton.setVisible(true);
         bigPicture.setVisible(true);
         smallPicture.setVisible(true);
 
@@ -335,15 +365,17 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected void showGUI(){
-        //usernameLabel.setVisible(false);
-        //serverIpLabel.setVisible(false);
-        //serverPortLabel.setVisible(false);
+        centerFrameOnScreen(725, 544);
+
+        usernameLabel.setVisible(false);
+        serverIpLabel.setVisible(false);
+        serverPortLabel.setVisible(false);
         //handicapLabel.setVisible(false);
-        //usernameText.setVisible(false);
-        //serverIpText.setVisible(false);
-        //serverPortText.setVisible(false);
+        usernameText.setVisible(false);
+        serverIpText.setVisible(false);
+        serverPortText.setVisible(false);
         //handicapText.setVisible(false);
-        //connectButton.setVisible(false);
+        connectButton.setVisible(false);
         bigPicture.setVisible(false);
         smallPicture.setVisible(false);
 

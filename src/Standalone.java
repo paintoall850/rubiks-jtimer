@@ -58,8 +58,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     volatile Thread timerThread;
     AudioClip countdownClip = null;
 
-    DecimalFormat ssxx, ss;
-
     private double[] timeQueue = new double[100]; // gowd this is bad
 
     boolean runningCountdown;
@@ -72,6 +70,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     String[] currentAverageScrambles = new String[12], currentAverageTimes = new String[12];
     String[] sessionTimes = new String[100], sessionScrambles = new String[100];
 
+    DecimalFormat ssxx, ss;
     JFileChooser fc = new JFileChooser();
 
     String[] importedAlgs;
@@ -104,6 +103,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
 
     public Standalone(){
+        // configure Contentpane
+        Container contentPane = getContentPane();
+        contentPane.setLayout(null);
+
+        // configure JFrame
+        setTitle("Rubik's JTimer");
+        centerFrameOnScreen(860, 550);
+        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
+        setResizable(false);
+
         ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
 
@@ -111,25 +120,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         fc.setAcceptAllFileFilterUsed(false);
         scrambleAlg = new ScrambleAlg();
 
-        // configure Contentpane
-        Container contentPane = getContentPane();
-        contentPane.setLayout(null);
-
         // configure countdownclip
         try {
             countdownClip = Applet.newAudioClip(getClass().getResource("count.mid"));
         } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no countdown audio.");}
-
-        // configure JFrame
-        setTitle("Rubik's JTimer");
-        setSize(860, 550);
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
-
-        // center frame on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
 
         // set up JMenuBar
         saveBestItem = new JMenuItem("Save Best Average As...");
@@ -264,14 +258,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             timeLabels[i] = new JLabel("<html><font size=\"5\">" + timeString[i] + "</font></html>");
         }
 
-        // setBounds
+        // set bounds
         setTheBounds();
-
-        // add ActionListeners
-        addTheActionListeners();
 
         // add to contentPane
         addTheContent(contentPane);
+
+        // add ActionListeners
+        addTheActionListeners();
 
         // inital load of options
         optionsMenu.loadOptions();
@@ -290,6 +284,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     } // end constructor
+
+//**********************************************************************************************************************
+
+    private void centerFrameOnScreen(int width, int height){
+        setSize(width, height);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int appWidth = getSize().width, appHeight = getSize().height;
+        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+    }
 
 //**********************************************************************************************************************
 
