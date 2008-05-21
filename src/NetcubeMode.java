@@ -54,6 +54,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     String remoteTime;
     boolean isTyping, remoteIsTyping;
     ImageIcon typeOn, typeOff;
+    String newAlg;
 
     // mixed stuff
     JLabel remoteStatusLabel; // not used in Client
@@ -77,7 +78,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     public NetcubeMode(Color textBackgrColor){
         // configure JFrame
-        centerFrameOnScreen(725, 544);
+        //centerFrameOnScreen(725, 550);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
 
@@ -139,7 +140,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         sendMessageButton = new JButton("Send");
 
         useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
-        useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        //useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText = new JTextArea("");
         scrambleText.setFocusable(true);
         scrambleText.setEditable(false);
@@ -192,8 +193,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         bigPicture.setBorder(blackLine);
         smallPicture.setBorder(blackLine);
 
-        //set everything to defaults
+        // set everything to defaults
         reset();
+        newAlg = ""; // just in case...
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -220,38 +222,36 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         //handicapText.setBounds(90,85,80,20);
         connectButton.setBounds(10,110-25,160,20+25);
 
-        chatScrollPane.setBounds(180,10,350,95);
-        userIsTyping.setBounds(180,110,20,20);
-        chatText.setBounds(205,110,235,20);
-        sendMessageButton.setBounds(450,110,80,20);
+        puzzleLabel.setBounds(10,5,90,20);
+        puzzleCombo.setBounds(10,25,90,20);
+        countdownLabel.setBounds(110,5,90,20);
+        countdownCombo.setBounds(110,25,90,20);
+        startButton.setBounds(10,50,190,20+10);
+        popButton.setBounds(10,75+10,190,20+10);
+        readyColor.setBounds(10,100+20,20,20); // not used in Client
+        remoteStatusLabel.setBounds(10+30,100+20,190-30,20); // not used in Client
+        localStatusLabel.setBounds(10,100+20,190,20); // not used in Server
 
-        useThisAlgLabel.setBounds(10,140,700,20);
-        scrambleText.setBounds(10,160,700,50);
-        timerLabel.setBounds(10,220,700,75);
+        useThisAlgLabel.setBounds(215,5,333+17,20);
+        scrambleText.setBounds(215,25,333+17,115);
+        timerLabel.setBounds(215,157,333+17,75);
 
-        localTimeUsernameLabel.setBounds(10,305,345,200);
-        remoteTimeUsernameLabel.setBounds(365,305,345,200);
-        localTimeLabel.setBounds(20,325,325,75);
-        remoteTimeLabel.setBounds(375,325,325,75);
-        localAverageDetailButton.setBounds(215,405,120,20);
-        localSessionDetailButton.setBounds(215,430,120,20);
-        remoteAverageDetailButton.setBounds(570,405,120,20);
-        remoteSessionDetailButton.setBounds(570,430,120,20);
+        chatScrollPane.setBounds(10,150,190,245);
+        userIsTyping.setBounds(10,400,20,20);
+        chatText.setBounds(35,400,85,20);
+        sendMessageButton.setBounds(130,400,70,20);
 
-        puzzleLabel.setBounds(540,15,80,20);
-        puzzleCombo.setBounds(540,35,80,20);
-        countdownLabel.setBounds(540+90,15,80,20);
-        countdownCombo.setBounds(540+90,35,80,20);
-        startButton.setBounds(540,60,170,20);
-        popButton.setBounds(540,85,170,20);
+        localTimeUsernameLabel.setBounds(215,240,310+40,185);
+        remoteTimeUsernameLabel.setBounds(535+40,240,310+40,185);
+        localTimeLabel.setBounds(215,250,310+40,60);
+        remoteTimeLabel.setBounds(535+40,250,310+40,60);
+        localAverageDetailButton.setBounds(385,330,120,20);
+        localSessionDetailButton.setBounds(385,355,120,20);
+        remoteAverageDetailButton.setBounds(705+40,330,120,20);
+        remoteSessionDetailButton.setBounds(705+40,355,120,20);
 
-        readyColor.setBounds(540,110,20,20); // not used in Client
-        remoteStatusLabel.setBounds(570,110,140,20); // not used in Client
-        localStatusLabel.setBounds(540,110,170,20); // not used in Server
-
-        smallPicture.setBounds(210-30,10,500,120);
+        smallPicture.setBounds(180,10,500,120);
         bigPicture.setBounds(10,150,700,355);
-
     }
 
 //**********************************************************************************************************************
@@ -365,7 +365,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected void showGUI(){
-        centerFrameOnScreen(725, 544);
+        centerFrameOnScreen(860+80, 465);
 
         usernameLabel.setVisible(false);
         serverIpLabel.setVisible(false);
@@ -499,21 +499,21 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         }
 
         //**********add times and scrambles to rolling average and session times**********
-        sessionScrambles[sessionIndex] = scrambleText.getText();
+        sessionScrambles[sessionIndex] = newAlg; //scrambleText.getText();
         localSessionTimes[sessionIndex] = localTimeLabel.getText();
         remoteSessionTimes[sessionIndex] = remoteTimeLabel.getText();
 
         //if the time is not a pop, add the time and scramble to the rolling average and move the place up one
         if(localTime != 0){
             localCurrentAverage[localCurrentPlaceInAverage] = localTimeLabel.getText();
-            localCurrentScrambles[localCurrentPlaceInAverage] = scrambleText.getText();
+            localCurrentScrambles[localCurrentPlaceInAverage] = newAlg; //scrambleText.getText();
             localCurrentPlaceInAverage++;
             if(localCurrentPlaceInAverage == 12)
                 localCurrentPlaceInAverage = 0;
         }
         if(remoteTime != 0){
             remoteCurrentAverage[remoteCurrentPlaceInAverage] = remoteTimeLabel.getText();
-            remoteCurrentScrambles[remoteCurrentPlaceInAverage] = scrambleText.getText();
+            remoteCurrentScrambles[remoteCurrentPlaceInAverage] = newAlg; //scrambleText.getText();
             remoteCurrentPlaceInAverage++;
             if(remoteCurrentPlaceInAverage == 12)
                 remoteCurrentPlaceInAverage = 0;

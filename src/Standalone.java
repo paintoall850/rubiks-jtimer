@@ -38,6 +38,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     private ScrambleAlg scrambleAlg;
     private ScramblePane scramblePane;
     private TimerArea timerArea;
+    private String newAlg;
 
     JButton startButton, discardButton, popButton, plusTwoButton, averageModeButton;
     JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
@@ -109,7 +110,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         // configure JFrame
         setTitle("Rubik's JTimer");
-        centerFrameOnScreen(860, 550);
+        centerFrameOnScreen(860, 570);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
 
@@ -119,6 +120,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         fc.setFileFilter(new TextFileFilter());
         fc.setAcceptAllFileFilterUsed(false);
         scrambleAlg = new ScrambleAlg();
+        newAlg = "";
 
         // configure countdownclip
         try {
@@ -217,7 +219,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
-        scramblePane = new ScramblePane(282,216); // needs to be changed in two places
+        scramblePane = new ScramblePane(282,216+20); // needs to be changed in two places
         scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setLayout(null);
 
@@ -298,28 +300,21 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     private void setTheBounds(){
 
-        puzzleLabel.setBounds(10,5,80,20);
-        puzzleCombo.setBounds(10,25,80,20);
-        countdownLabel.setBounds(100,5,80,20);
-        countdownCombo.setBounds(100,25,80,20);
-        startButton.setBounds(10,50,170,70);
-        discardButton.setBounds(10,125,170,45);
-        popButton.setBounds(10,175,80,45);
-        plusTwoButton.setBounds(100,175,80,45);
-        averageModeButton.setBounds(663,286+20,160,20);
-        useThisAlgLabel.setBounds(190,5,363,20);
-        scrambleText.setBounds(190,25,363,95);
-        timerLabel.setBounds(190,125+12,363,75);
-        timerArea.setBounds(190,125,363,75+21);
-        scramblePane.setBounds(563,5,282,216); // needs to be changed in two places
-        sessionStatsLabel.setBounds(10,270+10,412,130);
-        rollingAverageLabel.setBounds(432,270+10,412,130);
-        bestAverageLabel.setBounds(10,410+5,834,72);
-        bestAverageText.setBounds(20,427+5,724,45);
-        averageDetailedViewButton.setBounds(754,426+5,80,45);
-        sessionDetailedViewButton.setBounds(311-70,286+20,160,20);
-        insertTimeButton.setBounds(311-70,311+20,160,20);
-        sessionResetButton.setBounds(311-70,336+20,160,20);
+        puzzleLabel.setBounds(10,5,90,20);
+        puzzleCombo.setBounds(10,25,90,20);
+        countdownLabel.setBounds(110,5,90,20);
+        countdownCombo.setBounds(110,25,90,20);
+        startButton.setBounds(10,50,190,70+20);
+        discardButton.setBounds(10,125+20,190,45);
+        popButton.setBounds(10,175+20,90,45);
+        plusTwoButton.setBounds(110,175+20,90,45);
+
+        useThisAlgLabel.setBounds(215,5,333,20);
+        scrambleText.setBounds(215,25,333,115);
+        timerLabel.setBounds(215,125+12+20,333,75);
+        timerArea.setBounds(215,125+20,333,75+21);
+
+        scramblePane.setBounds(563,5,282,216+20); // needs to be changed in two places
 
         // total width is 834 if there is a 10 margin on each side
         // so use formula: margin = (834-12*width-11*separation)/2 + 10
@@ -328,13 +323,23 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         int width = 67;
         int seperation = 2;
         for(int i=0; i<12; i++){
-            smartButton[i].setBounds(x, 225, width, 56);
-            averageLabels[i].setBounds(x, 225, width, 20);
+            smartButton[i].setBounds(x, 230+20, width, 46);
+            averageLabels[i].setBounds(x, 230+20, width, 20);
             averageLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
-            timeLabels[i].setBounds(x, 245, width, 20);
+            timeLabels[i].setBounds(x, 245+20, width, 20);
             timeLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
             x = x + width + seperation;
         }
+
+        sessionStatsLabel.setBounds(10,270+10+20,412,130);
+        rollingAverageLabel.setBounds(432,270+10+20,412,130);
+        bestAverageLabel.setBounds(10,410+5+20,834,72);
+        bestAverageText.setBounds(20,427+5+20,724,45);
+        averageDetailedViewButton.setBounds(754,426+5+20,80,45);
+        sessionDetailedViewButton.setBounds(311-70,286+20+20,160,20);
+        insertTimeButton.setBounds(311-70,311+20+20,160,20);
+        sessionResetButton.setBounds(311-70,336+20+20,160,20);
+        averageModeButton.setBounds(663,286+20+20,160,20);
     }
 
 //**********************************************************************************************************************
@@ -445,7 +450,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 sessionScrambles = temp2;
             }
             sessionTimes[sessionIndex] = "POP";
-            sessionScrambles[sessionIndex] = scrambleText.getText();
+            sessionScrambles[sessionIndex] = newAlg;//scrambleText.getText();
             sessionIndex++;
             if(cubesSolved >= 12)
                 averageDetailedViewButton.setEnabled(true);
@@ -598,7 +603,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                     sessionScrambles = temp2;
                 }
                 sessionTimes[sessionIndex] = "POP";
-                sessionScrambles[sessionIndex] = scrambleText.getText();
+                sessionScrambles[sessionIndex] = newAlg;//scrambleText.getText();
                 sessionIndex++;
                 updateScrambleAlgs();
                 sessionDetailedViewButton.setEnabled(true);
@@ -741,8 +746,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         sessionTotalTime = sessionTotalTime + Double.parseDouble(ssxx.format(time));
         sessionTimes[sessionIndex] = ssxx.format(time);
-        sessionScrambles[sessionIndex] = scrambleText.getText();
-        currentAverageScrambles[placeInAverage] = scrambleText.getText();
+        sessionScrambles[sessionIndex] = newAlg;//scrambleText.getText();
+        currentAverageScrambles[placeInAverage] = newAlg;//scrambleText.getText();
         currentAverageTimes[placeInAverage] = ssxx.format(time);
 
         if(Double.parseDouble(sessionTimes[sessionIndex]) < sessionFastest || Double.parseDouble(sessionTimes[sessionIndex]) > sessionSlowest || sessionFastest == 0 || sessionSlowest == 0){
@@ -1064,7 +1069,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     private void updateScrambleAlgs(){
         scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
         if(hasImported && (importedIndex < importedAlgs.length)){
-            scrambleText.setText(importedAlgs[importedIndex]);
+            newAlg = importedAlgs[importedIndex];
+            scrambleText.setText(newAlg.replaceAll("@", "\n"));
             importedIndex++;
         }
         else{
@@ -1072,7 +1078,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 JOptionPane.showMessageDialog(this, "All imported scrambles have been used. Random scrambles will now be displayed.");
                 hasImported = false;
             }
-            scrambleText.setText(scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+""));
+            newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
+            scrambleText.setText(newAlg.replaceAll("@", "\n"));
         }
         updateScramblePane();
     } // end updateScrambleAlgs
@@ -1080,7 +1087,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
 
     private void updateScramblePane(){
-        scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", scrambleText.getText());
+        scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll("@", " "));//scrambleText.getText());
     }
 
 //**********************************************************************************************************************

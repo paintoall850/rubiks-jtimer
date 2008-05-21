@@ -64,11 +64,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         // configure JFrame
         setTitle("Options for Rubik's JTimer (stored in " + FILENAME + ")");
+        centerFrameOnScreen(604, 325);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
-
-        // center frame on the screen
-        centerFrameOnScreen(604, 325);
 
         myStandalone = standalone;
 
@@ -185,10 +183,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         resetButton.setBounds(186+20,255,186,30);
         cancelButton.setBounds(2*186+30,255,186,30);
 
-        puzzleLabel.setBounds(30,25,80,20);
-        puzzleCombo.setBounds(30,45,80,20);
-        countdownLabel.setBounds(120,25,80,20);
-        countdownCombo.setBounds(120,45,80,20);
+        puzzleLabel.setBounds(30,25,90,20);
+        puzzleCombo.setBounds(30,45,90,20);
+        countdownLabel.setBounds(130,25,90,20);
+        countdownCombo.setBounds(130,45,90,20);
         confirmBox.setBounds(30,75,230,20);
         showMinutesBox.setBounds(30,105,230,20);
 
@@ -309,9 +307,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         if(source == saveButton){
             saveOptions();
             myStandalone.OptionsToGUI();
-            setVisible(false); //this.dispose();
+            this.setVisible(false); //this.dispose();
         } else if(source == cancelButton){
-            setVisible(false); //this.dispose();
+            this.setVisible(false); //this.dispose();
         } else if(source == resetButton){
             resetOptions();
             averageText.setCaretPosition(0);

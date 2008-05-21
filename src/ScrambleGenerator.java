@@ -41,7 +41,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
 
         // configure JFrame
         setTitle("Scramble Generator");
-        centerFrameOnScreen(225, 150);
+        centerFrameOnScreen(225, 155);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
 
@@ -56,10 +56,10 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
         formatImport = new JRadioButton("Format Output for Importing");
         radioGroup = new ButtonGroup();
 
-        puzzleLabel.setBounds(10,5,80,20);
-        puzzleCombo.setBounds(10,25,80,20);
-        numLabel.setBounds(100,5,110,20);
-        numText.setBounds(100,25,110,20);
+        puzzleLabel.setBounds(10,5,90,20);
+        puzzleCombo.setBounds(10,25,90,20);
+        numLabel.setBounds(110,5,100,20);
+        numText.setBounds(110,25,100,20);
         formatPrint.setBounds(10,50,200,20);
         formatImport.setBounds(10,70,200,20);
         generateButton.setBounds(10,95,200,20);
@@ -97,23 +97,29 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
             try{
                 numberOfScrambles = Integer.parseInt(numText.getText());
             } catch(NumberFormatException f){
-                JOptionPane.showMessageDialog(this,"Number of scrambles is invalid. Please enter an integer to continue.");
+                JOptionPane.showMessageDialog(this, "Number of scrambles is invalid. Please enter a positive integer to continue.");
                 return;
             }
 
             if(numberOfScrambles < 1){
-                JOptionPane.showMessageDialog(this,"Number of scrambles is invalid. Please enter an integer to continue.");
+                JOptionPane.showMessageDialog(this, "Number of scrambles is invalid. Please enter a positive integer to continue.");
                 return;
             }
 
             String printToFile = "";
             if(formatPrint.isSelected()){
                 printToFile = "----- Rubik's JTimer Generated Scrambles -----\n\nCube Type: " + puzzleCombo.getSelectedItem() + "\nNumber of Scrambles: " + numberOfScrambles + "\n\nScrambles:\n";
-                for(int i=0; i<numberOfScrambles; i++)
-                    printToFile = printToFile + (i+1) + ")          " + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\n";
+                for(int i=0; i<numberOfScrambles; i++){
+                    String newAlg = algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"");
+                    newAlg = newAlg.replaceAll("@", " ");
+                    printToFile = printToFile + (i+1) + ")          " + newAlg + "\n";
+                }
             } else {
-                for(int i=0; i<numberOfScrambles; i++)
-                    printToFile = printToFile + algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"") + "\n";
+                for(int i=0; i<numberOfScrambles; i++){
+                    String newAlg = algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"");
+                    //newAlg = alg.replaceAll("@", " ");
+                    printToFile = printToFile + newAlg + "\n";
+                }
             }
             printToFile = printToFile.replaceAll("\n", System.getProperty("line.separator"));
 
@@ -130,6 +136,8 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
                     out.close();
                 } catch(IOException g){JOptionPane.showMessageDialog(this,"There was an error saving. You may not have write permissions.");}
             }
+
+            this.setVisible(false);
         }
     } // end actionPerformed
 }
