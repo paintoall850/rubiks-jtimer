@@ -28,8 +28,8 @@ import javax.swing.border.Border;
 //area for all Program Constants
 public interface Constants{
     static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 18);
-    static final Font smAlgFont = new Font("SansSerif", Font.BOLD, 12);
-    static final Font regFont = new Font("Serif", Font.PLAIN, 14);
+    static final Font smAlgFont = new Font("Courier", Font.BOLD, 11);
+    static final Font regFont = new Font("Serif", Font.BOLD, 14);
 
     static final Border blackLine = BorderFactory.createLineBorder(Color.black);
     static final Border theBorder = BorderFactory.createCompoundBorder(
