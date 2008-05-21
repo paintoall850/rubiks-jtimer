@@ -38,5 +38,7 @@ public interface Constants{
 
     static final String[] puzzleChoices = {"2x2x2","3x3x3","4x4x4","5x5x5","Pyraminx", "Megaminx"};
     static final String[] countdownChoices = {"0","3","5","10","15"};
+
+    // needs to be changed in ScrambleMegaminx.java too
     static final String ALG_BREAK = "[.]"; // was "@" (not it's treated as regular expression)
 }

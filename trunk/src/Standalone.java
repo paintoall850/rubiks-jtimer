@@ -97,8 +97,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } catch(Exception e){}
 
         // create this frame and show it
-        Standalone app = new Standalone();
-        app.setVisible(true);
+        Standalone standalone = new Standalone();
+        standalone.setVisible(true);
     } // end main
 
 //**********************************************************************************************************************
