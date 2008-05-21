@@ -72,6 +72,8 @@ public class Server extends NetcubeMode{
 
         // add ActionListeners
         super.addActionListeners();
+        usernameText.addActionListener(this);
+        serverPortText.addActionListener(this);
         puzzleCombo.addActionListener(this);
         countdownCombo.addActionListener(this);
 
@@ -88,62 +90,14 @@ public class Server extends NetcubeMode{
     public void actionPerformed(ActionEvent e){
         Object source = e.getSource();
 
-        if(source == connectButton){
-            try{
-                connectButton.setText("LISTENING");
-                connectButton.setEnabled(false);
-                usernameText.setEnabled(false);
-                serverPortText.setEnabled(false);
-                //handicapText.setEnabled(false);
-
-                serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
-                connectionListener = new ConnectionListener(serverSocket, this);
-                connectionListener.setDaemon(true);
-                connectionListener.start();
-            } catch(Exception f){
-                JOptionPane.showMessageDialog(this, "Server information is not correctly formatted.");
-                hideGUI();
-                connectButton.setText("Start Server");
-                connectButton.setEnabled(true);
-                // client only: serverIpText.setEnabled(true);
-                usernameText.setEnabled(true);
-                serverPortText.setEnabled(true);
-                //handicapText.setEnabled(true);
-                sendMessageButton.setEnabled(false);
-                chatText.setEnabled(false);
+        if(source == connectButton || source == usernameText || source == serverPortText){
+            if(usernameText.getText().equals("")){
+                JOptionPane.showMessageDialog(this, "Username should not be blank.");
                 return;
             }
-        } else if(e.getActionCommand().equals("Connected")){
-            try{
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
-                localTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, usernameText.getText() + "'s Statistics"));
-                out.println("U" + usernameText.getText());
-                out.println("P" + puzzleCombo.getSelectedItem());
-                out.println("T" + countdownCombo.getSelectedItem());
-                out.flush();
-                generateNewScramble();
-
-                showGUI();
-                startupClip.play();
-                chatListener = new Thread(this);
-                chatListener.start();
-                connectButton.setText("CONNECTED");
-                connectButton.setEnabled(false);
-                //client only: serverIpText.setEnabled(false);
-                usernameText.setEnabled(false);
-                serverPortText.setEnabled(false);
-                //handicapText.setEnabled(false);
-                sendMessageButton.setEnabled(true);
-                chatText.setEnabled(true);
-            } catch(Exception f){
-                JOptionPane.showMessageDialog(this, "Cannot get chat stream.");
-                System.out.println(f.getMessage());
-                return;
-            }
+            startServerConnection();
         } else if(source == sendMessageButton || source == chatText){
-            if(chatText.getText().equalsIgnoreCase("")) return;
+            if(chatText.getText().equals("")) return;
             try{
                 chatDoc.insertString(chatDoc.getLength(),(usernameText.getText() + ": "),redStyle);
                 chatDoc.insertString(chatDoc.getLength(),chatText.getText() + "\n",blackStyle);
@@ -401,10 +355,64 @@ public class Server extends NetcubeMode{
 
 //**********************************************************************************************************************
 
+    private void startServerConnection(){
+        try{
+            connectButton.setText("LISTENING");
+            connectButton.setEnabled(false);
+            usernameText.setEnabled(false);
+            serverPortText.setEnabled(false);
+            //handicapText.setEnabled(false);
+
+            serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
+            connectionListener = new ConnectionListener(serverSocket, this);
+            connectionListener.setDaemon(true);
+            connectionListener.start();
+        } catch(Exception f){
+            JOptionPane.showMessageDialog(this, "Cannot start server. Information may be entered incorrectly.");
+            hideGUI();
+            connectButton.setText("Start Server");
+            connectButton.setEnabled(true);
+            // client only: serverIpText.setEnabled(true);
+            usernameText.setEnabled(true);
+            serverPortText.setEnabled(true);
+            //handicapText.setEnabled(true);
+            sendMessageButton.setEnabled(false);
+            chatText.setEnabled(false);
+        }
+    }
+
+//**********************************************************************************************************************
+
     public void connectionMade(Socket clientSocket){
         this.clientSocket = clientSocket;
-        ActionEvent evt = new ActionEvent("Connected", 0, "Connected");
-        this.actionPerformed(evt);
+        try{
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+
+            localTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, usernameText.getText() + "'s Statistics"));
+            out.println("U" + usernameText.getText());
+            out.println("P" + puzzleCombo.getSelectedItem());
+            out.println("T" + countdownCombo.getSelectedItem());
+            out.flush();
+            generateNewScramble();
+
+            showGUI();
+            startupClip.play();
+            chatListener = new Thread(this);
+            chatListener.start();
+            connectButton.setText("CONNECTED");
+            connectButton.setEnabled(false);
+            //client only: serverIpText.setEnabled(false);
+            usernameText.setEnabled(false);
+            serverPortText.setEnabled(false);
+            //handicapText.setEnabled(false);
+            sendMessageButton.setEnabled(true);
+            chatText.setEnabled(true);
+        } catch(Exception f){
+            JOptionPane.showMessageDialog(this, "Cannot start server. Information may be entered incorrectly.");
+            System.out.println(f.getMessage());
+            return;
+        }
     }
 
 //**********************************************************************************************************************
