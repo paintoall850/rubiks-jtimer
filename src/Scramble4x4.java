@@ -110,18 +110,18 @@ public class Scramble4x4{
             //If the first two moves are in the same direction
             if(movesSameDirection(previousArray, previousGroup, oldArray, oldGroup)){
                 //loop until the next move is an intersecting face
-                while(isParallel(currentArray,previousArray))
+                while(isParallel(currentArray, previousArray))
                     generateMove();
             } else {
                 //loop until the next move is not in the same group as either of the first two moves AND is not the same face
-                while((movesSameDirection(currentArray,currentGroup,previousArray,previousGroup) ||
-                                    movesSameDirection(currentArray,currentGroup,oldArray,oldGroup)) ||
-                                    isSameFace(currentArray,currentFace,previousArray,previousFace))
+                while((movesSameDirection(currentArray, currentGroup, previousArray, previousGroup) ||
+                                    movesSameDirection(currentArray, currentGroup, oldArray, oldGroup)) ||
+                                    isSameFace(currentArray, currentFace, previousArray, previousFace))
                     generateMove();
             }
         } else {
             //loop until the next move is not the same face as the previous
-            while(isSameFace(currentArray,currentFace,previousArray,previousFace))
+            while(isSameFace(currentArray, currentFace, previousArray, previousFace))
                 generateMove();
         }
 
@@ -145,7 +145,7 @@ public class Scramble4x4{
             generateMove();
 
             //if three moves before this one are all parellel, then make this move on an intersecting face
-            if(isParallel(previousArray,oldArray) && isParallel(previousArray, deadArray)){
+            if(isParallel(previousArray, oldArray) && isParallel(previousArray, deadArray)){
                 while(isParallel(currentArray, previousArray))
                     generateMove();
             } else {
@@ -154,16 +154,16 @@ public class Scramble4x4{
                     //If the first two moves are in the same direction
                     if(movesSameDirection(previousArray, previousGroup, oldArray, oldGroup)){
                         //loop until the next move is an intersecting face
-                        while(isParallel(currentArray,previousArray))
+                        while(isParallel(currentArray, previousArray))
                             generateMove();
                     } else
                         //loop until the next move is not in the same group as either of the first two moves AND is not the same face
-                        while(movesSameDirection(currentArray,currentGroup,previousArray,previousGroup) || movesSameDirection(currentArray,currentGroup,oldArray,oldGroup) || isSameFace(currentArray,currentFace,previousArray,previousFace)){
+                        while(movesSameDirection(currentArray, currentGroup, previousArray, previousGroup) || movesSameDirection(currentArray, currentGroup, oldArray, oldGroup) || isSameFace(currentArray, currentFace, previousArray, previousFace)){
                             generateMove();
                     }
                 } else {
                     //loop until the next move is not the same face as the previous
-                    while(isSameFace(currentArray,currentFace,previousArray,previousFace))
+                    while(isSameFace(currentArray, currentFace, previousArray, previousFace))
                         generateMove();
                 }
             }

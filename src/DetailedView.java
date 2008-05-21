@@ -85,7 +85,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
                 out.write(printToWindow);
                 out.close();
             } catch(IOException e){
-                JOptionPane.showMessageDialog(this,"There was an error saving. You may not have write permissions.");
+                JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
             }
         }
     } // end saveToFile

@@ -26,7 +26,7 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public class OptionsMenu extends JFrame implements ActionListener, MouseListener, Constants{
-    private static final String FACE_NAMES[] = {"Front","Back","Left","Right","Down","Up"};
+    private static final String FACE_NAMES[] = {"Front", "Back", "Left", "Right", "Down", "Up"};
     private static final String FILENAME = "rjt.properties";
 
     // Complete List of Save-able options
@@ -373,7 +373,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             out.close();
         }
         catch(IOException g){
-            JOptionPane.showMessageDialog(this,"There was an error saving. You may not have write permissions.");
+            JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
         }
     }
 

@@ -134,7 +134,9 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
                     BufferedWriter out = new BufferedWriter(fr);
                     out.write(printToFile);
                     out.close();
-                } catch(IOException g){JOptionPane.showMessageDialog(this,"There was an error saving. You may not have write permissions.");}
+                } catch(IOException g){
+                    JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
+                }
             }
 
             this.setVisible(false);

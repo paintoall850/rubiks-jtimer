@@ -131,20 +131,20 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         saveBestItem = new JMenuItem("Save Best Average As...");
         saveSessionItem = new JMenuItem("Save Session Average As...");
         optionsItem = new JMenuItem("Options");
-        optionsItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2,0));
+        optionsItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         exitItem = new JMenuItem("Exit");
         importItem = new JMenuItem("Import Scrambles"); importItem.setMnemonic('I');
-        importItem.setAccelerator(KeyStroke.getKeyStroke('I',2));
+        importItem.setAccelerator(KeyStroke.getKeyStroke('I', 2));
         generatorItem = new JMenuItem("Generate Scrambles"); generatorItem.setMnemonic('G');
-        generatorItem.setAccelerator(KeyStroke.getKeyStroke('G',2));
+        generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
         instItem = new JMenuItem("Instuctions");
-        instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1,0));
+        instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         aboutItem = new JMenuItem("About Rubik's JTimer"); aboutItem.setMnemonic('A');
-        aboutItem.setAccelerator(KeyStroke.getKeyStroke('A',2));
+        aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
         serverItem = new JMenuItem("Start Server");
-        serverItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3,0));
+        serverItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         clientItem = new JMenuItem("Connect To Server");
-        clientItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4,0));
+        clientItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
         fileMenu = new JMenu("File"); fileMenu.setMnemonic('F');
         fileMenu.add(saveBestItem);
         fileMenu.add(saveSessionItem);
@@ -219,7 +219,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
-        scramblePane = new ScramblePane(282,216+20); // needs to be changed in two places
+        scramblePane = new ScramblePane(282, 216+20); // needs to be changed in two places
         scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setLayout(null);
 
@@ -486,7 +486,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             }
         } else if(source == sessionResetButton){
             if(optionsMenu.showResetConfirmX){
-                int choice = JOptionPane.showConfirmDialog(this,"Are you sure you want to reset this session and lose all times?","Warning!",0);
+                int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", 0);
                 if(choice == 1){
                     returnFocus();
                     return;
@@ -543,7 +543,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getSessionView(), fc.getSelectedFile());
             } else {
-                JOptionPane.showMessageDialog(this,"No times have been recorded for this session.");
+                JOptionPane.showMessageDialog(this, "No times have been recorded for this session.");
             }
         } else if(source == saveBestItem){
             if(cubesSolved >= 12){
@@ -551,7 +551,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getAverageView(), fc.getSelectedFile());
             } else {
-                JOptionPane.showMessageDialog(this,"Not enough cubes have been solved to calculate an average.");
+                JOptionPane.showMessageDialog(this, "Not enough cubes have been solved to calculate an average.");
             }
         } else if(source == exitItem){
             System.exit(0);
@@ -578,8 +578,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                         input = input + read + "%";
                     }
                     in.close();
-                } catch(IOException g){JOptionPane.showMessageDialog(this,"There was an error opening the file.");}
-                StringTokenizer st = new StringTokenizer(input,"%");
+                } catch(IOException g){JOptionPane.showMessageDialog(this, "There was an error opening the file.");}
+                StringTokenizer st = new StringTokenizer(input, "%");
                 importedAlgs = new String[st.countTokens()];
                 for(int i=0;i<importedAlgs.length;i++)
                     importedAlgs[i] = st.nextToken();
@@ -614,7 +614,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 try{
                     inputTime = Double.parseDouble(ssxx.format(Double.parseDouble(input))) * 1000;
                 } catch(NumberFormatException h){
-                    JOptionPane.showMessageDialog(this,"Invalid number entered. No time was added to the session.");
+                    JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
                     return;
                 }
                 startTime = 0;
@@ -631,21 +631,23 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == optionsItem){
             optionsMenu.setVisible(true);
         } else if(source == serverItem){
-            int choice = JOptionPane.showConfirmDialog(this,"Switching to Server Mode destroys main window session. Are you sure?","Warning!",0);
+            int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", 0);
             if(choice == 1){
                 returnFocus();
                 return;
             }
-            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsMenu.textBackgrColorX);
+            //this.setVisible(false);
+            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsMenu);
             server.setVisible(true);
             disposeAll(); //this.dispose();
         } else if(source == clientItem){
-            int choice = JOptionPane.showConfirmDialog(this,"Switching to Client Mode destroys main window session. Are you sure?","Warning!",0);
+            int choice = JOptionPane.showConfirmDialog(this, "Switching to Client Mode destroys main window session. Are you sure?", "Warning!", 0);
             if(choice == 1){
                 returnFocus();
                 return;
             }
-            Client client = new Client(optionsMenu.textBackgrColorX);
+            //this.setVisible(false);
+            Client client = new Client(optionsMenu);
             client.setVisible(true);
             disposeAll(); //this.dispose();
         }
@@ -1045,7 +1047,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         while(true){
             int index = original.indexOf(find);
             if(index >= 0)
-                original = original.substring(0,index) + replace + original.substring(index+find.length(), original.length());
+                original = original.substring(0, index) + replace + original.substring(index+find.length(), original.length());
             else
                 break;
         }
@@ -1061,7 +1063,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             BufferedWriter out = new BufferedWriter(fr);
             out.write(text);
             out.close();
-        } catch(IOException e){JOptionPane.showMessageDialog(this,"There was an error saving. You may not have write permissions.");}
+        } catch(IOException e){
+            JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
+        }
     } // end saveToFile
 
 //**********************************************************************************************************************

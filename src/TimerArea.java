@@ -105,7 +105,7 @@ public class TimerArea extends JButton implements FocusListener, KeyListener, Co
                 case ACCEPT:        /*myStandalone.timerAccept();*/ myState = TimerState.RESTING; focusGained(null); break;
             }
         //int code = e.getKeyCode();
-        //updateBorder("Key Released! (" + code + "," + i + ")", new Color(0,0,255), new Color(255,0,0));
+        //updateBorder("Key Released! (" + code + ", " + i + ")", new Color(0,0,255), new Color(255,0,0));
         //i++;
     }
 
@@ -120,7 +120,7 @@ public class TimerArea extends JButton implements FocusListener, KeyListener, Co
                 case ACCEPT:        break;
             }
         //int code = e.getKeyCode();
-        //updateBorder("Key Pressed! (" + code + "," + j + ")", new Color(0,0,255), new Color(0,255,0));
+        //updateBorder("Key Pressed! (" + code + ", " + j + ")", new Color(0,0,255), new Color(0,255,0));
         //j++;
     }
 
