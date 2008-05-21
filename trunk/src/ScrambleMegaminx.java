@@ -15,8 +15,8 @@
 import java.util.Vector;
 
 public class ScrambleMegaminx{
-    private final String[][] faces = {{"R"},{"D","Y"}};
-    private final String[] directions = {"-","--","+","++"};
+    private final String[][] faces = {{"R"}, {"D", "Y"}};
+    private final String[] directions = {"-", "--", "+", "++"};
     private final int defaultLength = 70;
 
     public ScrambleMegaminx(){}

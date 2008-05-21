@@ -116,7 +116,7 @@ public class ScramblePane extends JPanel implements Constants{
         int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = (myHeight - 3*face_pixels - 2*face_gap)/2;
         y += 5; // nudge away from title
 
-        setCubeFaceBounds(CubeFace[size][0], size, 1*n + x ,1*n + y, face_pixels/size);
+        setCubeFaceBounds(CubeFace[size][0], size, 1*n + x, 1*n + y, face_pixels/size);
         setCubeFaceBounds(CubeFace[size][1], size, 3*n + x, 1*n + y, face_pixels/size);
         setCubeFaceBounds(CubeFace[size][2], size, 0*n + x, 1*n + y, face_pixels/size);
         setCubeFaceBounds(CubeFace[size][3], size, 2*n + x, 1*n + y, face_pixels/size);
@@ -269,8 +269,8 @@ public class ScramblePane extends JPanel implements Constants{
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(1.5F));
 
-        int xCenter = 76, yCenter = 100; // 141,120 worked for just 1 cluster
-        int xShift = 125, yShift = 58; // for the second/back cluster of 6 faces (was 141,0)
+        int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
+        int xShift = 125, yShift = 58; // for the second/back cluster of 6 faces (was 141, 0)
         double radius = 25;
         double face_gap = 4;
         double big_radius = 2 * radius * Math.cos(0.2D*Math.PI) + face_gap;

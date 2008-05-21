@@ -38,8 +38,8 @@ public class Server extends NetcubeMode{
 
 //**********************************************************************************************************************
 
-    public Server(String puzzle, String countdown, Color textBackgrColor){
-        super(textBackgrColor);
+    public Server(String puzzle, String countdown, OptionsMenu optionsMenu){
+        super(optionsMenu);
 
         // configure Contentpane
         Container contentPane = getContentPane();
@@ -99,8 +99,8 @@ public class Server extends NetcubeMode{
         } else if(source == sendMessageButton || source == chatText){
             if(chatText.getText().equals("")) return;
             try{
-                chatDoc.insertString(chatDoc.getLength(),(usernameText.getText() + ": "),redStyle);
-                chatDoc.insertString(chatDoc.getLength(),chatText.getText() + "\n",blackStyle);
+                chatDoc.insertString(chatDoc.getLength(), (usernameText.getText()+": "), redStyle);
+                chatDoc.insertString(chatDoc.getLength(), (chatText.getText()+"\n"), blackStyle);
                 out.println("C" + chatText.getText());
                 out.flush();
                 chatPane.setCaretPosition(chatDoc.getLength());
@@ -216,16 +216,16 @@ public class Server extends NetcubeMode{
                 generateNewScramble();
             }
         } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getLocalSessionView(), myBackgrColor);
+            DetailedView win = new DetailedView("Session Times", getLocalSessionView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView(), myBackgrColor);
+            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getRemoteSessionView(), myBackgrColor);
+            DetailedView win = new DetailedView("Session Times", getRemoteSessionView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView(), myBackgrColor);
+            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         }
     } // end actionPerformed
@@ -236,8 +236,8 @@ public class Server extends NetcubeMode{
         try{
             while(true){
                 String data = in.readLine();
-                String prefix = data.substring(0,1);
-                String message = data.substring(1,data.length());
+                String prefix = data.substring(0, 1);
+                String message = data.substring(1, data.length());
                 performAction(prefix, message);
             }
         } catch(Exception e){

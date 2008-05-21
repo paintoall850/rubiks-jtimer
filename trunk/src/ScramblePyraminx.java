@@ -19,10 +19,10 @@
  */
 
 public class ScramblePyraminx{
-    private static final String[]   U = {"U","U'"},
-                                    L = {"L","L'"},
-                                    R = {"R","R'"},
-                                    B = {"B","B'"};
+    private static final String[]   U = {"U", "U'"},
+                                    L = {"L", "L'"},
+                                    R = {"R", "R'"},
+                                    B = {"B", "B'"};
     private int previousArray, previousFace, currentArray, currentFace;
     private String formatedMove;
 

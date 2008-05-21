@@ -30,12 +30,12 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public abstract class NetcubeMode extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
-    //protected OptionsMenu optionsMenu;
+    protected OptionsMenu optionsMenu;
     //protected ScrambleGenerator scrambleGenerator;
     //protected InstructionScreen instructionScreen;
     //protected AboutScreen aboutScreen;
 
-    protected Color myBackgrColor;
+    //protected Color myBackgrColor;
     //protected ScramblePane scramblePane;
     protected String newAlg;
 
@@ -81,7 +81,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
 //**********************************************************************************************************************
 
-    public NetcubeMode(Color textBackgrColor){
+    public NetcubeMode(OptionsMenu optionsMenu){
         // configure JFrame
         //centerFrameOnScreen(725, 550);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
@@ -110,7 +110,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
 
-        myBackgrColor = textBackgrColor;
+        this.optionsMenu = optionsMenu;
+        //myBackgrColor = textBackgrColor;
         newAlg = ""; // just in case...
 
         // GUI Object creation
@@ -145,13 +146,12 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         sendMessageButton = new JButton("Send");
 
         useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
-        //useThisAlgLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scrambleText = new JTextArea("");
         scrambleText.setFocusable(true);
         scrambleText.setEditable(false);
         scrambleText.setLineWrap(true);
         scrambleText.setWrapStyleWord(true);
-        scrambleText.setBackground(myBackgrColor);
+        scrambleText.setBackground(optionsMenu.textBackgrColorX);
         scrambleText.setForeground(Color.black);
         scrambleText.setBorder(blackLine);
 
@@ -815,7 +815,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         while(true){
             int index = original.indexOf(find);
             if(index >= 0)
-                original = original.substring(0,index) + replace + original.substring((index+find.length()),(original.length()));
+                original = original.substring(0, index) + replace + original.substring(index+find.length(), original.length());
             else
                 break;
         }
