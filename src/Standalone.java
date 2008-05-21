@@ -1070,7 +1070,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
         if(hasImported && (importedIndex < importedAlgs.length)){
             newAlg = importedAlgs[importedIndex];
-            scrambleText.setText(newAlg.replaceAll("@", "\n"));
+            scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
             importedIndex++;
         }
         else{
@@ -1079,7 +1079,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 hasImported = false;
             }
             newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
-            scrambleText.setText(newAlg.replaceAll("@", "\n"));
+            scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         }
         updateScramblePane();
     } // end updateScrambleAlgs
@@ -1087,7 +1087,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
 
     private void updateScramblePane(){
-        scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll("@", " "));//scrambleText.getText());
+        scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll(ALG_BREAK, " "));//scrambleText.getText());
     }
 
 //**********************************************************************************************************************

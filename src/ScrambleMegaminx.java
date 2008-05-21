@@ -14,7 +14,7 @@
   */
 import java.util.Vector;
 
-public class ScrambleMegaminx {
+public class ScrambleMegaminx{
     private final String[][] faces = {{"R"},{"D","Y"}};
     private final String[] directions = {"-","--","+","++"};
     private final int defaultLength = 70;
@@ -66,7 +66,7 @@ public class ScrambleMegaminx {
         String scramble = "";
         int rand = 0;
         for(int line=0; line<7; line++){
-            if(line != 0) scramble = scramble + "@";//"          ";
+            if(line != 0) scramble = scramble + ".";//"          ";// was "@" briefly too
             for(int i=0; i<10; i++){
                 rand = (int)(Math.random()*2);
                 scramble = scramble + (i%2==1 ? "D" : "R") + (rand==1 ? "++ " : "-- ");

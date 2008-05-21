@@ -239,7 +239,7 @@ public class Client extends NetcubeMode{
         } else if(prefix.equals("S")){ // pass Scramble alg
             scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
             newAlg = data;
-            scrambleText.setText(newAlg.replaceAll("@", "\n"));
+            scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         } else if(prefix.equals("N")){ // pass finished time
             remoteTime = data;
             //if everyone is done, then stop the timer update stats

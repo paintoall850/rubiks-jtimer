@@ -111,13 +111,13 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
                 printToFile = "----- Rubik's JTimer Generated Scrambles -----\n\nCube Type: " + puzzleCombo.getSelectedItem() + "\nNumber of Scrambles: " + numberOfScrambles + "\n\nScrambles:\n";
                 for(int i=0; i<numberOfScrambles; i++){
                     String newAlg = algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"");
-                    newAlg = newAlg.replaceAll("@", " ");
+                    newAlg = newAlg.replaceAll(ALG_BREAK, " ");
                     printToFile = printToFile + (i+1) + ")          " + newAlg + "\n";
                 }
             } else {
                 for(int i=0; i<numberOfScrambles; i++){
                     String newAlg = algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"");
-                    //newAlg = alg.replaceAll("@", " ");
+                    //newAlg = alg.replaceAll(ALG_BREAK, " ");
                     printToFile = printToFile + newAlg + "\n";
                 }
             }
