@@ -1043,7 +1043,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
 
-    private String findAndReplace(String original, String find, String replace){
+    private static final String findAndReplace(String original, String find, String replace){
         while(true){
             int index = original.indexOf(find);
             if(index >= 0)

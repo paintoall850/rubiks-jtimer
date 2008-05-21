@@ -35,7 +35,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     //protected InstructionScreen instructionScreen;
     //protected AboutScreen aboutScreen;
 
-    //protected Color myBackgrColor;
     //protected ScramblePane scramblePane;
     protected String newAlg;
 
@@ -811,7 +810,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
 //**********************************************************************************************************************
 
-    protected final String findAndReplace(String original, String find, String replace){
+    protected static final String findAndReplace(String original, String find, String replace){
         while(true){
             int index = original.indexOf(find);
             if(index >= 0)
