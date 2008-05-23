@@ -154,6 +154,24 @@ public class SolveTable implements Constants{
     }
 
 //**********************************************************************************************************************
+
+    // wrapper function, not yet used
+    // very useful when we want to change the window of RAs from 10:12 to say 3:5
+    public void updateAllStats(){
+        updateStatsBeginningAt(0);
+    }
+
+//**********************************************************************************************************************
+
+    // not yet used, for updating computed stats down the list starting at point-of-change
+    // updates all if called with index=0
+    public void updateStatsBeginningAt(int index){
+        int size = getSize();
+        for(int i=index; i<size; i++)
+            computeStats(i);
+    }
+
+//**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
