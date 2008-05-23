@@ -96,7 +96,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             //UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
             //MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme()); UIManager.setLookAndFeel(new MetalLookAndFeel());
             MetalLookAndFeel.setCurrentTheme(new OceanTheme()); UIManager.setLookAndFeel(new MetalLookAndFeel());
-        } catch(Exception e){}
+        } catch(Exception ex){}
 
         Standalone standalone = new Standalone();
     } // end main
@@ -125,7 +125,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         // configure countdownclip
         try {
             countdownClip = Applet.newAudioClip(getClass().getResource("count.mid"));
-        } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no countdown audio.");}
+        } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no countdown audio.");}
 
         // set up JMenuBar
         saveBestItem = new JMenuItem("Save Best Average As...");
@@ -415,13 +415,18 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == popButton){
             //acceptsSincePop = 0;
             popButton.setText("Popped!");
-            acceptTimeX(stopTime-startTime, true, false);
+            try{
+                acceptTimeX(stopTime-startTime, true, false);
+            } catch(NumberFormatException ex){
+                JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
+                System.out.println(ex.getMessage());
+            }
         } else if(source == plusTwoButton){
             try{
                 acceptTimeX(stopTime-startTime, false, true);
-            } catch(NumberFormatException l){
+            } catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
-                System.out.println(l);
+                System.out.println(ex.getMessage());
             }
         } else if(source == averageModeButton){
             if(averageModeButton.getText().equals("Average of 5 Mode")){
@@ -462,27 +467,31 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == countdownCombo){
             returnFocus();
         } else if(source == sessionDetailedViewButton){
-            //DetailedView win = new DetailedView("Session Times", getSessionView(), optionsMenu.textBackgrColorX);
-            //win.setVisible(true);
+//@@@
+            DetailedView win = new DetailedView("Session Times for " + solveTable.getPuzzle(), getSessionView(), optionsMenu.textBackgrColorX);
+            win.setVisible(true);
         } else if(source == averageDetailedViewButton){
-            //DetailedView win = new DetailedView("Best Average", getAverageView(), optionsMenu.textBackgrColorX);
-            //win.setVisible(true);
+//@@@
+            DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsMenu.textBackgrColorX);
+            win.setVisible(true);
         } else if(source == saveSessionItem){
-/*            if(cubesSolved >= 1){
+//@@@
+            if(sessionDetailsEnabled){//cubesSolved >= 1){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getSessionView(), fc.getSelectedFile());
             } else {
                 JOptionPane.showMessageDialog(this, "No times have been recorded for this session.");
-            }*/
+            }
         } else if(source == saveBestItem){
-/*            if(cubesSolved >= 12){
+//@@@
+            if(averageDetailsEnabled){//cubesSolved >= 12){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getAverageView(), fc.getSelectedFile());
             } else {
                 JOptionPane.showMessageDialog(this, "Not enough cubes have been solved to calculate an average.");
-            }*/
+            }
         } else if(source == exitItem){
             System.exit(0);
         } else if(source == generatorItem){
@@ -507,7 +516,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                     while((read = in.readLine()) != null)
                         input += read + "%";
                     in.close();
-                } catch(IOException g){JOptionPane.showMessageDialog(this, "There was an error opening the file.");}
+                } catch(IOException ex){
+                    JOptionPane.showMessageDialog(this, "There was an error opening the file.");
+                }
                 StringTokenizer st = new StringTokenizer(input, "%");
                 importedAlgs = new String[st.countTokens()];
                 for(int i=0; i<importedAlgs.length; i++)
@@ -520,21 +531,25 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:");
             if(input == null) return;
             if(input.equalsIgnoreCase("POP")){
-                acceptTimeX(0, true, false);
+                try{
+                    acceptTimeX(0, true, false);
+                } catch(NumberFormatException ex){
+                    JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
+                }
                 return;
             }
             float inputTime = 0;
             try{
                 inputTime = Float.parseFloat(ssxx.format(Float.parseFloat(input)));
-            } catch(NumberFormatException h){
+            } catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
                 return;
             }
             try{
                 acceptTimeX(Math.round(inputTime * 1000));
-            } catch(NumberFormatException v){
+            } catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
-                System.out.println(v);
+                System.out.println(ex.getMessage());
             }
             insertTimeButton.requestFocus();
         } else if(source == optionsItem){
@@ -577,26 +592,26 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 } else if(countingDown == 3){
                     try{
                         countdownClip.play();
-                    } catch(NullPointerException e){}
+                    } catch(NullPointerException ex){}
                     timerLabel.setText(countingDown+"");
                     countingDown--;
                     try{
                         timerThread.sleep(1000);
-                    } catch(InterruptedException e){}
+                    } catch(InterruptedException ex){}
                 } else {
                     timerLabel.setText(countingDown+"");
                     countingDown--;
                     try{
                         timerThread.sleep(1000);
-                    } catch(InterruptedException e){}
+                    } catch(InterruptedException ex){}
                 }
             } else {
                 float time = (System.currentTimeMillis() - startTime)/1000F;
                 timerLabel.setText(timeToString(time, true));
                 try{
                     timerThread.sleep(120);
-                } catch(InterruptedException e){
-                    System.out.println(e);
+                } catch(InterruptedException ex){
+                    System.out.println(ex.getMessage());
                 }
             }
         }
@@ -622,8 +637,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
 // Private Methods
 //**********************************************************************************************************************
-/*
+//@@@
     private String getSessionView(){
+/*
         String timesAndScrambles = "", timesOnly = "";
         float deviation = 0, average = 0;
         if(cubesSolved >= 1)
@@ -646,24 +662,73 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         String formatedAverage = timeToString(average, false);
         String formatedFastest = timeToString(sessionFastest, false);
         String formatedSlowest = timeToString(sessionSlowest, false);
+*/
+
+        String formatedAverage = "N/A", formatedStdDev = "N/A";
+        String timesAndScrambles = "none", timesOnly = "none";
+        String formatedFastest = "N/A", formatedSlowest = "N/A";
+        int numberSolved = 0, numberPopped = 0;
+
+        int size = solveTable.getSize();
+        if(size > 0){
+            SolveTable.Solve currentSolve = solveTable.getSolve(size-1);
+
+            numberSolved = currentSolve.numberSolves;
+            numberPopped = currentSolve.numberPops;
+
+            if(currentSolve.sessionAverage != INF)
+                formatedAverage = timeToString(currentSolve.sessionAverage, false, true);
+            else
+                formatedAverage = "DNF";
+
+            if(currentSolve.sessionStdDev != INF)
+                formatedStdDev = timeToString(currentSolve.sessionStdDev, false, false);
+            else
+                formatedStdDev = "???";
+
+            solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            timesAndScrambles = ""; timesOnly = "";
+            for(int i=0; i<size; i++){
+                String s = solveTable.getString(i);
+                timesAndScrambles += (i+1) + ")          " + s + "          " + solveTable.getScramble(i) + "\n";
+                timesOnly += s + "\n";
+            }
+
+            //solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            formatedFastest = solveTable.getString(currentSolve.sessionFastestIndex);
+            formatedSlowest = solveTable.getString(currentSolve.sessionSlowestIndex);
+        }
 
         String returnMe = optionsMenu.sessionViewFormatX;
-        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
-        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
-        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
-        returnMe = findAndReplace(returnMe, "%D", ssxx.format(deviation));
-        returnMe = findAndReplace(returnMe, "%C", cubesSolved+"");
-        returnMe = findAndReplace(returnMe, "%P", numberOfPops+"");
+        returnMe = returnMe.replaceAll("%T", new Date()+"");
+        returnMe = returnMe.replaceAll("%C", numberSolved+"");
+        returnMe = returnMe.replaceAll("%P", numberPopped+"");
+        returnMe = returnMe.replaceAll("%A", formatedAverage);
+        returnMe = returnMe.replaceAll("%D", formatedStdDev);
+        returnMe = returnMe.replaceAll("%I", timesAndScrambles.trim());
+        returnMe = returnMe.replaceAll("%O", timesOnly.trim());
+        returnMe = returnMe.replaceAll("%F", formatedFastest);
+        returnMe = returnMe.replaceAll("%S", formatedSlowest);
+        returnMe = returnMe.replaceAll("%Z", solveTable.getPuzzle());
+
+//        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+//        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
+//        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+//        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+//        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
+//        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
+//        returnMe = findAndReplace(returnMe, "%D", ssxx.format(deviation));
+//        returnMe = findAndReplace(returnMe, "%C", cubesSolved+"");
+//        returnMe = findAndReplace(returnMe, "%P", numberOfPops+"");
+
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getSessionView
-*/
+
 //**********************************************************************************************************************
-/*
+//@@@
     private String getAverageView(){
+/*
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){
@@ -674,19 +739,57 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         String formatedAverage = timeToString(bestAverage, false);
         String formatedFastest = timeToString(bestFastest, false);
         String formatedSlowest = timeToString(bestSlowest, false);
+*/
+
+        String formatedAverage = "N/A", formatedStdDev = "N/A";
+        String timesAndScrambles = "none", timesOnly = "none";
+        String formatedFastest = "N/A", formatedSlowest = "N/A";
+
+        int bestIndex = solveTable.findBestRolling();
+        if(bestIndex != -1){
+            SolveTable.Solve bestSolve = solveTable.getSolve(bestIndex);
+
+            formatedAverage = timeToString(bestSolve.rollingAverage, false, true);
+            formatedStdDev = timeToString(bestSolve.rollingStdDev, false, false);
+
+            solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            timesAndScrambles = ""; timesOnly = "";
+            for(int i=1; i<=12; i++){
+                int index = i+bestIndex-12;
+                String s = solveTable.getString(index);
+                if(index == bestSolve.rollingFastestIndex || index == bestSolve.rollingSlowestIndex)
+                    s = "(" + s + ")";
+                timesAndScrambles += (index+1) + ")          " + s + "          " + solveTable.getScramble(index) + "\n";
+                timesOnly += s + "\n";
+            }
+
+            //solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            formatedFastest = solveTable.getString(bestSolve.rollingFastestIndex);
+            formatedSlowest = solveTable.getString(bestSolve.rollingSlowestIndex);
+        }
 
         String returnMe = optionsMenu.averageViewFormatX;
-        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
-        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-        returnMe = findAndReplace(returnMe, "%D", ssxx.format(bestStandardDeviation));
-        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
-        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
+        returnMe = returnMe.replaceAll("%T", new Date()+"");
+        returnMe = returnMe.replaceAll("%A", formatedAverage);
+        returnMe = returnMe.replaceAll("%D", formatedStdDev);
+        returnMe = returnMe.replaceAll("%I", timesAndScrambles.trim());
+        returnMe = returnMe.replaceAll("%O", timesOnly.trim());
+        returnMe = returnMe.replaceAll("%F", formatedFastest);
+        returnMe = returnMe.replaceAll("%S", formatedSlowest);
+        returnMe = returnMe.replaceAll("%Z", solveTable.getPuzzle());
+
+//        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
+//        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
+//        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
+//        returnMe = findAndReplace(returnMe, "%O", timesOnly);
+//        returnMe = findAndReplace(returnMe, "%D", ssxx.format(bestStandardDeviation));
+//        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
+//        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
+
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getAverageView
-*/
+
 //**********************************************************************************************************************
 
     private final String timeToString(float time, boolean truncate){
@@ -706,7 +809,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     }
 
 //**********************************************************************************************************************
-
+/*
     private static final String findAndReplace(String original, String find, String replace){
         while(true){
             int index = original.indexOf(find);
@@ -717,7 +820,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         }
         return original;
     } // end findAndReplace
-
+*/
 //**********************************************************************************************************************
 
     private void saveToFile(String text, File file){
@@ -727,7 +830,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             BufferedWriter out = new BufferedWriter(fr);
             out.write(text);
             out.close();
-        } catch(IOException e){
+        } catch(IOException ex){
             JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
         }
     } // end saveToFile
@@ -806,10 +909,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
     public void timerAccept(){
         try{
-            acceptTimeX(stopTime-startTime, false, false);
-        } catch(NumberFormatException j){
+            acceptTimeX(stopTime-startTime);
+        } catch(NumberFormatException ex){
             JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
-            System.out.println(j);
+            System.out.println(ex.getMessage());
         }
     }
 

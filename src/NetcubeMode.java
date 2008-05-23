@@ -88,23 +88,23 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         try { //configure chatSound
             chatSound = Applet.newAudioClip(getClass().getResource("blip.wav"));
-        } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "blip.wav not found. There will be no audio when a message is recieved.");}
+        } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "blip.wav not found. There will be no audio when a message is recieved.");}
 
         try { //configure countdownClip
             countdownClip = Applet.newAudioClip(getClass().getResource("count.mid"));
-        } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no audio during countdown.");}
+        } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no audio during countdown.");}
 
         try { //configure bing1
             bing1 = Applet.newAudioClip(getClass().getResource("bing1.wav"));
-        } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "bing1.wav not found. There will be no 'ready' sound.");}
+        } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "bing1.wav not found. There will be no 'ready' sound.");}
 
         try { //configure bing2
             bing2 = Applet.newAudioClip(getClass().getResource("bing2.wav"));
-        } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "bing2.wav not found. There will be no 'ready' sound.");}
+        } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "bing2.wav not found. There will be no 'ready' sound.");}
 
         try { //configure startupClip
             startupClip = Applet.newAudioClip(getClass().getResource("startup.wav"));
-        } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "startup.wav not found. There will be no startup sound.");}
+        } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "startup.wav not found. There will be no startup sound.");}
 
         ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
@@ -452,7 +452,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
                 } else if(countdown == 3){
                     try{
                         countdownClip.play();
-                    } catch(NullPointerException e){}
+                    } catch(NullPointerException ex){}
                     timerLabel.setText(countdown+"");
                     countdown--;
                 } else {
@@ -481,10 +481,10 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         float localTime, remoteTime;
         try{
             localTime = Float.parseFloat(localTimeLabel.getText());
-        } catch(NumberFormatException e){localTime = 0;}
+        } catch(NumberFormatException ex){localTime = 0;}
         try{
             remoteTime = Float.parseFloat(remoteTimeLabel.getText());
-        } catch(NumberFormatException f){remoteTime = 0;}
+        } catch(NumberFormatException ex){remoteTime = 0;}
 
         //increment remote pops if they popped
         if(remoteTime == 0)

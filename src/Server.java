@@ -50,7 +50,7 @@ public class Server extends NetcubeMode{
 
         try { //configure readyClip
             readyClip = Applet.newAudioClip(getClass().getResource("ready.wav"));
-        } catch(NullPointerException e){JOptionPane.showMessageDialog(this, "ready.wav not found. There will be no 'ready' sound.");}
+        } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "ready.wav not found. There will be no 'ready' sound.");}
 
         // GUI Object creation
         serverIpText.setText("N/A");
@@ -110,7 +110,9 @@ public class Server extends NetcubeMode{
                     out.println("I");
                     out.flush();
                 }
-            } catch(BadLocationException f){System.out.println(f);}
+            } catch(BadLocationException ex){
+                System.out.println(ex.getMessage());
+            }
         } else if(source == puzzleCombo){
             out.println("P" + puzzleCombo.getSelectedItem());
             out.flush();
@@ -240,7 +242,7 @@ public class Server extends NetcubeMode{
                 String message = data.substring(1, data.length());
                 performAction(prefix, message);
             }
-        } catch(Exception e){
+        } catch(Exception ex){
             hideGUI();
             JOptionPane.showMessageDialog(this, "Client has disconnected from this server.");
             reset();
@@ -260,8 +262,8 @@ public class Server extends NetcubeMode{
                 out.close();
                 clientSocket.close();
                 serverSocket.close();
-            } catch(IOException e){
-                e.printStackTrace();
+            } catch(IOException ex){
+                ex.printStackTrace();
             }
         }
     } // end run
@@ -275,7 +277,9 @@ public class Server extends NetcubeMode{
                 chatDoc.insertString(chatDoc.getLength(), data + "\n", blackStyle);
                 chatPane.setCaretPosition(chatDoc.getLength());
                 chatSound.play();
-            } catch(BadLocationException f){System.out.println(f);}
+            } catch(BadLocationException ex){
+                System.out.println(ex.getMessage());
+            }
         } else if(prefix.equals("U")){ // pass Username
             remoteUsername = data;
             remoteTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, remoteUsername + "'s Statistics"));
@@ -367,7 +371,7 @@ public class Server extends NetcubeMode{
             connectionListener = new ConnectionListener(serverSocket, this);
             connectionListener.setDaemon(true);
             connectionListener.start();
-        } catch(Exception f){
+        } catch(Exception ex){
             JOptionPane.showMessageDialog(this, "Cannot start server. Information may be entered incorrectly.");
             hideGUI();
             connectButton.setText("Start Server");
@@ -408,9 +412,9 @@ public class Server extends NetcubeMode{
             //handicapText.setEnabled(false);
             sendMessageButton.setEnabled(true);
             chatText.setEnabled(true);
-        } catch(Exception f){
+        } catch(Exception ex){
             JOptionPane.showMessageDialog(this, "Cannot start server. Information may be entered incorrectly.");
-            System.out.println(f.getMessage());
+            System.out.println(ex.getMessage());
             return;
         }
     }
@@ -431,8 +435,8 @@ public class Server extends NetcubeMode{
             try{
                 clientSocket = serverSocket.accept();
                 server.connectionMade(clientSocket);
-            } catch(Exception e){
-                System.err.println(e.getMessage());
+            } catch(Exception ex){
+                System.err.println(ex.getMessage());
             }
         }
     }

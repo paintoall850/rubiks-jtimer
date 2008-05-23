@@ -93,6 +93,13 @@ public class SolveTable implements Constants{
 
 //**********************************************************************************************************************
 
+    public String getScramble(int i){
+        Solve solve = myTable.get(currentPuzzle).get(i);
+        return solve.scramble;
+    }
+
+//**********************************************************************************************************************
+
     public boolean getPopQ(int i){
         return myTable.get(currentPuzzle).get(i).isPop;
     }

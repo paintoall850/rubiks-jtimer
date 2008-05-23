@@ -99,7 +99,9 @@ public class Client extends NetcubeMode{
                     out.println("I");
                     out.flush();
                 }
-            } catch(BadLocationException f){System.out.println(f);}
+            } catch(BadLocationException ex){
+                System.out.println(ex.getMessage());
+            }
         } else if(source == localStatusLabel){
             out.println("R" + localStatusLabel.isSelected());
             out.flush();
@@ -194,7 +196,7 @@ public class Client extends NetcubeMode{
                 String message = data.substring(1, data.length());
                 performAction(prefix, message);
             }
-        } catch(Exception e){
+        } catch(Exception ex){
             hideGUI();
             JOptionPane.showMessageDialog(this, "You have been disconnected from the server.");
             reset();
@@ -213,8 +215,8 @@ public class Client extends NetcubeMode{
                 in.close();
                 out.close();
                 clientSocket.close();
-            } catch(IOException e){
-                e.printStackTrace();
+            } catch(IOException ex){
+                ex.printStackTrace();
             }
         }
     } // end run
@@ -228,7 +230,9 @@ public class Client extends NetcubeMode{
                 chatDoc.insertString(chatDoc.getLength(), data + "\n", blackStyle);
                 chatPane.setCaretPosition(chatDoc.getLength());
                 chatSound.play();
-            } catch(BadLocationException f){System.out.println(f);}
+            } catch(BadLocationException ex){
+                System.out.println(ex.getMessage());
+            }
         } else if(prefix.equals("U")){ // pass Username
             remoteUsername = data;
             remoteTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, remoteUsername + "'s Statistics"));
@@ -328,7 +332,7 @@ public class Client extends NetcubeMode{
             //handicapText.setEnabled(false);
             sendMessageButton.setEnabled(true);
             chatText.setEnabled(true);
-        } catch(Exception f){
+        } catch(Exception ex){
             JOptionPane.showMessageDialog(this, "Cannot connect to server. Information may be entered incorrectly.");
             hideGUI();
             connectButton.setText("Connect To Server");

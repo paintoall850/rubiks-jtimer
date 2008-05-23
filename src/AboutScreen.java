@@ -49,5 +49,7 @@ public class AboutScreen extends JFrame implements Constants{
 
         contentPane.add(cowPic);
         contentPane.add(aboutLabel);
+
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end AboutScreen
 }

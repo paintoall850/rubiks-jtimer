@@ -38,7 +38,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
 
         // configure JFrame
         setTitle(windowTitle);
-        setSize(625, 340);
+        setSize(625, 340+10);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
 
@@ -62,8 +62,10 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         // save Button
         saveButton = new JButton("Save " + windowTitle);
         saveButton.addActionListener(this);
-        saveButton.setBounds(10,280,600,20);
+        saveButton.setBounds(10,280,600,20+10);
         contentPane.add(saveButton);
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     } // end constructor
 
     public void actionPerformed(ActionEvent e){
@@ -84,7 +86,7 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
                 FileWriter out = new FileWriter(new File((fc.getSelectedFile())+".txt"));
                 out.write(printToWindow);
                 out.close();
-            } catch(IOException e){
+            } catch(IOException ex){
                 JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
             }
         }
