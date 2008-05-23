@@ -44,5 +44,7 @@ public class InstructionScreen extends JFrame implements Constants{
         instLabel.setVerticalAlignment(SwingConstants.TOP);
         instLabel.setBounds(10,10,300,400);
         contentPane.add(instLabel);
+
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end InstructionScreen
 }

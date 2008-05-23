@@ -76,6 +76,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
         radioGroup.add(formatImport);
 
         formatPrint.setSelected(true);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end contructor
 
 //**********************************************************************************************************************
@@ -96,7 +97,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
             int numberOfScrambles = 0;
             try{
                 numberOfScrambles = Integer.parseInt(numText.getText());
-            } catch(NumberFormatException f){
+            } catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "Number of scrambles is invalid. Please enter a positive integer to continue.");
                 return;
             }
@@ -134,7 +135,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
                     BufferedWriter out = new BufferedWriter(fr);
                     out.write(printToFile);
                     out.close();
-                } catch(IOException g){
+                } catch(IOException ex){
                     JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
                 }
             }

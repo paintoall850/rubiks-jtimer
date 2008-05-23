@@ -129,9 +129,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         countdownLabel = new JLabel("Countdown:");
         countdownCombo = new JComboBox(countdownChoices);
 
-        averageSyntaxLabel = new JLabel("<HTML>%A - Average<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times And Scrambles<br>%O - Times Only<br>%T - Date And Time<br>%S - Slowest Time</HTML>");
+        averageSyntaxLabel = new JLabel("<html>%A - Average<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%T - Date and Time<br>%S - Slowest Time<br>%Z - Puzzle Name</html>");
         averageSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
-        sessionSyntaxLabel = new JLabel("<HTML>%A - Average<br>%C - Cubes Solved<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times And Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date And Time</HTML>");
+        sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Cubes Solved<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
         confirmBox = new JCheckBox("Session Reset Warning Window");
         showMinutesBox = new JCheckBox("Use mm:ss.xx Format");
@@ -373,7 +373,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             props.store(out, APP_TITLE + " Configuration File");
             out.close();
         }
-        catch(IOException g){
+        catch(IOException ex){
             JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
         }
     }
@@ -406,7 +406,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             sessionViewFormatX = props.getProperty("15.sessionViewFormat");
 
             OptionsToGUI();
-        } catch(IOException g){
+        } catch(IOException ex){
             resetOptions();
         }
     } // end loadOptions
