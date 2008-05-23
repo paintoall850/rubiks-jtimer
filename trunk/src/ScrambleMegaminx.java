@@ -12,7 +12,7 @@
   *
   * Edit as you wish, but please don't sell it!
   */
-import java.util.Vector;
+//import java.util.Vector;
 
 public class ScrambleMegaminx{
     private final String[][] faces = {{"R"}, {"D", "Y"}};
@@ -20,7 +20,7 @@ public class ScrambleMegaminx{
     private final int defaultLength = 70;
 
     public ScrambleMegaminx(){}
-
+/*
     public String generateScramble(int length){
         String scramble = "";
         //StringBuffer scramble = new StringBuffer(); //output buffer
@@ -59,7 +59,7 @@ public class ScrambleMegaminx{
         }
         return scramble.toString();
     }
-
+*/
     public String generateScramble(){
 //        return generateScramble(defaultLength);
 

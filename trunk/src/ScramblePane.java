@@ -271,9 +271,9 @@ public class ScramblePane extends JPanel implements Constants{
 
         int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
         int xShift = 125, yShift = 58; // for the second/back cluster of 6 faces (was 141, 0)
-        double radius = 25;
-        double face_gap = 4;
-        double big_radius = 2 * radius * Math.cos(0.2D*Math.PI) + face_gap;
+        float radius = 25;
+        float face_gap = 4;
+        float big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
 
         Polygon big_pent = regular_poly(5, big_radius, true); // auxiliary: for drawing outer 5 faces of cluster
         big_pent.translate(xCenter, yCenter);
@@ -296,7 +296,7 @@ public class ScramblePane extends JPanel implements Constants{
 
 //**********************************************************************************************************************
 
-    private void drawMinxFace(Graphics2D g2d, double r, int x_offset, int y_offset, boolean pointup, int[][] state){
+    private void drawMinxFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
         Polygon pent = regular_poly(5, r, pointup);
         pent.translate(x_offset, y_offset);
 
@@ -535,9 +535,9 @@ public class ScramblePane extends JPanel implements Constants{
 
         int xCenter = 141;//myWidth/2;
         int yCenter = 98;//myHeight/2 - 20;
-        double radius = 52;//Math.min(myWidth, myHeight) * 0.2;
-        double face_gap = 6;
-        double big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
+        float radius = 52;//Math.min(myWidth, myHeight) * 0.2;
+        float face_gap = 6;
+        float big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
 
         Polygon big_tri = regular_poly(3, big_radius, false); // auxiliary: for drawing the outer 3 faces
         big_tri.translate(xCenter, yCenter);
@@ -552,7 +552,7 @@ public class ScramblePane extends JPanel implements Constants{
 
 //**********************************************************************************************************************
 
-    private void drawPyraFace(Graphics2D g2d, double r, int x_offset, int y_offset, boolean pointup, int[][] state){
+    private void drawPyraFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
         Polygon tri = regular_poly(3, r, pointup);
         tri.translate(x_offset, y_offset);
 
@@ -675,9 +675,9 @@ public class ScramblePane extends JPanel implements Constants{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    private Polygon regular_poly(int n, double r, boolean pointup){
+    private Polygon regular_poly(int n, float r, boolean pointup){
         Polygon poly = new Polygon();
-        double offset = (pointup ? -0.5D*Math.PI : 0.5D*Math.PI);
+        float offset = (float)(pointup ? -Math.PI/2 : Math.PI/2);
         for(int i=0; i<n; i++)
             poly.addPoint((int)Math.round(r*Math.cos(i*2*Math.PI/n + offset)),
                           (int)Math.round(r*Math.sin(i*2*Math.PI/n + offset)));
@@ -687,16 +687,16 @@ public class ScramblePane extends JPanel implements Constants{
 //**********************************************************************************************************************
 
     private static Point getLineIntersection(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
-        double norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
-        double x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
-        double y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
+        float norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
+        float x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
+        float y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
 
         return new Point((int)Math.round(x_inter), (int)Math.round(y_inter));
     }
 
 //**********************************************************************************************************************
 
-    private static double DET(double a, double b, double c, double d){
+    private static float DET(float a, float b, float c, float d){
         return (a*d - b*c);
     }
 

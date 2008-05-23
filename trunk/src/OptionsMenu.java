@@ -131,7 +131,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         averageSyntaxLabel = new JLabel("<HTML>%A - Average<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times And Scrambles<br>%O - Times Only<br>%T - Date And Time<br>%S - Slowest Time</HTML>");
         averageSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
-        sessionSyntaxLabel = new JLabel("<HTML>%A - Average<br>%C - Cubes Solved<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times And Scrambles<br>%O - Times Only<br>%P - Number Of Pops<br>%S - Slowest Time<br>%T - Date And Time</HTML>");
+        sessionSyntaxLabel = new JLabel("<HTML>%A - Average<br>%C - Cubes Solved<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times And Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date And Time</HTML>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
         confirmBox = new JCheckBox("Session Reset Warning Window");
         showMinutesBox = new JCheckBox("Use mm:ss.xx Format");
@@ -306,7 +306,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         if(source == saveButton){
             saveOptions();
-            myStandalone.OptionsToGUI();
+            myStandalone.updateGUI();
+            myStandalone.updateStatsX();
             this.setVisible(false); //this.dispose();
         } else if(source == cancelButton){
             this.setVisible(false); //this.dispose();

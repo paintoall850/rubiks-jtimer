@@ -112,13 +112,13 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
                 for(int i=0; i<numberOfScrambles; i++){
                     String newAlg = algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"");
                     newAlg = newAlg.replaceAll(ALG_BREAK, " ");
-                    printToFile = printToFile + (i+1) + ")          " + newAlg + "\n";
+                    printToFile += (i+1) + ")          " + newAlg + "\n";
                 }
             } else {
                 for(int i=0; i<numberOfScrambles; i++){
                     String newAlg = algGenerator.generateAlg(puzzleCombo.getSelectedItem()+"");
                     //newAlg = alg.replaceAll(ALG_BREAK, " ");
-                    printToFile = printToFile + newAlg + "\n";
+                    printToFile += newAlg + "\n";
                 }
             }
             printToFile = printToFile.replaceAll("\n", System.getProperty("line.separator"));
