@@ -21,7 +21,7 @@
 import java.text.*;
 import java.util.*;
 
-public class SolveTable implements Constants{ // experimental
+public class SolveTable implements Constants{
 
     private Hashtable<String, Vector<Solve>> myTable = new Hashtable<String, Vector<Solve>>(10);
     private String currentPuzzle;
@@ -30,12 +30,7 @@ public class SolveTable implements Constants{ // experimental
 
 //**********************************************************************************************************************
 
-    public SolveTable(){
-System.err.print("default constructor!" + "\n");
-    }
-
     public SolveTable(String puzzle){
-System.err.print("constructor: " + puzzle + "\n");
         setPuzzle(puzzle);
         ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
@@ -46,7 +41,6 @@ System.err.print("constructor: " + puzzle + "\n");
 
     public void setPuzzle(String puzzle){
         currentPuzzle = puzzle;
-System.err.print("Set currentPuzzle: " + currentPuzzle + "\n");
 
         if(!myTable.containsKey(currentPuzzle))
             myTable.put(currentPuzzle, new Vector<Solve>(100, 100));
@@ -61,7 +55,6 @@ System.err.print("Set currentPuzzle: " + currentPuzzle + "\n");
 //**********************************************************************************************************************
 
     public void addSolve(int time100, String scramble, boolean isPop, boolean isPlus2){
-System.err.print("Add solve for currentPuzzle: " + currentPuzzle + "\n");
         Solve solve = new Solve(time100, scramble, isPop, isPlus2);
         myTable.get(currentPuzzle).add(solve);
         computeStats(getSize()-1);
@@ -243,7 +236,6 @@ System.err.print("Add solve for currentPuzzle: " + currentPuzzle + "\n");
 //**********************************************************************************************************************
 
     public int findBestRolling(){
-//System.err.print("entering... findBestRolling()\n");
         int size = getSize();
         if(size < 12) return -1;
 
@@ -255,7 +247,6 @@ System.err.print("Add solve for currentPuzzle: " + currentPuzzle + "\n");
                 temp = getSolve(i).rollingAverage;
                 index = i;
             }
-//System.err.print("exiting... findBestRolling(): " + temp + "\n");
 
         if(temp == INF)
             return -1;
