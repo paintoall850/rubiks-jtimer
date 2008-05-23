@@ -68,7 +68,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     SolveTable solveTable;
     private boolean sessionDetailsEnabled, averageDetailsEnabled;
-    private int acceptsSincePop;
+    //private int acceptsSincePop;
     private boolean runningCountdown;
     private int countingDown;
     private long startTime, stopTime;
@@ -195,7 +195,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         for(int i=0; i<12; i++)
             smartButton[i] = new SmartButton("#" + (i+1));
 
-        useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
+        useThisAlgLabel = new JLabel();//"Use this Scramble Algorithm:");
 
         scrambleText = new JTextArea("");
         scrambleText.setFocusable(true);
@@ -215,16 +215,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
         scramblePane = new ScramblePane(282, 216+20); // needs to be changed in two places
-        scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
+        //scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setLayout(null);
 
 
         sessionStatsLabel = new JLabel();
-        sessionStatsLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Session Statistics"));
+        //sessionStatsLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Session Statistics"));
         rollingAverageLabel = new JLabel();
-        rollingAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Rolling Average"));
+        //rollingAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Rolling Average"));
         bestAverageLabel = new JLabel();
-        bestAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Best Average"));
+        //bestAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Best Average"));
 
         bestAverageText = new JTextArea();
         bestAverageText.setFont(regFont);
@@ -259,6 +259,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         optionsMenu.loadOptions(); // inital load of options
         solveTable = new SolveTable(optionsMenu.puzzleX);
+        updateLabels(optionsMenu.puzzleX);
 
         if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
             puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
@@ -412,7 +413,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             buttonsOn();
             updateScrambleAlgs();
         } else if(source == popButton){
-            acceptsSincePop = 0;
+            //acceptsSincePop = 0;
             popButton.setText("Popped!");
             acceptTimeX(stopTime-startTime, true, false);
         } else if(source == plusTwoButton){
@@ -440,12 +441,19 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             }
             resetTheSession();
         } else if(source == puzzleCombo){
-            if(solveTable.getPuzzle().equals(puzzleCombo.getSelectedItem()+"")){
-                return;
-            }
-            solveTable.setPuzzle(puzzleCombo.getSelectedItem()+"");
-popButton.setText("POP");
-acceptsSincePop = 12;
+            String puzzle = puzzleCombo.getSelectedItem()+"";
+            if(solveTable.getPuzzle().equals(puzzle)) return;
+
+            solveTable.setPuzzle(puzzle);
+            updateLabels(puzzle);
+
+//popButton.setText("POP");
+//acceptsSincePop = 12;
+            if(solveTable.okayToPop())
+                popButton.setText("POP");
+            else
+                popButton.setText("Popped!");
+
             hasImported = false;
             importedIndex = 0;
             updateStatsX();
@@ -783,9 +791,12 @@ acceptsSincePop = 12;
             float time = (stopTime-startTime)/1000F;
             timerLabel.setText(timeToString(time, true));
             startButton.setText("Accept Time");
-            if(acceptsSincePop >= 12){
+            if(solveTable.okayToPop()){//if(acceptsSincePop >= 12){
                 popButton.setText("POP");
                 popButton.setEnabled(true);
+            } else{
+                popButton.setText("Popped!");
+                popButton.setEnabled(false);
             }
             discardButton.setEnabled(true);
             plusTwoButton.setEnabled(true);
@@ -841,7 +852,7 @@ acceptsSincePop = 12;
     private void acceptTimeX(long time, boolean isPop, boolean isPlus2) throws NumberFormatException{
         int time100 = Math.round(time/10F);
         solveTable.addSolve(time100, newAlg, isPop, isPlus2);
-        acceptsSincePop++;
+        //acceptsSincePop++;
         updateStatsX();
         buttonsOn();
         updateScrambleAlgs();
@@ -872,7 +883,7 @@ acceptsSincePop = 12;
 
     private void resetTheSession(){
         popButton.setText("POP");
-        acceptsSincePop = 12;
+        //acceptsSincePop = 12;
         hasImported = false;
         importedIndex = 0;
 
@@ -1045,5 +1056,15 @@ acceptsSincePop = 12;
         averageDetailsEnabled = (sBestAverage != "N/A");
 
     } // end updateStatsX
+
+//**********************************************************************************************************************
+
+    private void updateLabels(String puzzle){
+        useThisAlgLabel.setText("Use this " + puzzle + " Scramble Algorithm:");
+        scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, puzzle + " Scramble View"));
+        sessionStatsLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Session Statistics for " + puzzle));
+        rollingAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Rolling Average for " + puzzle));
+        bestAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Best Average for " + puzzle));
+    }
 
 }

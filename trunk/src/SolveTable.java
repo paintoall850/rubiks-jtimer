@@ -254,4 +254,17 @@ public class SolveTable implements Constants{
             return index;
     }
 
+//**********************************************************************************************************************
+
+    public boolean okayToPop(){
+        int size = getSize();
+
+        int index;
+        for(index = size-1; index >= 0; index--)
+            if(getPopQ(index)) break;
+
+        if(index == -1) return true;
+        return (size-index) >= 12;
+    }
+
 }
