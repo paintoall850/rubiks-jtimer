@@ -54,7 +54,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     JScrollPane chatScrollPane;
     java.util.Timer timerThread;
     int countdown;
-    double startTime, stopTime;
+    long startTime, stopTime;
     DecimalFormat ssxx, ss;
     String remoteTime;
     boolean isTyping, remoteIsTyping;
@@ -68,7 +68,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     // data storage
     String[] localSessionTimes, remoteSessionTimes, sessionScrambles, localCurrentAverage, remoteCurrentAverage, localCurrentScrambles, remoteCurrentScrambles;
     int localCubesSolved, remoteCubesSolved, sessionIndex, localCurrentPlaceInAverage, remoteCurrentPlaceInAverage, localNumOfPops, remoteNumOfPops, localScore, remoteScore, acceptsSincePop;
-    double localTotalTime, remoteTotalTime, localSessionFastest, remoteSessionFastest, localSessionSlowest, remoteSessionSlowest, localCurrentFastest, remoteCurrentFastest, localCurrentSlowest, remoteCurrentSlowest, localCurrentRollingAverage, remoteCurrentRollingAverage, localCurrentSessionAverage, remoteCurrentSessionAverage;
+    float localTotalTime, remoteTotalTime, localSessionFastest, remoteSessionFastest, localSessionSlowest, remoteSessionSlowest, localCurrentFastest, remoteCurrentFastest, localCurrentSlowest, remoteCurrentSlowest, localCurrentRollingAverage, remoteCurrentRollingAverage, localCurrentSessionAverage, remoteCurrentSessionAverage;
 
     // network stuff
     Socket clientSocket;
@@ -467,7 +467,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     protected final class RunTimer extends java.util.TimerTask{
         public void run(){
-            double time = (System.currentTimeMillis() - startTime)/1000;
+            float time = (System.currentTimeMillis()-startTime)/1000F;
             timerLabel.setText(ssxx.format(time));
         }
     } // end RunTimer class
@@ -478,12 +478,12 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         remoteTimeLabel.setText(remoteTime);
 
         //**********show who won and adjust scores!**********
-        double localTime, remoteTime;
+        float localTime, remoteTime;
         try{
-            localTime = Double.parseDouble(localTimeLabel.getText());
+            localTime = Float.parseFloat(localTimeLabel.getText());
         } catch(NumberFormatException e){localTime = 0;}
         try{
-            remoteTime = Double.parseDouble(remoteTimeLabel.getText());
+            remoteTime = Float.parseFloat(remoteTimeLabel.getText());
         } catch(NumberFormatException f){remoteTime = 0;}
 
         //increment remote pops if they popped
@@ -569,9 +569,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             int slowest = 0;
 
             for(int i=0; i<12; i++){
-                double fastestTime = Double.parseDouble(localCurrentAverage[fastest]);
-                double slowestTime = Double.parseDouble(localCurrentAverage[slowest]);
-                double currentTime = Double.parseDouble(localCurrentAverage[i]);
+                float fastestTime = Float.parseFloat(localCurrentAverage[fastest]);
+                float slowestTime = Float.parseFloat(localCurrentAverage[slowest]);
+                float currentTime = Float.parseFloat(localCurrentAverage[i]);
 
                 if(currentTime > slowestTime)
                     slowest = i;
@@ -579,15 +579,15 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
                     fastest = i;
             }
 
-            localCurrentSlowest = Double.parseDouble(localCurrentAverage[slowest]);
-            localCurrentFastest = Double.parseDouble(localCurrentAverage[fastest]);
+            localCurrentSlowest = Float.parseFloat(localCurrentAverage[slowest]);
+            localCurrentFastest = Float.parseFloat(localCurrentAverage[fastest]);
 
             //calculate average of the middle ten times
-            double sum = 0;
+            float sum = 0;
             for(int i=0; i<12; i++)
                 if(i!=fastest && i!=slowest)
-                    sum += Double.parseDouble(localCurrentAverage[i]);
-            localCurrentRollingAverage = sum/10.0;
+                    sum += Float.parseFloat(localCurrentAverage[i]);
+            localCurrentRollingAverage = sum/10F;
         }
 
         //update REMOTE rolling average if at least 12 cubes have been solved
@@ -597,9 +597,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             int slowest = 0;
 
             for(int i=0; i<12; i++){
-                double fastestTime = Double.parseDouble(remoteCurrentAverage[fastest]);
-                double slowestTime = Double.parseDouble(remoteCurrentAverage[slowest]);
-                double currentTime = Double.parseDouble(remoteCurrentAverage[i]);
+                float fastestTime = Float.parseFloat(remoteCurrentAverage[fastest]);
+                float slowestTime = Float.parseFloat(remoteCurrentAverage[slowest]);
+                float currentTime = Float.parseFloat(remoteCurrentAverage[i]);
 
                 if(currentTime > slowestTime)
                     slowest = i;
@@ -607,15 +607,15 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
                     fastest = i;
             }
 
-            remoteCurrentSlowest = Double.parseDouble(remoteCurrentAverage[slowest]);
-            remoteCurrentFastest = Double.parseDouble(remoteCurrentAverage[fastest]);
+            remoteCurrentSlowest = Float.parseFloat(remoteCurrentAverage[slowest]);
+            remoteCurrentFastest = Float.parseFloat(remoteCurrentAverage[fastest]);
 
             //calculate average of the middle ten times
-            double sum = 0;
+            float sum = 0;
             for(int i=0; i<12; i++)
                 if(i!=fastest && i!=slowest)
-                    sum += Double.parseDouble(remoteCurrentAverage[i]);
-            remoteCurrentRollingAverage = sum/10.0;
+                    sum += Float.parseFloat(remoteCurrentAverage[i]);
+            remoteCurrentRollingAverage = sum/10F;
         }
 
         //**********increment session index**********
@@ -739,7 +739,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         for(int i=0; i<12; i++){
             String currentTime = localCurrentAverage[i];
-            if(Double.parseDouble(currentTime) == localCurrentFastest || Double.parseDouble(currentTime) == localCurrentSlowest)
+            if(Float.parseFloat(currentTime) == localCurrentFastest || Float.parseFloat(currentTime) == localCurrentSlowest)
                 currentTime = "(" + currentTime + ")";
             timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + localCurrentScrambles[i] + "\n";
             timesOnly = timesOnly + currentTime + "\n";
@@ -790,7 +790,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         for(int i=0; i<12; i++){
             String currentTime = remoteCurrentAverage[i];
-            if(Double.parseDouble(currentTime) == remoteCurrentFastest || Double.parseDouble(currentTime) == remoteCurrentSlowest)
+            if(Float.parseFloat(currentTime) == remoteCurrentFastest || Float.parseFloat(currentTime) == remoteCurrentSlowest)
                 currentTime = "(" + currentTime + ")";
             timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + remoteCurrentScrambles[i] + "\n";
             timesOnly = timesOnly + currentTime + "\n";

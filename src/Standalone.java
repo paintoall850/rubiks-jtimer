@@ -51,7 +51,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     JTextArea scrambleText, bestAverageText;
 
     JLabel[] averageLabels, timeLabels;
-    String[] timeString;
+    //String[] timeString;
     SmartButton[] smartButton;
 
     private boolean averageOfFiveMode; // experimental
@@ -59,24 +59,29 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     volatile Thread timerThread;
     AudioClip countdownClip = null;
 
-    private double[] timeQueue = new double[100]; // gowd this is bad
+    //int placeInAverage = 0;
+    //float sessionTotalTime = 0, sessionFastest = 0, sessionSlowest = 0;
+    //float bestAverage = 0, bestStandardDeviation = 0, bestFastest = 0, bestSlowest = 0, previousAverage = 0;
+    //int countingDown = 0, cubesSolved = 0, sessionIndex = 0, acceptsSincePop = 12, numberOfPops = 0;
+    //String[] bestAverageTimes = new String[12], bestAverageScrambles = new String[12];
+    //String[] currentAverageScrambles = new String[12], currentAverageTimes = new String[12];
+    //String[] sessionTimes = new String[100], sessionScrambles = new String[100];
 
-    boolean runningCountdown;
-    int placeInAverage = 0;
-    double startTime = 0, stopTime = 0;
-    double sessionTotalTime = 0, sessionFastest = 0, sessionSlowest = 0;
-    double bestAverage = 0, bestStandardDeviation = 0, bestFastest = 0, bestSlowest = 0, previousAverage = 0;
-    int countingDown = 0, cubesSolved = 0, sessionIndex = 0, acceptsSincePop = 12, numberOfPops = 0;
-    String[] bestAverageTimes = new String[12], bestAverageScrambles = new String[12];
-    String[] currentAverageScrambles = new String[12], currentAverageTimes = new String[12];
-    String[] sessionTimes = new String[100], sessionScrambles = new String[100];
+    // expreimental
+    //Hashtable<String, Vector<Solve>> recordTable = new Hashtable<String, Vector<Solve>>(10);
+    SolveTable solveTable;
+    private boolean sessionDetailsEnabled, averageDetailsEnabled;
+    private int acceptsSincePop;
+    private boolean runningCountdown;
+    private int countingDown;
+    private long startTime, stopTime;
 
     DecimalFormat ssxx, ss;
     JFileChooser fc = new JFileChooser();
 
-    String[] importedAlgs;
-    boolean hasImported;
-    int importedIndex;
+    private String[] importedAlgs;
+    private boolean hasImported;
+    private int importedIndex;
 
 //**********************************************************************************************************************
 
@@ -96,9 +101,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             MetalLookAndFeel.setCurrentTheme(new OceanTheme()); UIManager.setLookAndFeel(new MetalLookAndFeel());
         } catch(Exception e){}
 
-        // create this frame and show it
+        // create this frame //and show it
         Standalone standalone = new Standalone();
-        standalone.setVisible(true);
+        //standalone.setVisible(true);
+        //startButton.requestFocus();
     } // end main
 
 //**********************************************************************************************************************
@@ -183,16 +189,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         startButton = new JButton("Start Timer");
         discardButton = new JButton("Discard Time");
-        discardButton.setEnabled(false);
-        popButton = new JButton("POP");
-        popButton.setEnabled(false);
+//        discardButton.setEnabled(false);
+        popButton = new JButton();//"POP");
+//        popButton.setEnabled(false);
         plusTwoButton = new JButton("+2");
-        plusTwoButton.setEnabled(false);
+//        plusTwoButton.setEnabled(false);
         averageModeButton = new JButton("Average of 5 Mode");
 
         averageLabels = new JLabel[12];
         for(int i=0; i<12; i++)
-            averageLabels[i] = new JLabel("#" + (i+1));
+            averageLabels[i] = new JLabel();//"#" + (i+1));
 
         smartButton = new SmartButton[12];
         for(int i=0; i<12; i++)
@@ -210,9 +216,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         scrambleText.setBorder(blackLine);
         scrambleText.setFont(lgAlgFont);
 
-        timerLabel = new JLabel("");
-        timerLabel.setText(""); //"00.00"
-        timerLabel.setVisible(false);
+        timerLabel = new JLabel();
+        //timerLabel.setText(""); //"00.00"
+        //timerLabel.setVisible(false);
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
 
@@ -223,23 +229,23 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         scramblePane.setLayout(null);
 
 
-        sessionStatsLabel = new JLabel("<html>Recent Time: N/A<br>Previous Time: N/A<br>Progress: N/A<br><br>Cubes Solved: 0<br>Session Average: N/A</html>");
+        sessionStatsLabel = new JLabel();//"<html>Recent Time: N/A<br>Previous Time: N/A<br>Progress: N/A<br><br>Cubes Solved: 0<br>Session Average: N/A</html>");
         sessionStatsLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Session Statistics"));
-        rollingAverageLabel = new JLabel("<html>Current Average: <font size=\"5\">N/A</font><br>Progress: N/A<br><br>Fastest Time: N/A<br>Slowest Time: N/A<br>Standard Deviation: N/A</html>");
+        rollingAverageLabel = new JLabel();//"<html>Current Average: <font size=\"5\">N/A</font><br>Progress: N/A<br><br>Fastest Time: N/A<br>Slowest Time: N/A<br>Standard Deviation: N/A</html>");
         rollingAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Rolling Average"));
-        bestAverageLabel = new JLabel("");
+        bestAverageLabel = new JLabel();
         bestAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Best Average"));
 
-        bestAverageText = new JTextArea("Average: N/A\nIndividual Times: N/A");
+        bestAverageText = new JTextArea();//"Average: N/A\nIndividual Times: N/A");
         bestAverageText.setFont(regFont);
         bestAverageText.setBorder(blackLine);
         bestAverageText.setEditable(false);
 
         insertTimeButton = new JButton ("Insert Own Time");
         sessionDetailedViewButton = new JButton("Session Details");
-        sessionDetailedViewButton.setEnabled(false);
+//        sessionDetailedViewButton.setEnabled(false);
         averageDetailedViewButton = new JButton("Details");
-        averageDetailedViewButton.setEnabled(false);
+//        averageDetailedViewButton.setEnabled(false);
         sessionResetButton = new JButton("Full Session Reset");
 
         enterPressesWhenFocused(startButton);
@@ -252,38 +258,59 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         enterPressesWhenFocused(averageDetailedViewButton);
         enterPressesWhenFocused(insertTimeButton);
 
-        timeString = new String[12];
+        //timeString = new String[12];
         timeLabels = new JLabel[12];
         for(int i=0; i<12; i++){
-            timeString[i] = "none";
-            timeLabels[i] = new JLabel("<html><font size=\"5\">" + timeString[i] + "</font></html>");
+        //    timeString[i] = "none";
+            timeLabels[i] = new JLabel();//"<html><font size=\"5\">" + timeString[i] + "</font></html>");
         }
+
+
+        optionsMenu.loadOptions(); // inital load of options
+System.err.print("Before: " + "\n");
+        solveTable = new SolveTable(optionsMenu.puzzleX); // experimental
+System.err.print("After: " + solveTable.getPuzzle() + "\n");
+
+        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
+            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
+//System.err.print("fdsafsd: " + "" + "\n");
+        if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+"")) // less glitchier
+            countdownCombo.setSelectedItem(optionsMenu.countdownX);
+//System.err.print("waefawe: " + "" + "\n");
+        updateGUI();
+//System.err.print("awefawfewa: " + "" + "\n");
+        resetTheSession();
 
         // set bounds
         setTheBounds();
-
         // add to contentPane
         addTheContent(contentPane);
-
         // add ActionListeners
         addTheActionListeners();
 
-        // inital load of options
-        optionsMenu.loadOptions();
-        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
-            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
-        if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+"")) // less glitchier
-            countdownCombo.setSelectedItem(optionsMenu.countdownX);
-        OptionsToGUI();
-
+/*
+        sessionDetailsEnabled = false; averageDetailsEnabled = false;
+        acceptsSincePop = 12;
+        updateStatsX();//@@@
+        buttonsOn();
+*/
+        runningCountdown = false;
+        countingDown = 0;
+        startTime = 0;
+        stopTime = 0;
+System.err.print("we're here." + "\n");
+/*
         // set some stuff up
         importedIndex = 0;
         hasImported = false;
         updateScrambleAlgs();
-        timeLabels[0].setForeground(optionsMenu.currentColorX);
-        returnFocus();
-
+        //timeLabels[0].setForeground(optionsMenu.currentColorX);
+//        returnFocus();
+*/
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
+        startButton.requestFocus();
+
     } // end constructor
 
 //**********************************************************************************************************************
@@ -322,23 +349,23 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         int width = 67;
         int seperation = 2;
         for(int i=0; i<12; i++){
-            smartButton[i].setBounds(x, 230+20, width, 46);
-            averageLabels[i].setBounds(x, 230+20, width, 20);
+            smartButton[i].setBounds(x, 250, width, 46);
+            averageLabels[i].setBounds(x, 250, width, 20);
             averageLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
-            timeLabels[i].setBounds(x, 245+20, width, 20);
+            timeLabels[i].setBounds(x, 265, width, 20);
             timeLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
-            x = x + width + seperation;
+            x += width + seperation;
         }
 
-        sessionStatsLabel.setBounds(10,270+10+20,412,130);
-        rollingAverageLabel.setBounds(432,270+10+20,412,130);
-        bestAverageLabel.setBounds(10,410+5+20,834,72);
-        bestAverageText.setBounds(20,427+5+20,724,45);
-        averageDetailedViewButton.setBounds(754,426+5+20,80,45);
-        sessionDetailedViewButton.setBounds(311-70,286+20+20,160,20);
-        insertTimeButton.setBounds(311-70,311+20+20,160,20);
-        sessionResetButton.setBounds(311-70,336+20+20,160,20);
-        averageModeButton.setBounds(663,286+20+20,160,20);
+        sessionStatsLabel.setBounds(10,300,412,130);
+        rollingAverageLabel.setBounds(432,300,412,130);
+        bestAverageLabel.setBounds(10,435,834,72);
+        bestAverageText.setBounds(20,452,724,45);
+        averageDetailedViewButton.setBounds(754,452,80,45);
+        sessionDetailedViewButton.setBounds(241,326,160,20);
+        insertTimeButton.setBounds(241,351,160,20);
+        sessionResetButton.setBounds(241,376,160,20);
+        averageModeButton.setBounds(663,326,160,20);
     }
 
 //**********************************************************************************************************************
@@ -357,7 +384,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         clientItem.addActionListener(this);
         puzzleCombo.addActionListener(this);
         countdownCombo.addActionListener(this);
-        startButton.addActionListener(this); //HERE
+        startButton.addActionListener(this);
         discardButton.addActionListener(this);
         popButton.addActionListener(this);
         plusTwoButton.addActionListener(this);
@@ -410,17 +437,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         Object source = e.getSource();
 
         if(source == startButton){
-            if(startButton.getText().equals("Start Timer")){
-                timerStart();
-            } else if(startButton.getText().equals("Stop Timer")){
-                timerStop();
-            } else if(startButton.getText().equals("Accept Time")){
-                timerAccept();
-            }
+            if(startButton.getText().equals("Start Timer")) timerStart();
+            else if(startButton.getText().equals("Stop Timer")) timerStop();
+            else if(startButton.getText().equals("Accept Time")) timerAccept();
         } else if(source == discardButton){
-            if(cubesSolved >= 1 || numberOfPops >= 1)
+            buttonsOn();
+            updateScrambleAlgs();
+/*            if(sessionDetailsEnabled)
                 sessionDetailedViewButton.setEnabled(true);
-            if(cubesSolved >= 12)
+            if(averageDetailsEnabled)
                 averageDetailedViewButton.setEnabled(true);
             insertTimeButton.setEnabled(true);
             sessionResetButton.setEnabled(true);
@@ -430,14 +455,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             puzzleCombo.setEnabled(true);
             countdownCombo.setEnabled(true);
             startButton.setText("Start Timer");
-            timerLabel.setText("");//timerLabel.setText("Ready2?");
-            timerLabel.setVisible(false);
+            timerLabel.setText("");
+            //timerLabel.setVisible(false);
             updateScrambleAlgs();
-            returnFocus();
+            returnFocus();*/
         } else if(source == popButton){
             acceptsSincePop = 0;
-            numberOfPops++;
-            popButton.setText("Popped");
+            //numberOfPops++;
+            popButton.setText("Popped!");
+            acceptTimeX(stopTime-startTime, true, false);
+/*
             if(sessionIndex > sessionTimes.length-1){
                 String[] temp = new String[sessionTimes.length*2];
                 String[] temp2 = new String[sessionTimes.length*2];
@@ -447,30 +474,34 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 }
                 sessionTimes = temp;
                 sessionScrambles = temp2;
-            }
-            sessionTimes[sessionIndex] = "POP";
-            sessionScrambles[sessionIndex] = newAlg;//scrambleText.getText();
-            sessionIndex++;
+            }*/
+            //sessionTimes[sessionIndex] = "POP";
+            //sessionScrambles[sessionIndex] = newAlg;//scrambleText.getText();
+            //sessionIndex++;
+/*
             if(cubesSolved >= 12)
                 averageDetailedViewButton.setEnabled(true);
             insertTimeButton.setEnabled(true);
             sessionDetailedViewButton.setEnabled(true);
             sessionResetButton.setEnabled(true);
-            discardButton.setEnabled(false);
-            popButton.setEnabled(false);
-            plusTwoButton.setEnabled(false);
+
             puzzleCombo.setEnabled(true);
             countdownCombo.setEnabled(true);
             startButton.setText("Start Timer");
-            timerLabel.setText("");//timerLabel.setText("Ready3?");
-            timerLabel.setVisible(false);
+            discardButton.setEnabled(false);
+            popButton.setEnabled(false);
+            plusTwoButton.setEnabled(false);
+
+            timerLabel.setText("");
+            //timerLabel.setVisible(false);
             updateScrambleAlgs();
             returnFocus();
+*/
         } else if(source == plusTwoButton){
-            stopTime = stopTime + 2000;//1200000; // TEMP: was 2000
-            cubesSolved++;
+            //stopTime += 1200000; // TEMP: was 2000
+            //cubesSolved++;
             try{
-                acceptTime();
+                acceptTimeX(stopTime-startTime, false, true);//acceptTime();
             } catch(NumberFormatException l){
                 JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
                 System.out.println(l);
@@ -491,67 +522,49 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                     return;
                 }
             }
-
-            placeInAverage = 0;
-            sessionIndex = 0;
-            bestAverage = 0;
-            cubesSolved = 0;
-            sessionTotalTime = 0;
-            sessionFastest = 0;
-            sessionSlowest = 0;
-            acceptsSincePop = 12;
-            sessionTimes = new String[100];
-            sessionScrambles = new String[100];
-            bestAverageText.setText("Average: N/A\nIndividual Times: N/A");
-            for(int i=0; i<12; i++){
-                timeString[i] = "none";
-                timeLabels[i].setText("<html><font size=\"5\">" + timeString[i] + "</font></html>");
-                timeLabels[i].setForeground(Color.black);
-            }
-            timeLabels[placeInAverage].setForeground(optionsMenu.currentColorX);
-            sessionStatsLabel.setText("<html>Recent Time: N/A<br>Previous Time: N/A<br>Progress: N/A<br><br>Cubes Solved: 0<br>Session Average: N/A</html>");
-            rollingAverageLabel.setText("<html>Current Average: <font size=\"5\">N/A</font><br>Progress: N/A<br><br>Fastest Time: N/A<br>Slowest Time: N/A<br>Standard Deviation: N/A</html>");
-            insertTimeButton.setEnabled(true);
-            sessionDetailedViewButton.setEnabled(false);
-            averageDetailedViewButton.setEnabled(false);
-            discardButton.setEnabled(false);
-            popButton.setEnabled(false);
-            plusTwoButton.setEnabled(false);
-            puzzleCombo.setEnabled(true);
-            countdownCombo.setEnabled(true);
-            startButton.setText("Start Timer");
-            timerLabel.setText("");//timerLabel.setText("Ready4?");
-            timerLabel.setVisible(false);
-            hasImported = false;
-            updateScrambleAlgs();
-            returnFocus();
+            resetTheSession();
         } else if(source == puzzleCombo){
+System.err.print("combo box: " + puzzleCombo.getSelectedItem() + "\n");
+            if(solveTable.getPuzzle().equals(puzzleCombo.getSelectedItem()+"")){
+System.err.print("not good: " + solveTable.getPuzzle() + "\n");
+                return;
+            }
+            solveTable.setPuzzle(puzzleCombo.getSelectedItem()+"");
+popButton.setText("POP");
+//sessionDetailsEnabled = false;
+//averageDetailsEnabled = false;
+acceptsSincePop = 12;
+hasImported = false;
+importedIndex = 0;
+
+            updateStatsX();
+            buttonsOn();
             updateScrambleAlgs();
-            returnFocus();
+            //returnFocus();
         } else if(source == countdownCombo){
             returnFocus();
         } else if(source == sessionDetailedViewButton){
-            DetailedView win = new DetailedView("Session Times", getSessionView(), optionsMenu.textBackgrColorX);
-            win.setVisible(true);
+            //DetailedView win = new DetailedView("Session Times", getSessionView(), optionsMenu.textBackgrColorX);
+            //win.setVisible(true);
         } else if(source == averageDetailedViewButton){
-            DetailedView win = new DetailedView("Best Average", getAverageView(), optionsMenu.textBackgrColorX);
-            win.setVisible(true);
+            //DetailedView win = new DetailedView("Best Average", getAverageView(), optionsMenu.textBackgrColorX);
+            //win.setVisible(true);
         } else if(source == saveSessionItem){
-            if(cubesSolved >= 1){
+/*            if(cubesSolved >= 1){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getSessionView(), fc.getSelectedFile());
             } else {
                 JOptionPane.showMessageDialog(this, "No times have been recorded for this session.");
-            }
+            }*/
         } else if(source == saveBestItem){
-            if(cubesSolved >= 12){
+/*            if(cubesSolved >= 12){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getAverageView(), fc.getSelectedFile());
             } else {
                 JOptionPane.showMessageDialog(this, "Not enough cubes have been solved to calculate an average.");
-            }
+            }*/
         } else if(source == exitItem){
             System.exit(0);
         } else if(source == generatorItem){
@@ -573,14 +586,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                     FileReader fr = new FileReader(fc.getSelectedFile());
                     BufferedReader in = new BufferedReader(fr);
                     String read;
-                    while ((read = in.readLine()) != null){
-                        input = input + read + "%";
-                    }
+                    while((read = in.readLine()) != null)
+                        input += read + "%";
                     in.close();
                 } catch(IOException g){JOptionPane.showMessageDialog(this, "There was an error opening the file.");}
                 StringTokenizer st = new StringTokenizer(input, "%");
                 importedAlgs = new String[st.countTokens()];
-                for(int i=0;i<importedAlgs.length;i++)
+                for(int i=0; i<importedAlgs.length; i++)
                     importedAlgs[i] = st.nextToken();
                 hasImported = true;
                 importedIndex = 0;
@@ -588,10 +600,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             }
         } else if(source == insertTimeButton){
             String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:");
-            if(input == null){return;}
+            if(input == null) return;
             if(input.equalsIgnoreCase("POP")){
-                numberOfPops++;
-                if(sessionIndex > sessionTimes.length-1){
+                //numberOfPops++;
+/*                if(sessionIndex > sessionTimes.length-1){
                     String[] temp = new String[sessionTimes.length*2];
                     String[] temp2 = new String[sessionTimes.length*2];
                     for(int i=0; i<sessionTimes.length; i++){
@@ -604,29 +616,30 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 sessionTimes[sessionIndex] = "POP";
                 sessionScrambles[sessionIndex] = newAlg;//scrambleText.getText();
                 sessionIndex++;
-                updateScrambleAlgs();
-                sessionDetailedViewButton.setEnabled(true);
+*/              
+                acceptTimeX(0, true, false);
+//                updateScrambleAlgs();
+//                sessionDetailedViewButton.setEnabled(true);
                 return;
             }
-            double inputTime = 0;
-            if(input != null){
-                try{
-                    inputTime = Double.parseDouble(ssxx.format(Double.parseDouble(input))) * 1000;
-                } catch(NumberFormatException h){
-                    JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
-                    return;
-                }
-                startTime = 0;
-                stopTime = inputTime;
-                cubesSolved++;
-                try{
-                    acceptTime();
-                } catch(NumberFormatException v){
-                    JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
-                    System.out.println(v);
-                }
-                insertTimeButton.requestFocus();
+            float inputTime = 0;
+            try{
+                inputTime = Float.parseFloat(ssxx.format(Float.parseFloat(input)));
+            } catch(NumberFormatException h){
+                JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
+                return;
             }
+            //startTime = 0;
+            //stopTime = Math.round(inputTime * 1000);
+            //cubesSolved++;
+            try{
+                acceptTimeX(Math.round(inputTime * 1000));//acceptTime();
+            } catch(NumberFormatException v){
+                JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
+                System.out.println(v);
+            }
+            insertTimeButton.requestFocus();
+
         } else if(source == optionsItem){
             optionsMenu.setVisible(true);
         } else if(source == serverItem){
@@ -681,14 +694,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                     } catch(InterruptedException e){}
                 }
             } else {
-                double time = (System.currentTimeMillis()-startTime)/1000;
-                if(time>=60 && optionsMenu.showMinutesX){
-                    int min = (int)(time/60);
-                    double sec = time-(min*60);
-                    timerLabel.setText(min + ":" + ((time < 600) ? ssxx.format(sec) : ss.format(sec)));
-                } else {
-                    timerLabel.setText(ssxx.format(time));
-                }
+                float time = (System.currentTimeMillis() - startTime)/1000F;
+                timerLabel.setText(timeToString(time, true));
                 try{
                     timerThread.sleep(120);
                 } catch(InterruptedException e){
@@ -713,24 +720,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true),
                 JComponent.WHEN_FOCUSED);
-
     }
 
 //**********************************************************************************************************************
 // Private Methods
 //**********************************************************************************************************************
-
+/*
     private void acceptTime() throws NumberFormatException{
-        double time = (stopTime-startTime)/1000;
-        for(int i=11; i>0; i--) timeQueue[i] = timeQueue[i-1];
-        timeQueue[0] = Double.parseDouble(ssxx.format(time));
-        if(time>=60 && optionsMenu.showMinutesX){
-            int min = (int)(time/60);
-            double sec = time-(min*60);
-            timeString[placeInAverage] = min + ":" + ((time < 600) ? ssxx.format(sec) : ss.format(sec));
-        } else {
-            timeString[placeInAverage] = ssxx.format(time);
-        }
+        float time = (stopTime-startTime)/1000F;
+        timeString[placeInAverage] = timeToString(time, true);
         timeLabels[placeInAverage].setText("<html><font size=\"5\">" + timeString[placeInAverage] + "</font></html>");
 
         // grow the two session lists by a factor of 2 when near full
@@ -745,20 +743,20 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             sessionScrambles = temp2;
         }
 
-        sessionTotalTime = sessionTotalTime + Double.parseDouble(ssxx.format(time));
+        sessionTotalTime += Float.parseFloat(ssxx.format(time));
         sessionTimes[sessionIndex] = ssxx.format(time);
         sessionScrambles[sessionIndex] = newAlg;//scrambleText.getText();
-        currentAverageScrambles[placeInAverage] = newAlg;//scrambleText.getText();
         currentAverageTimes[placeInAverage] = ssxx.format(time);
+        currentAverageScrambles[placeInAverage] = newAlg;//scrambleText.getText();
 
-        if(Double.parseDouble(sessionTimes[sessionIndex]) < sessionFastest || Double.parseDouble(sessionTimes[sessionIndex]) > sessionSlowest || sessionFastest == 0 || sessionSlowest == 0){
+        if(Float.parseFloat(sessionTimes[sessionIndex]) < sessionFastest || Float.parseFloat(sessionTimes[sessionIndex]) > sessionSlowest || sessionFastest == 0 || sessionSlowest == 0){
             if(sessionFastest == 0 || sessionSlowest == 0){
-                sessionFastest = Double.parseDouble(sessionTimes[sessionIndex]);
-                sessionSlowest = Double.parseDouble(sessionTimes[sessionIndex]);
-            } else if(Double.parseDouble(sessionTimes[sessionIndex]) < sessionFastest){
-                sessionFastest = Double.parseDouble(sessionTimes[sessionIndex]);
-            } else if(Double.parseDouble(sessionTimes[sessionIndex]) > sessionSlowest){
-                sessionSlowest = Double.parseDouble(sessionTimes[sessionIndex]);
+                sessionFastest = Float.parseFloat(sessionTimes[sessionIndex]);
+                sessionSlowest = Float.parseFloat(sessionTimes[sessionIndex]);
+            } else if(Float.parseFloat(sessionTimes[sessionIndex]) < sessionFastest){
+                sessionFastest = Float.parseFloat(sessionTimes[sessionIndex]);
+            } else if(Float.parseFloat(sessionTimes[sessionIndex]) > sessionSlowest){
+                sessionSlowest = Float.parseFloat(sessionTimes[sessionIndex]);
             }
         }
 
@@ -770,36 +768,33 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             int slowest = 0;
 
             for(int i=0; i<12; i++){
-                if(Double.parseDouble(currentAverageTimes[i]) < Double.parseDouble(currentAverageTimes[fastest]))
+                if(Float.parseFloat(currentAverageTimes[i]) < Float.parseFloat(currentAverageTimes[fastest]))
                     fastest = i;
-                else if(Double.parseDouble(currentAverageTimes[i]) > Double.parseDouble(currentAverageTimes[slowest]))
+                else if(Float.parseFloat(currentAverageTimes[i]) > Float.parseFloat(currentAverageTimes[slowest]))
                     slowest = i;
             }
 
             timeLabels[fastest].setForeground(optionsMenu.fastestColorX);
             timeLabels[slowest].setForeground(optionsMenu.slowestColorX);
 
-            double average = 0;
-
+            float average = 0;
             for(int i=0; i<12; i++)
                 if(i!=fastest && i!=slowest)
-                    average = average + Double.parseDouble(currentAverageTimes[i]);
+                    average += Float.parseFloat(currentAverageTimes[i]);
+            average /= 10;
 
-            average /= 10.0;
-
-            double standardDeviation = 0;
-            for(int i=0; i<12; i++){
+            float standardDeviation = 0;
+            for(int i=0; i<12; i++)
                 if(i!=fastest && i!=slowest)
-                    standardDeviation = standardDeviation + ((average - Double.parseDouble(currentAverageTimes[i])) * (average - Double.parseDouble(currentAverageTimes[i])));
-            }
-            standardDeviation = Math.sqrt(standardDeviation/9);
+                    standardDeviation += (average-Float.parseFloat(currentAverageTimes[i])) * (average-Float.parseFloat(currentAverageTimes[i]));
+            standardDeviation = (float)Math.sqrt(standardDeviation/9);
 
             String progressColor, progress;
             progress = ssxx.format(average-previousAverage);
             try{
-                if(Double.parseDouble(progress) > 0){
+                if(Float.parseFloat(progress) > 0){
                     progressColor = "#FF0000";
-                } else if(Double.parseDouble(progress) < 0){
+                } else if(Float.parseFloat(progress) < 0){
                     progressColor = "#0000FF";
                 } else {
                     progressColor = "#000000";
@@ -808,27 +803,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             } catch(NumberFormatException e){
                     progressColor = "#000000";
             }
-            String printedAverage;
-            if(average>=60 && optionsMenu.showMinutesX){
-                int minutes = (int)(average/60);
-                printedAverage = minutes + ":" + ssxx.format(average-(minutes*60));
-            } else {
-                printedAverage = ssxx.format(average) + " sec.";
-            }
+            String printedAverage = timeToString(average, false, true);
             rollingAverageLabel.setText("<html>Current Average: <font size=\"5\">" + printedAverage + "</font><br>Progress: <font color=\"" + progressColor + "\">" + progress +" sec.</font><br><br>Fastest Time: " + timeString[fastest] + "<br>Slowest Time: " + timeString[slowest] + "<br>Standard Deviation: " + ssxx.format(standardDeviation) + "</html>");
             previousAverage = average;
 
             if(average<bestAverage || bestAverage==0){
                 bestAverage = average;
-                String bestAverageFormated;
-                if(bestAverage>=60 && optionsMenu.showMinutesX){
-                    int minutes = (int)(bestAverage/60);
-                    bestAverageFormated = minutes + ":" + ssxx.format(bestAverage-(minutes*60));
-                } else {
-                    bestAverageFormated = ssxx.format(bestAverage) + " sec.";
-                }
-                bestFastest = Double.parseDouble(currentAverageTimes[fastest]);
-                bestSlowest = Double.parseDouble(currentAverageTimes[slowest]);
+                String bestAverageFormated = timeToString(bestAverage, false, true);
+                bestFastest = Float.parseFloat(currentAverageTimes[fastest]);
+                bestSlowest = Float.parseFloat(currentAverageTimes[slowest]);
                 bestStandardDeviation = standardDeviation;
 
                 //copy times and scrambles
@@ -836,9 +819,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 String[] temp2 = new String[12];
 
                 for(int i=0; i<12; i++){
-                    if(Double.parseDouble(currentAverageTimes[i])>=60 && optionsMenu.showMinutesX){
-                        int minutes = (int)(Double.parseDouble(currentAverageTimes[i])/60);
-                        temp[i] = minutes + ":" + ssxx.format(Double.parseDouble(currentAverageTimes[i])-(minutes*60));
+                    if(Float.parseFloat(currentAverageTimes[i])>=60 && optionsMenu.showMinutesX){
+                        int min = (int)(Float.parseFloat(currentAverageTimes[i])/60);
+                        temp[i] = min + ":" + ssxx.format(Float.parseFloat(currentAverageTimes[i]) - min*60);
                     } else {
                         temp[i] = currentAverageTimes[i];
                     }
@@ -873,29 +856,24 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         if(cubesSolved > 1){
             if(placeInAverage == 0){
                 previousTime = timeString[11];
-                progress = ssxx.format(Double.parseDouble(currentAverageTimes[placeInAverage]) - Double.parseDouble(currentAverageTimes[11]));
+                progress = ssxx.format(Float.parseFloat(currentAverageTimes[placeInAverage]) - Float.parseFloat(currentAverageTimes[11]));
             } else {
                 previousTime = timeString[placeInAverage-1];
-                progress = ssxx.format(Double.parseDouble(currentAverageTimes[placeInAverage]) - Double.parseDouble(currentAverageTimes[placeInAverage-1]));
+                progress = ssxx.format(Float.parseFloat(currentAverageTimes[placeInAverage]) - Float.parseFloat(currentAverageTimes[placeInAverage-1]));
             }
         } else {
             previousTime = "N/A";
             progress = "N/A";
         }
-        String sessionAverage = (ssxx.format(sessionTotalTime/cubesSolved));
-        if(Double.parseDouble(sessionAverage)>=60 && optionsMenu.showMinutesX){
-            int min = (int)(Double.parseDouble(sessionAverage)/60);
-            sessionAverage = min + ":" + ssxx.format(Double.parseDouble(sessionAverage)-(min*60));
-        } else {
-            sessionAverage = sessionAverage + " sec.";
-        }
+
+        String sessionAverage = timeToString(sessionTotalTime/cubesSolved, false, true);
 
         String progressColor;
         try{
-            if(Double.parseDouble(progress) > 0){
+            if(Float.parseFloat(progress) > 0){
                 progressColor = "#FF0000";
                 progress = progress + " sec.";
-            } else if(Double.parseDouble(progress) < 0){
+            } else if(Float.parseFloat(progress) < 0){
                 progressColor = "#0000FF";
                 progress = progress + " sec.";
             } else {
@@ -931,53 +909,32 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         updateScrambleAlgs();
         returnFocus();
     } // end acceptTime
-
+*/
 //**********************************************************************************************************************
-
+/*
     private String getSessionView(){
         String timesAndScrambles = "", timesOnly = "";
-        double deviation = 0.0, average = 0.0;
+        float deviation = 0, average = 0;
         if(cubesSolved >= 1)
             average = sessionTotalTime/cubesSolved;
 
-        String formatedAverage;
-        if(average>=60 && optionsMenu.showMinutesX){
-            int minutes = (int)(average/60);
-            formatedAverage = minutes + ":" + ssxx.format(average - minutes*60);
-        } else
-            formatedAverage = ssxx.format(average);
-
         for(int i=0; i<sessionIndex; i++){
-            String currentTime = "";
-            if((!sessionTimes[i].equals("POP")) && Double.parseDouble(sessionTimes[i])>=60 && optionsMenu.showMinutesX){
-                int minutes = (int)(Double.parseDouble(sessionTimes[i])/60);
-                currentTime = minutes + ":" + ssxx.format(Double.parseDouble(sessionTimes[i])-(minutes*60));
-            } else
-                currentTime = sessionTimes[i];
+            String currentTime = "POP";
+            if(!sessionTimes[i].equals("POP"))
+                currentTime = timeToString(Float.parseFloat(sessionTimes[i]), false);
             timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + sessionScrambles[i] + "\n";
-            timesOnly = timesOnly + currentTime + "\n";
+            timesOnly += currentTime + "\n";
             if(cubesSolved >= 2){
                 if(!(sessionTimes[i].equals("POP")))
-                    deviation = deviation + ((average-Double.parseDouble(sessionTimes[i]))*(average-Double.parseDouble(sessionTimes[i])));
+                    deviation += (average-Float.parseFloat(sessionTimes[i])) * (average-Float.parseFloat(sessionTimes[i]));
             }
         }
         if(cubesSolved >= 2)
-            deviation = Math.sqrt(deviation/(cubesSolved-1));
+            deviation = (float)Math.sqrt(deviation/(cubesSolved-1));
 
-        String formatedFastest;
-        String formatedSlowest;
-        if(sessionFastest>=60 && optionsMenu.showMinutesX){
-            int minutes = (int)(sessionFastest/60);
-            formatedFastest = minutes + ":" + ssxx.format(sessionFastest - minutes*60);
-        } else {
-            formatedFastest = ssxx.format(sessionFastest);
-        }
-        if(sessionSlowest>=60 && optionsMenu.showMinutesX){
-            int minutes = (int)(sessionSlowest/60);
-            formatedSlowest = minutes + ":" + ssxx.format(sessionSlowest - minutes*60);
-        } else {
-            formatedSlowest = ssxx.format(sessionSlowest);
-        }
+        String formatedAverage = timeToString(average, false);
+        String formatedFastest = timeToString(sessionFastest, false);
+        String formatedSlowest = timeToString(sessionSlowest, false);
 
         String returnMe = optionsMenu.sessionViewFormatX;
         returnMe = findAndReplace(returnMe, "%T", new Date()+"");
@@ -992,41 +949,20 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getSessionView
-
+*/
 //**********************************************************************************************************************
-
+/*
     private String getAverageView(){
-        String timesAndScrambles = "";
-        String timesOnly = "";
+        String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + bestAverageTimes[i] + "          " + bestAverageScrambles[i] + "\n";
-            timesOnly = timesOnly + bestAverageTimes[i] + "\n";
+            timesAndScrambles += (i+1) + ")          " + bestAverageTimes[i] + "          " + bestAverageScrambles[i] + "\n";
+            timesOnly += bestAverageTimes[i] + "\n";
         }
 
-        String formatedAverage;
-        if(bestAverage>=60 && optionsMenu.showMinutesX){
-            int minutes = (int)(bestAverage/60);
-            formatedAverage = minutes + ":" + ssxx.format(bestAverage - minutes*60);
-        } else {
-            formatedAverage = ssxx.format(bestAverage);
-        }
-
-        String formatedFastest;
-        if(bestFastest>=60 && optionsMenu.showMinutesX){
-            int minutes = (int)(bestFastest/60);
-            formatedFastest = minutes + ":" + ssxx.format(bestFastest - minutes*60);
-        } else {
-            formatedFastest = ssxx.format(bestFastest);
-        }
-
-        String formatedSlowest;
-        if(bestSlowest>=60 && optionsMenu.showMinutesX){
-            int minutes = (int)(bestSlowest/60);
-            formatedSlowest = minutes + ":" + ssxx.format(bestSlowest - minutes*60);
-        } else {
-            formatedSlowest = ssxx.format(bestSlowest);
-        }
+        String formatedAverage = timeToString(bestAverage, false);
+        String formatedFastest = timeToString(bestFastest, false);
+        String formatedSlowest = timeToString(bestSlowest, false);
 
         String returnMe = optionsMenu.averageViewFormatX;
         returnMe = findAndReplace(returnMe, "%T", new Date()+"");
@@ -1039,6 +975,23 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getAverageView
+*/
+//**********************************************************************************************************************
+    private final String timeToString(float time, boolean truncate){
+        return timeToString(time, truncate, false);
+    }
+
+    private final String timeToString(float time, boolean truncate, boolean verbose){
+        String s = ssxx.format(time); // consider the case time=59.999D
+        time = Float.parseFloat(s);
+        if(time>=60 && optionsMenu.showMinutesX){
+            int min = (int)(time/60);
+            float sec = time-min*60;
+            s = min + ":" + ((time < 600 || !truncate) ? ssxx.format(sec) : ss.format(sec));
+        } else
+            s = ssxx.format(time) + (verbose ? " sec." : "");
+        return s;
+    }
 
 //**********************************************************************************************************************
 
@@ -1100,13 +1053,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         runningCountdown = true;
         countingDown = Integer.parseInt(countdownCombo.getSelectedItem()+"");
         timerLabel.setForeground(optionsMenu.countdownColorX);
-        timerLabel.setVisible(true);
-        insertTimeButton.setEnabled(false);
-        sessionResetButton.setEnabled(false);
-        sessionDetailedViewButton.setEnabled(false);
-        averageDetailedViewButton.setEnabled(false);
+        //timerLabel.setVisible(true);
+
         puzzleCombo.setEnabled(false);
         countdownCombo.setEnabled(false);
+        sessionDetailedViewButton.setEnabled(false);
+        insertTimeButton.setEnabled(false);
+        sessionResetButton.setEnabled(false);
+        averageDetailedViewButton.setEnabled(false);
+
         timerThread = new Thread(this);
         timerThread.start();
     }
@@ -1116,34 +1071,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     public void timerStop(){
         if(runningCountdown){
             timerThread = null;
-            if(cubesSolved>=1 || numberOfPops>=1)
-                sessionDetailedViewButton.setEnabled(true);
-            insertTimeButton.setEnabled(true);
-            averageDetailedViewButton.setEnabled(true);
-            sessionResetButton.setEnabled(true);
-            discardButton.setEnabled(false);
-            popButton.setEnabled(false);
-            plusTwoButton.setEnabled(false);
-            puzzleCombo.setEnabled(true);
-            countdownCombo.setEnabled(true);
-            startButton.setText("Start Timer");
-            timerLabel.setText("");//timerLabel.setText("Ready1?");
-            timerLabel.setVisible(false);
             countdownClip.stop();
-            returnFocus();
+            buttonsOn();
         } else {
             stopTime = System.currentTimeMillis();
             timerThread = null;
-            double time = (stopTime-startTime)/1000;
-            if(time>=60 && optionsMenu.showMinutesX){
-                int min = (int)(time/60);
-                double sec = time - min*60;
-                timerLabel.setText(min + ":" + ((time < 600) ? ssxx.format(sec) : ss.format(sec)));
-            } else {
-                timerLabel.setText(ssxx.format(time));
-            }
+            float time = (stopTime-startTime)/1000F;
+            timerLabel.setText(timeToString(time, true));
             startButton.setText("Accept Time");
-            if(acceptsSincePop >= 12 || acceptsSincePop == -1){
+            if(acceptsSincePop >= 12){// || acceptsSincePop == -1){
                 popButton.setText("POP");
                 popButton.setEnabled(true);
             }
@@ -1154,9 +1090,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
     public void timerAccept(){
-        cubesSolved++;
+        //cubesSolved++;
         try{
-            acceptTime();
+            acceptTimeX(stopTime-startTime, false, false);
         } catch(NumberFormatException j){
             JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
             System.out.println(j);
@@ -1182,13 +1118,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
 
-    public void OptionsToGUI(){
-        //if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+""))
-        //    puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
-        //if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+""))
-        //    countdownCombo.setSelectedItem(optionsMenu.countdownX);
-
-        timeLabels[placeInAverage].setForeground(optionsMenu.currentColorX);
+    public void updateGUI(){
+        //int size = solveTable.getSize();
+        //timeLabels[size%12].setForeground(optionsMenu.currentColorX);
         scramblePane.setCubeColors(optionsMenu.cubeColorsX);
         scramblePane.setPyraminxColors(optionsMenu.pyraminxColorsX);
         scramblePane.setMegaminxColors(optionsMenu.megaminxColorsX);
@@ -1196,5 +1128,282 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         scrambleText.setBackground(optionsMenu.textBackgrColorX);
         bestAverageText.setBackground(optionsMenu.textBackgrColorX);
     } //OptionsToGUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    private void acceptTimeX(long time) throws NumberFormatException{
+        acceptTimeX(time, false, false);
+    }
+
+    private void acceptTimeX(long time, boolean isPop, boolean isPlus2) throws NumberFormatException{
+        int time100 = Math.round(time/10F);
+        solveTable.addSolve(time100, newAlg, isPop, isPlus2);
+        acceptsSincePop++;
+        updateStatsX();
+        buttonsOn();
+        updateScrambleAlgs();
+    } // end acceptTimeX
+
+//**********************************************************************************************************************
+
+    private void buttonsOn(){
+        puzzleCombo.setEnabled(true);
+        countdownCombo.setEnabled(true);
+        startButton.setText("Start Timer");
+        discardButton.setEnabled(false);
+        popButton.setEnabled(false);
+        plusTwoButton.setEnabled(false);
+
+//System.err.print("sessionDetailsEnabled: " + sessionDetailsEnabled + "\n");
+        sessionDetailedViewButton.setEnabled(sessionDetailsEnabled);
+        insertTimeButton.setEnabled(true);
+        sessionResetButton.setEnabled(true);
+//System.err.print("averageDetailsEnabled: " + averageDetailsEnabled + "\n");
+        averageDetailedViewButton.setEnabled(averageDetailsEnabled);
+        timerLabel.setText("");
+        //timerLabel.setVisible(false);
+
+        returnFocus();
+    }
+
+//**********************************************************************************************************************
+
+    private void resetTheSession(){
+System.err.print("start resetTheSession" + "\n");
+        popButton.setText("POP");
+        //sessionDetailsEnabled = false;
+        //averageDetailsEnabled = false;
+        acceptsSincePop = 12;
+        hasImported = false;
+        importedIndex = 0;
+
+        solveTable.sessionReset();
+        updateStatsX();
+        buttonsOn();
+        updateScrambleAlgs();
+        
+System.err.print("end resetTheSession" + "\n");
+/*
+        placeInAverage = 0;
+        sessionIndex = 0;
+        bestAverage = 0;
+        cubesSolved = 0;
+        sessionTotalTime = 0;
+        sessionFastest = 0;
+        sessionSlowest = 0;
+        acceptsSincePop = 12;
+        sessionTimes = new String[100];
+        sessionScrambles = new String[100];*/
+/*        bestAverageText.setText("Average: N/A\nIndividual Times: N/A");
+        for(int i=0; i<12; i++){
+            timeString[i] = "none";
+            timeLabels[i].setText("<html><font size=\"5\">" + timeString[i] + "</font></html>");
+            timeLabels[i].setForeground(Color.black);
+        }
+        timeLabels[placeInAverage].setForeground(optionsMenu.currentColorX);
+        sessionStatsLabel.setText("<html>Recent Time: N/A<br>Previous Time: N/A<br>Progress: N/A<br><br>Cubes Solved: 0<br>Session Average: N/A</html>");
+        rollingAverageLabel.setText("<html>Current Average: <font size=\"5\">N/A</font><br>Progress: N/A<br><br>Fastest Time: N/A<br>Slowest Time: N/A<br>Standard Deviation: N/A</html>");*/
+/*
+        puzzleCombo.setEnabled(true);
+        countdownCombo.setEnabled(true);
+        startButton.setText("Start Timer");
+        discardButton.setEnabled(false);
+        popButton.setEnabled(false);
+        plusTwoButton.setEnabled(false);
+
+        sessionDetailedViewButton.setEnabled(false);
+        insertTimeButton.setEnabled(true);
+
+        averageDetailedViewButton.setEnabled(false);
+
+        timerLabel.setText("");//timerLabel.setText("Ready4?");
+        //timerLabel.setVisible(false);
+//        hasImported = false;
+//        updateScrambleAlgs();
+        returnFocus();
+*/
+    }
+
+//**********************************************************************************************************************
+
+    public void updateStatsX(){
+        int size = solveTable.getSize();
+        final String BLACK = "#000000", RED = "#FF0000", BLUE = "#0000FF", TIE = "FF8000";
+
+//System.err.print("blah: " + size + "\n");
+
+        String sRollingAverage = "N/A";
+        String sRollingProgress = "N/A";
+        String sRollingProgressColor = BLACK;
+        String sRollingFastest = "N/A";
+        String sRollingSlowest = "N/A";
+        String sRollingStdDev = "N/A";
+
+        String sBestAverage = "N/A";
+        String sBestIndvTimes = "N/A";
+
+        String sRecentTime = "N/A";
+        String sPrevTime = "N/A";
+        String sProgressColor = BLACK;
+        String sProgress = "N/A";
+        int numberSolved = 0;
+        String sSessionAverage = "N/A";
+
+
+        solveTable.setTimeStyle(optionsMenu.showMinutesX, true, false);
+        if(size < 12){
+            for(int i=0; i<12; i++){
+                String s;
+                averageLabels[i].setText("#" + (i+1));
+                if(i<size){
+                    s = solveTable.getString(i);
+
+                    float fastestTime = solveTable.getSolve(size-1).sessionFastestTime;
+                    float slowestTime = solveTable.getSolve(size-1).sessionSlowestTime;
+                    if(fastestTime == slowestTime) timeLabels[i].setForeground(Color.black);
+                    else if(solveTable.getTime(i) == fastestTime) timeLabels[i].setForeground(optionsMenu.fastestColorX);
+                    else if(solveTable.getTime(i) == slowestTime) timeLabels[i].setForeground(optionsMenu.slowestColorX);
+                    else timeLabels[i].setForeground(Color.black);
+                }
+                else{
+                    s = "none";
+                    timeLabels[i].setForeground(Color.black);
+                }
+                timeLabels[i].setText("<html><font size=\"5\">" + s + "</font></html>");
+            }
+        }
+        else{
+            for(int i=0; i<12; i++){
+                int index = size+i-12;
+                averageLabels[(size+i)%12].setText("#" + (index+1));
+                String s = solveTable.getString(index);
+                timeLabels[(size+i)%12].setText("<html><font size=\"5\">" + s + "</font></html>");
+
+                float fastestTime = solveTable.getSolve(size-1).rollingFastestTime;
+                float slowestTime = solveTable.getSolve(size-1).rollingSlowestTime;
+                if(fastestTime == slowestTime) timeLabels[(size+i)%12].setForeground(Color.black);
+                else if(solveTable.getTime(index) == fastestTime) timeLabels[(size+i)%12].setForeground(optionsMenu.fastestColorX);
+                else if(solveTable.getTime(index) == slowestTime) timeLabels[(size+i)%12].setForeground(optionsMenu.slowestColorX);
+                else timeLabels[(size+i)%12].setForeground(Color.black);
+            }
+        }
+        timeLabels[size%12].setForeground(optionsMenu.currentColorX);
+
+
+        if(size > 0){
+            SolveTable.Solve currentSolve = solveTable.getSolve(size-1);
+
+            if(size >= 12){
+                if(currentSolve.rollingAverage != INF){
+                    sRollingAverage = timeToString(currentSolve.rollingAverage, false, true);
+                    sRollingStdDev = timeToString(currentSolve.rollingStdDev, false, false);
+                }
+                else{
+                    sRollingAverage = "DNF";
+                    sRollingStdDev = "???";
+                }
+
+                if(size > 12){
+                    SolveTable.Solve prevSolve = solveTable.getSolve(size-2);
+                    if(currentSolve.rollingAverage != INF && prevSolve.rollingAverage != INF){
+                        sRollingProgress = timeToString(currentSolve.rollingAverage-prevSolve.rollingAverage, false, true);
+                        if(currentSolve.rollingAverage > prevSolve.rollingAverage) sRollingProgressColor = RED;
+                        if(currentSolve.rollingAverage < prevSolve.rollingAverage) sRollingProgressColor = BLUE;
+                        if(currentSolve.rollingAverage == prevSolve.rollingAverage) sRollingProgressColor = TIE;
+                    }
+                    if(currentSolve.rollingAverage != INF && prevSolve.rollingAverage == INF){
+                        sRollingProgress = "+inf.";
+                        sRollingProgressColor = RED;
+                    }
+                    if(currentSolve.rollingAverage == INF && prevSolve.rollingAverage != INF){
+                        sRollingProgress = "-inf.";
+                        sRollingProgressColor = BLUE;
+                    }
+                    if(currentSolve.rollingAverage == INF && prevSolve.rollingAverage == INF){
+                        sRollingProgress = "???";
+                        sRollingProgressColor = TIE;
+                    }
+                }
+                solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+                sRollingFastest = solveTable.getString(currentSolve.rollingFastestIndex);
+                sRollingSlowest = solveTable.getString(currentSolve.rollingSlowestIndex);
+            }
+
+
+            int bestIndex = solveTable.findBestRolling();
+//System.err.print("bestIndex: " + bestIndex + "\n");
+            if(bestIndex != -1){
+                SolveTable.Solve bestSolve = solveTable.getSolve(bestIndex);
+
+                sBestAverage = timeToString(bestSolve.rollingAverage, false, true);
+                solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+                sBestIndvTimes = "";
+                for(int i=1; i<=12; i++){
+                    int index = i+bestIndex-12;
+                    String s = solveTable.getString(index);
+                    if(index == bestSolve.rollingFastestIndex || index == bestSolve.rollingSlowestIndex)
+                        s = "(" + s + ")";
+                    sBestIndvTimes += s + ", ";
+                }
+                sBestIndvTimes = sBestIndvTimes.substring(0, sBestIndvTimes.length()-2);
+            }
+
+
+            sRecentTime = solveTable.getString(size-1);
+            if(size > 1){
+                sPrevTime = solveTable.getString(size-2);
+                float recentTime = solveTable.getTime(size-1), prevTime = solveTable.getTime(size-2);
+                if(recentTime != INF && prevTime != INF){
+                    sProgress = timeToString(recentTime-prevTime, false, true);
+                    if(recentTime > prevTime) sProgressColor = RED;
+                    if(recentTime < prevTime) sProgressColor = BLUE;
+                    if(recentTime == prevTime) sProgressColor = TIE;
+                }
+                if(recentTime != INF && prevTime == INF){
+                    sProgress = "+inf.";
+                    sProgressColor = RED;
+                }
+                if(recentTime == INF && prevTime != INF){
+                    sProgress = "-inf.";
+                    sProgressColor = BLUE;
+                }
+                if(recentTime == INF && prevTime == INF){
+                    sProgress = "???";
+                    sProgressColor = TIE;
+                }
+            }
+            numberSolved = currentSolve.numberSolves;
+//System.err.print("sessionAverage: " + currentSolve.sessionAverage + "\n");
+            if(currentSolve.sessionAverage != INF)
+                sSessionAverage = timeToString(currentSolve.sessionAverage, false, true);
+            else
+                sSessionAverage = "DNF";
+        }
+
+
+        rollingAverageLabel.setText("<html>Current Average: <font size=\"5\">" + sRollingAverage + "</font><br>Progress: <font color=\"" + sRollingProgressColor + "\">" + sRollingProgress +"</font><br><br>Fastest Time: " + sRollingFastest + "<br>Slowest Time: " + sRollingSlowest + "<br>Standard Deviation: " + sRollingStdDev + "</html>");
+
+        bestAverageText.setText("Average: " + sBestAverage + "\nIndividual Times: " + sBestIndvTimes);
+
+        sessionStatsLabel.setText("<html>Recent Time: " + sRecentTime + "<br>Previous Time: " + sPrevTime + "<br>Progress: <font color=\"" + sProgressColor + "\">" + sProgress + "</font><br><br>Cubes Solved: " + numberSolved + "<br>Session Average: " + sSessionAverage + "</html>");
+
+        sessionDetailsEnabled = (size > 0);
+        averageDetailsEnabled = (sBestAverage != "N/A");
+
+    } // end updateStatsX
 
 }

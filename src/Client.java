@@ -110,8 +110,8 @@ public class Client extends NetcubeMode{
             popButton.setEnabled(false);
             localTimeLabel.setForeground(Color.blue);
             timerLabel.setForeground(Color.black);
-            localTimeLabel.setText(ssxx.format((stopTime-startTime)/1000));
-            out.println("N" + ssxx.format((stopTime-startTime)/1000));
+            localTimeLabel.setText(ssxx.format((stopTime-startTime)/1000F));
+            out.println("N" + ssxx.format((stopTime-startTime)/1000F));
             out.flush();
 
             //increment acceptsSincePOp
