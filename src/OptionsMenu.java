@@ -309,7 +309,6 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         //tabs.add(minxSchemeTab, "Pyraminx & Megaminx Colors");
         tabs.add(sessionTab, "Session Times");
         tabs.add(bestTab, "Best Average");
-
     }
 
 //**********************************************************************************************************************

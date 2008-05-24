@@ -42,7 +42,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     JButton startButton, discardButton, popButton, plusTwoButton;//, averageModeButton;
     JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
-    JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
+    JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel, scramblePaneLabel;
     JLabel sessionStatsLabel, rollingAverageLabel, bestAverageLabel;
     JMenuBar jMenuBar;
     JMenu fileMenu, toolsMenu, networkMenu, helpMenu;
@@ -205,8 +205,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
+        scramblePaneLabel = new JLabel();
+        //scramblePaneLable.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane = new ScramblePane(282, 215+20); // needs to be changed in two places
-        //scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setLayout(null);
 
 
@@ -300,6 +301,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         timerLabel.setBounds(215,145+12,333,75);
         timerArea.setBounds(215,145,333,75+21);
 
+        scramblePaneLabel.setBounds(563,5,282,235); // copy below
         scramblePane.setBounds(563,5,282,235); // needs to be changed in two places
 
         // total width is 834 if there is a 10 margin on each side
@@ -372,6 +374,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         contentPane.add(scrambleText);
         contentPane.add(timerLabel);
         //contentPane.add(timerArea);
+        contentPane.add(scramblePaneLabel);
         contentPane.add(scramblePane);
         contentPane.add(sessionStatsLabel);
         contentPane.add(rollingAverageLabel);
@@ -1082,7 +1085,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     private void updateLabels(String puzzle){
         useThisAlgLabel.setText("Use this " + puzzle + " Scramble Algorithm:");
-        scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, puzzle + " Scramble View"));
+        scramblePaneLabel.setBorder(BorderFactory.createTitledBorder(theBorder, puzzle + " Scramble View"));
         sessionStatsLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Session Statistics for " + puzzle));
         rollingAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Rolling Average for " + puzzle));
         bestAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Best Average for " + puzzle));
