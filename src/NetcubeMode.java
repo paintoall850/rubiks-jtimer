@@ -38,10 +38,10 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     protected ScramblePane scramblePane;
     protected String newAlg;
 
-    JLabel usernameLabel, serverIpLabel, serverPortLabel;//, handicapLabel;
+    JLabel usernameLabel, serverIpLabel, serverPortLabel;
     JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
     JLabel puzzleLabel, countdownLabel, bigPicture, smallPicture, userIsTyping;
-    JTextField usernameText, serverIpText, serverPortText;//, handicapText;
+    JTextField usernameText, serverIpText, serverPortText;
     JTextField chatText;
     JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
     JTextPane chatPane;
@@ -82,7 +82,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     public NetcubeMode(OptionsMenu optionsMenu){
         // configure JFrame
-        //centerFrameOnScreen(725, 550);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
 
@@ -123,11 +122,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         usernameLabel = new JLabel("Username:");
         serverIpLabel = new JLabel("Server IP:");
         serverPortLabel = new JLabel("Server Port:");
-        //handicapLabel = new JLabel("Handicap:");
         usernameText = new JTextField();
         serverIpText = new JTextField(); // override in sub-class
         serverPortText = new JTextField("52003");
-        //handicapText = new JTextField();
         connectButton = new JButton(); // override in sub-class
 
         typeOff = new ImageIcon(getClass().getResource("typeOff.gif"));
@@ -164,10 +161,10 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
 
-        localTimeUsernameLabel = new JLabel("<html>Rolling Average: <FONT SIZE=\"5\">N/A</FONT><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
-        remoteTimeUsernameLabel = new JLabel("<html>Rolling Average: <FONT SIZE=\"5\">N/A</FONT><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
-        localTimeLabel = new JLabel(""); // will override
-        remoteTimeLabel = new JLabel(""); // will override
+        localTimeUsernameLabel = new JLabel("<html>Rolling Average: <font size=\"5\">N/A</font><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
+        remoteTimeUsernameLabel = new JLabel("<html>Rolling Average: <font size=\"5\">N/A</font><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
+        localTimeLabel = new JLabel(""); // override in sub-class
+        remoteTimeLabel = new JLabel(""); // override in sub-class
         localTimeUsernameLabel.setVerticalAlignment(SwingConstants.BOTTOM);
         remoteTimeUsernameLabel.setVerticalAlignment(SwingConstants.BOTTOM);
         localTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -224,42 +221,40 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         usernameLabel.setBounds(10,10,80,20);
         serverIpLabel.setBounds(10,35,80,20);
         serverPortLabel.setBounds(10,60,80,20);
-        //handicapLabel.setBounds(10,85,80,20);
         usernameText.setBounds(90,10,80,20);
         serverIpText.setBounds(90,35,80,20);
         serverPortText.setBounds(90,60,80,20);
-        //handicapText.setBounds(90,85,80,20);
-        connectButton.setBounds(10,110-25,160,20+25);
+        connectButton.setBounds(10,85,160,45);
 
         puzzleLabel.setBounds(10,5,90,20);
         puzzleCombo.setBounds(10,25,90,20);
         countdownLabel.setBounds(110,5,90,20);
         countdownCombo.setBounds(110,25,90,20);
-        startButton.setBounds(10,50,190,20+10);
-        popButton.setBounds(10,75+10,190,20+10);
-        readyColor.setBounds(10,100+20,20,20); // not used in Client
-        remoteStatusLabel.setBounds(10+30,100+20,190-30,20); // not used in Client
-        localStatusLabel.setBounds(10,100+20,190,20); // not used in Server
+        startButton.setBounds(10,50,190,30);
+        popButton.setBounds(10,85,190,30);
+        readyColor.setBounds(10,120,20,20); // not used in Client
+        remoteStatusLabel.setBounds(40,120,160,20); // not used in Client
+        localStatusLabel.setBounds(10,120,190,20); // not used in Server
 
-        useThisAlgLabel.setBounds(215,5,333+17,20);
-        scrambleText.setBounds(215,25,333+17,115);
-        timerLabel.setBounds(215,157,333+17,75);
+        useThisAlgLabel.setBounds(215,5,350,20);
+        scrambleText.setBounds(215,25,350,115);
+        timerLabel.setBounds(215,157,350,75);
 
-        scramblePane.setBounds(535+40,5,310+40,215+20); // needs to be changed in two places
+        scramblePane.setBounds(575,5,350,235); // needs to be changed in two places
 
         chatScrollPane.setBounds(10,150,190,245);
         userIsTyping.setBounds(10,400,20,20);
         chatText.setBounds(35,400,85,20);
         sendMessageButton.setBounds(130,400,70,20);
 
-        localTimeUsernameLabel.setBounds(215,240,310+40,185);
-        remoteTimeUsernameLabel.setBounds(535+40,240,310+40,185);
-        localTimeLabel.setBounds(215,250,310+40,60);
-        remoteTimeLabel.setBounds(535+40,250,310+40,60);
-        localAverageDetailButton.setBounds(385+40,330,120,20);
-        localSessionDetailButton.setBounds(385+40,355,120,20);
-        remoteAverageDetailButton.setBounds(705+80,330,120,20);
-        remoteSessionDetailButton.setBounds(705+80,355,120,20);
+        localTimeUsernameLabel.setBounds(215,240,350,185);
+        remoteTimeUsernameLabel.setBounds(575,240,350,185);
+        localTimeLabel.setBounds(215,250,350,60);
+        remoteTimeLabel.setBounds(575,250,350,60);
+        localAverageDetailButton.setBounds(425,330,120,20);
+        localSessionDetailButton.setBounds(425,355,120,20);
+        remoteAverageDetailButton.setBounds(785,330,120,20);
+        remoteSessionDetailButton.setBounds(785,355,120,20);
 
         smallPicture.setBounds(180,10,500,120);
         bigPicture.setBounds(10,150,700,355);
@@ -272,11 +267,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(usernameLabel);
         contentPane.add(serverIpLabel);
         contentPane.add(serverPortLabel);
-        //contentPane.add(handicapLabel);
         contentPane.add(usernameText);
         contentPane.add(serverIpText);
         contentPane.add(serverPortText);
-        //contentPane.add(handicapText);
         contentPane.add(connectButton);
 
         contentPane.add(chatScrollPane);
@@ -349,16 +342,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected void hideGUI(){
-        centerFrameOnScreen(695, 170);//185, 170);
+        centerFrameOnScreen(695, 170);
 
         usernameLabel.setVisible(true);
         serverIpLabel.setVisible(true);
         serverPortLabel.setVisible(true);
-        //handicapLabel.setVisible(true);
         usernameText.setVisible(true);
         serverIpText.setVisible(true);
         serverPortText.setVisible(true);
-        //handicapText.setVisible(true);
         connectButton.setVisible(true);
         bigPicture.setVisible(true);
         smallPicture.setVisible(true);
@@ -400,11 +391,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         usernameLabel.setVisible(false);
         serverIpLabel.setVisible(false);
         serverPortLabel.setVisible(false);
-        //handicapLabel.setVisible(false);
         usernameText.setVisible(false);
         serverIpText.setVisible(false);
         serverPortText.setVisible(false);
-        //handicapText.setVisible(false);
         connectButton.setVisible(false);
         bigPicture.setVisible(false);
         smallPicture.setVisible(false);
@@ -545,14 +534,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         //if the time is not a pop, add the time and scramble to the rolling average and move the place up one
         if(localTime != 0){
             localCurrentAverage[localCurrentPlaceInAverage] = localTimeLabel.getText();
-            localCurrentScrambles[localCurrentPlaceInAverage] = newAlg; //scrambleText.getText();
+            localCurrentScrambles[localCurrentPlaceInAverage] = newAlg;
             localCurrentPlaceInAverage++;
             if(localCurrentPlaceInAverage == 12)
                 localCurrentPlaceInAverage = 0;
         }
         if(remoteTime != 0){
             remoteCurrentAverage[remoteCurrentPlaceInAverage] = remoteTimeLabel.getText();
-            remoteCurrentScrambles[remoteCurrentPlaceInAverage] = newAlg; //scrambleText.getText();
+            remoteCurrentScrambles[remoteCurrentPlaceInAverage] = newAlg;
             remoteCurrentPlaceInAverage++;
             if(remoteCurrentPlaceInAverage == 12)
                 remoteCurrentPlaceInAverage = 0;
@@ -681,8 +670,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             remoteSessionSlowestTime = "N/A";
         }
 
-        localTimeUsernameLabel.setText("<html>Rolling Average: <FONT SIZE=\"5\">"+localRollingAverage+"</FONT><br>Session Average: "+localSessionAverage+"<br><br>Score: "+localScore+"<br>Session Fastest Time: "+localSessionFastestTime+"<br>Session Slowest Time: "+localSessionSlowestTime+"</html>");
-        remoteTimeUsernameLabel.setText("<html>Rolling Average: <FONT SIZE=\"5\">"+remoteRollingAverage+"</FONT><br>Session Average: "+remoteSessionAverage+"<br><br>Score: "+remoteScore+"<br>Session Fastest Time: "+remoteSessionFastestTime+"<br>Session Slowest Time: "+remoteSessionSlowestTime+"</html>");
+        localTimeUsernameLabel.setText("<html>Rolling Average: <font size=\"5\">"+localRollingAverage+"</font><br>Session Average: "+localSessionAverage+"<br><br>Score: "+localScore+"<br>Session Fastest Time: "+localSessionFastestTime+"<br>Session Slowest Time: "+localSessionSlowestTime+"</html>");
+        remoteTimeUsernameLabel.setText("<html>Rolling Average: <font size=\"5\">"+remoteRollingAverage+"</font><br>Session Average: "+remoteSessionAverage+"<br><br>Score: "+remoteScore+"<br>Session Fastest Time: "+remoteSessionFastestTime+"<br>Session Slowest Time: "+remoteSessionSlowestTime+"</html>");
     } // end updateStats
 
 //**********************************************************************************************************************
@@ -726,8 +715,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         acceptsSincePop = 13;
 
         timerLabel.setText("");
-        localTimeUsernameLabel.setText("<html>Rolling Average: <FONT SIZE=\"5\">N/A</FONT><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
-        remoteTimeUsernameLabel.setText("<html>Rolling Average: <FONT SIZE=\"5\">N/A</FONT><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
+        localTimeUsernameLabel.setText("<html>Rolling Average: <font size=\"5\">N/A</font><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
+        remoteTimeUsernameLabel.setText("<html>Rolling Average: <font size=\"5\">N/A</font><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
         localTimeLabel.setText("");
         remoteTimeLabel.setText("");
         chatText.setText("");
