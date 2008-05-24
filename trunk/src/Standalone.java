@@ -1,6 +1,6 @@
 /*
- * JNetCube
- * Copyright (C) 2007 Chris Hunt
+ * Rubik's JTimer - Copyright (C) 2008 Doug Li
+ * JNetCube - Copyright (C) 2007 Chris Hunt
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     private TimerArea timerArea;
     private String newAlg;
 
-    JButton startButton, discardButton, popButton, plusTwoButton, averageModeButton;
+    JButton startButton, discardButton, popButton, plusTwoButton;//, averageModeButton;
     JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
     JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
     JLabel sessionStatsLabel, rollingAverageLabel, bestAverageLabel;
@@ -53,22 +53,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     JLabel[] averageLabels, timeLabels;
     SmartButton[] smartButton;
 
-    private boolean averageOfFiveMode; // experimental
+    //private boolean averageOfFiveMode;
 
     volatile Thread timerThread;
     AudioClip countdownClip = null;
 
-    //int placeInAverage = 0;
-    //float sessionTotalTime = 0, sessionFastest = 0, sessionSlowest = 0;
-    //float bestAverage = 0, bestStandardDeviation = 0, bestFastest = 0, bestSlowest = 0, previousAverage = 0;
-    //int countingDown = 0, cubesSolved = 0, sessionIndex = 0, acceptsSincePop = 12, numberOfPops = 0;
-    //String[] bestAverageTimes = new String[12], bestAverageScrambles = new String[12];
-    //String[] currentAverageScrambles = new String[12], currentAverageTimes = new String[12];
-    //String[] sessionTimes = new String[100], sessionScrambles = new String[100];
-
     SolveTable solveTable;
     private boolean sessionDetailsEnabled, averageDetailsEnabled;
-    //private int acceptsSincePop;
     private boolean runningCountdown;
     private int countingDown;
     private long startTime, stopTime;
@@ -185,7 +176,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         discardButton = new JButton("Discard Time");
         popButton = new JButton();
         plusTwoButton = new JButton("+2");
-        averageModeButton = new JButton("Average of 5 Mode");
+        //averageModeButton = new JButton("Average of 5 Mode");
 
         averageLabels = new JLabel[12];
         for(int i=0; i<12; i++)
@@ -240,7 +231,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         enterPressesWhenFocused(discardButton);
         enterPressesWhenFocused(popButton);
         enterPressesWhenFocused(plusTwoButton);
-        enterPressesWhenFocused(averageModeButton);
+        //enterPressesWhenFocused(averageModeButton);
         enterPressesWhenFocused(sessionResetButton);
         enterPressesWhenFocused(sessionDetailedViewButton);
         enterPressesWhenFocused(averageDetailedViewButton);
@@ -334,7 +325,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         sessionDetailedViewButton.setBounds(241,326,160,20);
         insertTimeButton.setBounds(241,351,160,20);
         sessionResetButton.setBounds(241,376,160,20);
-        averageModeButton.setBounds(663,326,160,20);
+        //averageModeButton.setBounds(663,326,160,20);
     }
 
 //**********************************************************************************************************************
@@ -357,7 +348,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         discardButton.addActionListener(this);
         popButton.addActionListener(this);
         plusTwoButton.addActionListener(this);
-        averageModeButton.addActionListener(this);
+        //averageModeButton.addActionListener(this);
         sessionDetailedViewButton.addActionListener(this);
         averageDetailedViewButton.addActionListener(this);
         sessionResetButton.addActionListener(this);
@@ -418,24 +409,24 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             try{
                 acceptTimeX(stopTime-startTime, true, false);
             } catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
+                JOptionPane.showMessageDialog(this, ERROR_MESS);
                 System.out.println(ex.getMessage());
             }
         } else if(source == plusTwoButton){
             try{
                 acceptTimeX(stopTime-startTime, false, true);
             } catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
+                JOptionPane.showMessageDialog(this, ERROR_MESS);
                 System.out.println(ex.getMessage());
             }
-        } else if(source == averageModeButton){
+/*        } else if(source == averageModeButton){
             if(averageModeButton.getText().equals("Average of 5 Mode")){
                 averageModeButton.setText("Average of 10 Mode");
                 averageOfFiveMode = true;
             } else{
                 averageModeButton.setText("Average of 5 Mode");
                 averageOfFiveMode = false;
-            }
+            }*/
         } else if(source == sessionResetButton){
             if(optionsMenu.showResetConfirmX){
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", 0);
@@ -467,16 +458,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == countdownCombo){
             returnFocus();
         } else if(source == sessionDetailedViewButton){
-//@@@
             DetailedView win = new DetailedView("Session Times for " + solveTable.getPuzzle(), getSessionView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == averageDetailedViewButton){
-//@@@
             DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == saveSessionItem){
-//@@@
-            if(sessionDetailsEnabled){//cubesSolved >= 1){
+            if(sessionDetailsEnabled){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getSessionView(), fc.getSelectedFile());
@@ -484,8 +472,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 JOptionPane.showMessageDialog(this, "No times have been recorded for this session.");
             }
         } else if(source == saveBestItem){
-//@@@
-            if(averageDetailsEnabled){//cubesSolved >= 12){
+            if(averageDetailsEnabled){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getAverageView(), fc.getSelectedFile());
@@ -548,7 +535,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             try{
                 acceptTimeX(Math.round(inputTime * 1000));
             } catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
+                JOptionPane.showMessageDialog(this, ERROR_MESS);
                 System.out.println(ex.getMessage());
             }
             insertTimeButton.requestFocus();
@@ -637,32 +624,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 //**********************************************************************************************************************
 // Private Methods
 //**********************************************************************************************************************
-//@@@
+
     private String getSessionView(){
-/*
-        String timesAndScrambles = "", timesOnly = "";
-        float deviation = 0, average = 0;
-        if(cubesSolved >= 1)
-            average = sessionTotalTime/cubesSolved;
-
-        for(int i=0; i<sessionIndex; i++){
-            String currentTime = "POP";
-            if(!sessionTimes[i].equals("POP"))
-                currentTime = timeToString(Float.parseFloat(sessionTimes[i]), false);
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + sessionScrambles[i] + "\n";
-            timesOnly += currentTime + "\n";
-            if(cubesSolved >= 2){
-                if(!(sessionTimes[i].equals("POP")))
-                    deviation += (average-Float.parseFloat(sessionTimes[i])) * (average-Float.parseFloat(sessionTimes[i]));
-            }
-        }
-        if(cubesSolved >= 2)
-            deviation = (float)Math.sqrt(deviation/(cubesSolved-1));
-
-        String formatedAverage = timeToString(average, false);
-        String formatedFastest = timeToString(sessionFastest, false);
-        String formatedSlowest = timeToString(sessionSlowest, false);
-*/
 
         String formatedAverage = "N/A", formatedStdDev = "N/A";
         String timesAndScrambles = "none", timesOnly = "none";
@@ -710,36 +673,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         returnMe = returnMe.replaceAll("%F", formatedFastest);
         returnMe = returnMe.replaceAll("%S", formatedSlowest);
         returnMe = returnMe.replaceAll("%Z", solveTable.getPuzzle());
-
-//        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-//        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
-//        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-//        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-//        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
-//        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
-//        returnMe = findAndReplace(returnMe, "%D", ssxx.format(deviation));
-//        returnMe = findAndReplace(returnMe, "%C", cubesSolved+"");
-//        returnMe = findAndReplace(returnMe, "%P", numberOfPops+"");
-
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getSessionView
 
 //**********************************************************************************************************************
-//@@@
+
     private String getAverageView(){
-/*
-        String timesAndScrambles = "", timesOnly = "";
-
-        for(int i=0; i<12; i++){
-            timesAndScrambles += (i+1) + ")          " + bestAverageTimes[i] + "          " + bestAverageScrambles[i] + "\n";
-            timesOnly += bestAverageTimes[i] + "\n";
-        }
-
-        String formatedAverage = timeToString(bestAverage, false);
-        String formatedFastest = timeToString(bestFastest, false);
-        String formatedSlowest = timeToString(bestSlowest, false);
-*/
 
         String formatedAverage = "N/A", formatedStdDev = "N/A";
         String timesAndScrambles = "none", timesOnly = "none";
@@ -777,15 +717,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         returnMe = returnMe.replaceAll("%F", formatedFastest);
         returnMe = returnMe.replaceAll("%S", formatedSlowest);
         returnMe = returnMe.replaceAll("%Z", solveTable.getPuzzle());
-
-//        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-//        returnMe = findAndReplace(returnMe, "%A", formatedAverage);
-//        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-//        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-//        returnMe = findAndReplace(returnMe, "%D", ssxx.format(bestStandardDeviation));
-//        returnMe = findAndReplace(returnMe, "%F", formatedFastest);
-//        returnMe = findAndReplace(returnMe, "%S", formatedSlowest);
-
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getAverageView
@@ -808,19 +739,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         return s;
     }
 
-//**********************************************************************************************************************
-/*
-    private static final String findAndReplace(String original, String find, String replace){
-        while(true){
-            int index = original.indexOf(find);
-            if(index >= 0)
-                original = original.substring(0, index) + replace + original.substring(index+find.length(), original.length());
-            else
-                break;
-        }
-        return original;
-    } // end findAndReplace
-*/
 //**********************************************************************************************************************
 
     private void saveToFile(String text, File file){
@@ -911,7 +829,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         try{
             acceptTimeX(stopTime-startTime);
         } catch(NumberFormatException ex){
-            JOptionPane.showMessageDialog(this, "There has been an error, please inform Chris that you saw this message.");
+            JOptionPane.showMessageDialog(this, ERROR_MESS);
             System.out.println(ex.getMessage());
         }
     }
