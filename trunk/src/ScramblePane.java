@@ -110,11 +110,17 @@ public class ScramblePane extends JPanel implements Constants{
         int margin = 14;
         int face_gap = 4;
         //int face_pixels = 60;
-        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, (myHeight - 2*face_gap - 2*margin)/3);
+        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, ((myHeight-19) - 2*face_gap - 2*margin)/3);
+//System.err.print("myWidth:" + myWidth + "\n");
+//System.err.print("myHeight:" + myHeight + "\n");
+//System.err.print("margin:" + margin + "\n");
+//System.err.print("face_pixels:" + face_pixels + "\n");
         int n = face_pixels + face_gap;
         //int x = 15, y = 19; // nudge factors
-        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = (myHeight - 3*face_pixels - 2*face_gap)/2;
-        y += 5; // nudge away from title
+        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = ((myHeight-19) - 3*face_pixels - 2*face_gap)/2;
+        y += 14; // nudge away from title
+//System.err.print("x:" + x + "\n");
+//System.err.print("y:" + y + "\n");
 
         setCubeFaceBounds(CubeFace[size][0], size, 1*n + x, 1*n + y, face_pixels/size);
         setCubeFaceBounds(CubeFace[size][1], size, 3*n + x, 1*n + y, face_pixels/size);
@@ -269,11 +275,17 @@ public class ScramblePane extends JPanel implements Constants{
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(1.5F));
 
-        int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
         int xShift = 125, yShift = 58; // for the second/back cluster of 6 faces (was 141, 0)
-        float radius = 25;
+        //int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
+        int xCenter = (myWidth-xShift)/2, yCenter = (myHeight-yShift-20)/2 + 20;
+        float radius = 25; // hard code for now
         float face_gap = 4;
         float big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
+//System.err.print("xShift:" + xShift + "\n");
+//System.err.print("yShift:" + yShift + "\n");
+//System.err.print("xCenter:" + xCenter + "\n");
+//System.err.print("yCenter:" + yCenter + "\n");
+//System.err.print("radius:" + radius + "\n");
 
         Polygon big_pent = regular_poly(5, big_radius, true); // auxiliary: for drawing outer 5 faces of cluster
         big_pent.translate(xCenter, yCenter);
@@ -533,11 +545,14 @@ public class ScramblePane extends JPanel implements Constants{
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(1.5F));
 
-        int xCenter = 141;//myWidth/2;
-        int yCenter = 98;//myHeight/2 - 20;
-        float radius = 52;//Math.min(myWidth, myHeight) * 0.2;
+        int xCenter = myWidth/2;//141;//myWidth/2;
+        int yCenter = myHeight/2-19;//98;//myHeight/2 - 20;
+        float radius = Math.min(myWidth, myHeight-20) * 0.24F;//52;//Math.min(myWidth, myHeight) * 0.2;
         float face_gap = 6;
         float big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
+//System.err.print("xCenter:" + xCenter + "\n");
+//System.err.print("yCenter:" + yCenter + "\n");
+//System.err.print("radius:" + radius + "\n");
 
         Polygon big_tri = regular_poly(3, big_radius, false); // auxiliary: for drawing the outer 3 faces
         big_tri.translate(xCenter, yCenter);
