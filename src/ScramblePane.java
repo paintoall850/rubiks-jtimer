@@ -24,7 +24,7 @@ import java.util.*;
 import javax.swing.border.Border;
 import java.awt.image.BufferedImage;
 
-public class ScramblePane extends JComponent implements Constants{
+public class ScramblePane extends JPanel implements Constants{
     private static final int MIN_CUBE_SIZE = 2, MAX_CUBE_SIZE = 5; // constants
     private Color[] cubeColors = new Color[6];
     private Color[] pyraminxColors = new Color[4];
@@ -37,6 +37,11 @@ public class ScramblePane extends JComponent implements Constants{
 
     public ScramblePane(int width, int height){
         myWidth = width; myHeight = height; // needs gettin' rid of
+//System.err.print("width:" + width + "\n");
+//System.err.print("height:" + height + "\n");
+//System.err.print("getWidth():" + this.getWidth() + "\n");
+//System.err.print("getHeight():" + this.getHeight() + "\n");
+
         CubeFace = new JTextArea[MAX_CUBE_SIZE+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
         for(int face=0; face<6; face++) cubeColors[face] = Color.black; // just incase...
         for(int face=0; face<4; face++) pyraminxColors[face] = Color.black; // just incase...

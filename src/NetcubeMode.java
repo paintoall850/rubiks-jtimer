@@ -41,9 +41,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     protected static final String sessionViewFormat = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nUsername: %U\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
     protected static final String averageViewFormat = "----- " + APP_TITLE + " Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
 
-    JLabel usernameLabel, serverIpLabel, serverPortLabel;
-    JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
-    JLabel puzzleLabel, countdownLabel, userIsTyping, scramblePaneLabel, bigPicture, smallPicture;
+    JLabel usernameLabel, serverIpLabel, serverPortLabel, bigPicture, smallPicture;
+    JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel, userIsTyping;//, scramblePaneLabel;
+    JLabel localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
     JTextField usernameText, serverIpText, serverPortText;
     JTextField chatText;
     JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
@@ -113,10 +113,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         this.optionsMenu = optionsMenu;
         newAlg = ""; // just in case...
-        scramblePaneLabel = new JLabel();
-        scramblePaneLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
+        //scramblePaneLabel = new JLabel();
+        //scramblePaneLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane = new ScramblePane(310+40, 215+20); // needs to be changed in two places
         scramblePane.setLayout(null);
+        scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setCubeColors(optionsMenu.cubeColorsX);
         scramblePane.setPyraminxColors(optionsMenu.pyraminxColorsX);
         scramblePane.setMegaminxColors(optionsMenu.megaminxColorsX);
@@ -244,7 +245,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         scrambleText.setBounds(215,25,350,115);
         timerLabel.setBounds(215,157,350,75);
 
-        scramblePaneLabel.setBounds(575,5,350,235); // copy below
+        //scramblePaneLabel.setBounds(575,5,350,235); // copy below
         scramblePane.setBounds(575,5,350,235); // needs to be changed in two places
 
         chatScrollPane.setBounds(10,150,190,245);
@@ -286,7 +287,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(scrambleText);
         contentPane.add(timerLabel);
 
-        contentPane.add(scramblePaneLabel);
+        //contentPane.add(scramblePaneLabel);
         contentPane.add(scramblePane);
 
         contentPane.add(localTimeUsernameLabel);
@@ -376,7 +377,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         useThisAlgLabel.setVisible(false);
         scrambleText.setVisible(false);
         timerLabel.setVisible(false);
-        scramblePaneLabel.setVisible(false);
+        //scramblePaneLabel.setVisible(false);
         scramblePane.setVisible(false);
 
         localTimeUsernameLabel.setVisible(false);
@@ -421,7 +422,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         useThisAlgLabel.setVisible(true);
         scrambleText.setVisible(true);
         timerLabel.setVisible(true);
-        scramblePaneLabel.setVisible(true);
+        //scramblePaneLabel.setVisible(true);
         scramblePane.setVisible(true);
 
         localTimeUsernameLabel.setVisible(true);
