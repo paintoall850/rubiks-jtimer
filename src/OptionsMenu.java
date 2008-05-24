@@ -40,12 +40,13 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
     private Standalone myStandalone;
     JTabbedPane tabs;
-    JPanel generalTab, colorTab, bestTab, sessionTab;
+    JPanel generalTab, cubeSchemeTab, minxSchemeTab, sessionTab, bestTab;
     JButton saveButton, resetButton, cancelButton;
     JLabel puzzleLabel, countdownLabel, averageSyntaxLabel, sessionSyntaxLabel, startupLabel, colorLabel;
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
     JLabel[] faceCLabels = new JLabel[6];
     JLabel faceColorLabel, previewLabel;
+    ScramblePane pyraminxView, megaminxView;
 
     JComboBox puzzleCombo, countdownCombo;
     JCheckBox confirmBox, showMinutesBox;
@@ -69,6 +70,18 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         setResizable(false);
 
         myStandalone = standalone;
+
+        startupLabel = new JLabel();
+        startupLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Start-up Options"));
+        colorLabel = new JLabel();
+        colorLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Color Options"));
+
+        puzzleLabel = new JLabel("Puzzle:");
+        puzzleCombo = new JComboBox(puzzleChoices);
+        countdownLabel = new JLabel("Countdown:");
+        countdownCombo = new JComboBox(countdownChoices);
+        confirmBox = new JCheckBox("Session Reset Warning Window");
+        showMinutesBox = new JCheckBox("Use mm:ss.xx Format");
 
         countdownCLabel = new JLabel("Countdown");
         countdownColorText = new JTextArea();
@@ -95,17 +108,17 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         slowestColorText.setEditable(false);
         slowestColorText.setBorder(blackLine);
 
+        faceColorLabel = new JLabel();
+        faceColorLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Color Scheme for Cubes"));
+        previewLabel = new JLabel();
+        previewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Preview for 3x3"));
+
         for(int face=0; face<6; face++){
             faceCLabels[face] = new JLabel(FACE_NAMES[face]);
             faceColorTexts[face] = new JTextArea();
             faceColorTexts[face].setEditable(false);
             faceColorTexts[face].setBorder(blackLine);
         }
-
-        faceColorLabel = new JLabel();
-        faceColorLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View Face Colors"));
-        previewLabel = new JLabel();
-        previewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Preview"));
 
         ScramblePreview = new JTextArea[6][3][3];
         for(int face=0; face<6; face++)
@@ -117,50 +130,47 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
                     ScramblePreview[face][i][j].setBorder(blackLine);
                 }
 
-        startupLabel = new JLabel();
-        startupLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Start-up Options"));
-        colorLabel = new JLabel();
-        colorLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Color Options"));
-        saveButton = new JButton("Save Options");
-        resetButton = new JButton("Reset All Options");
-        cancelButton = new JButton("Cancel");
-        puzzleLabel = new JLabel("Puzzle:");
-        puzzleCombo = new JComboBox(puzzleChoices);
-        countdownLabel = new JLabel("Countdown:");
-        countdownCombo = new JComboBox(countdownChoices);
+        pyraminxView = new ScramblePane(319-50+3,190+10);// was 282,235);
+        pyraminxView.setLayout(null);
+        pyraminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
+        megaminxView = new ScramblePane(319-50+3,190+10);// was 282,235);
+        megaminxView.setLayout(null);
+        megaminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
 
-        averageSyntaxLabel = new JLabel("<html>%A - Average<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%T - Date and Time<br>%S - Slowest Time<br>%Z - Puzzle Name</html>");
-        averageSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
         sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
-        confirmBox = new JCheckBox("Session Reset Warning Window");
-        showMinutesBox = new JCheckBox("Use mm:ss.xx Format");
-        averageText = new JTextArea();
-        averageText.setFont(regFont);
-        averageText.setEditable(true);
-        averageScrollPane = new JScrollPane(averageText);
-        averageScrollPane.setBorder(blackLine);
         sessionText = new JTextArea();
         sessionText.setFont(regFont);
         sessionText.setEditable(true);
         sessionScrollPane = new JScrollPane(sessionText);
         sessionScrollPane.setBorder(blackLine);
 
+        averageSyntaxLabel = new JLabel("<html>%A - Average<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%T - Date and Time<br>%S - Slowest Time<br>%Z - Puzzle Name</html>");
+        averageSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
+        averageText = new JTextArea();
+        averageText.setFont(regFont);
+        averageText.setEditable(true);
+        averageScrollPane = new JScrollPane(averageText);
+        averageScrollPane.setBorder(blackLine);
+
+        saveButton = new JButton("Save Options");
+        resetButton = new JButton("Reset All Options");
+        cancelButton = new JButton("Cancel");
+
         // call big add tabs and content function
-        addTabsAndContent(contentPane);
+        addStuffToTabs();
 
-        saveButton.addActionListener(this);
-        resetButton.addActionListener(this);
-        cancelButton.addActionListener(this);
+        // call big setBounds function
+        setTheBounds();
 
-        countdownColorText.addMouseListener(this);
-        timerColorText.addMouseListener(this);
-        textBackgrColorText.addMouseListener(this);
-        currentColorText.addMouseListener(this);
-        fastestColorText.addMouseListener(this);
-        slowestColorText.addMouseListener(this);
-        for(int face=0; face<6; face++)
-            faceColorTexts[face].addMouseListener(this);
+        // add Content
+        contentPane.add(tabs);
+        contentPane.add(saveButton);
+        contentPane.add(resetButton);
+        contentPane.add(cancelButton);
+
+        // add ActionListeners
+        addTheActionListeners();
 
         loadOptions();
     } // end constructor
@@ -183,19 +193,21 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         resetButton.setBounds(186+20,255,186,30);
         cancelButton.setBounds(2*186+30,255,186,30);
 
+        startupLabel.setBounds(10,5,319-50+3,190+10);
+        colorLabel.setBounds(339-50+3,5,319-50+3,190+10);
+        faceColorLabel.setBounds(10,5,319-50+3,190+10);
+        previewLabel.setBounds(339-50+3,5,319-50+3,190+10);
+        sessionScrollPane.setBounds(12,10,358+6,183+10);
+        averageScrollPane.setBounds(12,10,358+6,183+10);
+        sessionSyntaxLabel.setBounds(378+6,5,180,190+10);
+        averageSyntaxLabel.setBounds(378+6,5,180,190+10);
+
         puzzleLabel.setBounds(30,25,90,20);
         puzzleCombo.setBounds(30,45,90,20);
         countdownLabel.setBounds(130,25,90,20);
         countdownCombo.setBounds(130,45,90,20);
         confirmBox.setBounds(30,75,230,20);
         showMinutesBox.setBounds(30,105,230,20);
-
-        averageScrollPane.setBounds(12,10,358,183);
-        sessionScrollPane.setBounds(12,10,358,183);
-        averageSyntaxLabel.setBounds(378,5,180,190);
-        sessionSyntaxLabel.setBounds(378,5,180,190);
-        startupLabel.setBounds(10,5,319-50,190);
-        colorLabel.setBounds(339-50,5,319-50,190);
 
         countdownColorText.setBounds(359-50,30,20,20);
         countdownCLabel.setBounds(384-50,30,100,20);
@@ -210,34 +222,35 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         slowestColorText.setBounds(359+120-50,90,20,20);
         slowestCLabel.setBounds(384+120-50,90,200,20);
 
-        faceColorLabel.setBounds(10,5,319-50,190);
-        previewLabel.setBounds(339-50,5,319-50,190);
+        faceColorTexts[0].setBounds(110-20,90+5,20,20);
+        faceCLabels[0].setBounds(110+25-20,90+5,60,20);
+        faceColorTexts[1].setBounds(230-20,90+5,20,20);
+        faceCLabels[1].setBounds(230+25-20,90+5,60,20);
+        faceColorTexts[2].setBounds(50-20,90+5,20,20);
+        faceCLabels[2].setBounds(50+25-20,90+5,60,20);
+        faceColorTexts[3].setBounds(170-20,90+5,20,20);
+        faceCLabels[3].setBounds(170+25-20,90+5,60,20);
+        faceColorTexts[4].setBounds(110-20,115+5,20,20);
+        faceCLabels[4].setBounds(110+25-20,115+5,60,20);
+        faceColorTexts[5].setBounds(110-20,65+5,20,20);
+        faceCLabels[5].setBounds(110+25-20,65+5,60,20);
 
-        faceColorTexts[0].setBounds(110-20,90,20,20);
-        faceCLabels[0].setBounds(110+25-20,90,60,20);
-        faceColorTexts[1].setBounds(230-20,90,20,20);
-        faceCLabels[1].setBounds(230+25-20,90,60,20);
-        faceColorTexts[2].setBounds(50-20,90,20,20);
-        faceCLabels[2].setBounds(50+25-20,90,60,20);
-        faceColorTexts[3].setBounds(170-20,90,20,20);
-        faceCLabels[3].setBounds(170+25-20,90,60,20);
-        faceColorTexts[4].setBounds(110-20,115,20,20);
-        faceCLabels[4].setBounds(110+25-20,115,60,20);
-        faceColorTexts[5].setBounds(110-20,65,20,20);
-        faceCLabels[5].setBounds(110+25-20,65,60,20);
-
-        int x = -75, y = 5;
+        int x = -71, y = 9;
         setFaceBounds(ScramblePreview[0], 3, 450+x, 75+y, 15);
         setFaceBounds(ScramblePreview[1], 3, 550+x, 75+y, 15);
         setFaceBounds(ScramblePreview[2], 3, 400+x, 75+y, 15);
         setFaceBounds(ScramblePreview[3], 3, 500+x, 75+y, 15);
         setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
         setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
+
+        pyraminxView.setBounds(10,5,319-50+3,190+10); // was 282,235);
+        megaminxView.setBounds(579-15-(319-50+3),5,319-50+3,190+10); // was 282,235);
+
 }
 
 //**********************************************************************************************************************
 
-    private void addTabsAndContent(Container contentPane){
+    private void addStuffToTabs(){
 
         generalTab = new JPanel();
         generalTab.setLayout(null);
@@ -262,17 +275,22 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         generalTab.add(slowestColorText);
         generalTab.add(slowestCLabel);
 
-        colorTab = new JPanel();
-        colorTab.setLayout(null);
-        colorTab.add(faceColorLabel);
-        colorTab.add(previewLabel);
+        cubeSchemeTab = new JPanel();
+        cubeSchemeTab.setLayout(null);
+        cubeSchemeTab.add(faceColorLabel);
+        cubeSchemeTab.add(previewLabel);
         for(int face=0; face<6; face++){
-            colorTab.add(faceColorTexts[face]);
-            colorTab.add(faceCLabels[face]);
+            cubeSchemeTab.add(faceColorTexts[face]);
+            cubeSchemeTab.add(faceCLabels[face]);
             for(int i=0; i<3; i++)
                 for(int j=0; j<3; j++)
-                    colorTab.add(ScramblePreview[face][i][j]);
+                    cubeSchemeTab.add(ScramblePreview[face][i][j]);
         }
+
+        minxSchemeTab = new JPanel();
+        minxSchemeTab.setLayout(null);
+        minxSchemeTab.add(pyraminxView);
+        minxSchemeTab.add(megaminxView);
 
         bestTab = new JPanel();
         bestTab.setLayout(null);
@@ -285,19 +303,33 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         sessionTab.add(sessionScrollPane);
 
         tabs = new JTabbedPane();
-        tabs.add(generalTab, "General Options");
-        tabs.add(colorTab, "Color Scheme");
-        tabs.add(bestTab, "Best Average Output");
-        tabs.add(sessionTab, "Session Times Output");
+        tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabs.add(generalTab, "General");
+        tabs.add(cubeSchemeTab, "Cube Colors");
+        //tabs.add(minxSchemeTab, "Pyraminx & Megaminx Colors");
+        tabs.add(sessionTab, "Session Times");
+        tabs.add(bestTab, "Best Average");
 
-        // call big setBounds function
-        setTheBounds();
+    }
 
-        contentPane.add(tabs);
-        contentPane.add(saveButton);
-        contentPane.add(resetButton);
-        contentPane.add(cancelButton);
-}
+//**********************************************************************************************************************
+
+    private void addTheActionListeners(){
+
+        saveButton.addActionListener(this);
+        resetButton.addActionListener(this);
+        cancelButton.addActionListener(this);
+
+        countdownColorText.addMouseListener(this);
+        timerColorText.addMouseListener(this);
+        textBackgrColorText.addMouseListener(this);
+        currentColorText.addMouseListener(this);
+        fastestColorText.addMouseListener(this);
+        slowestColorText.addMouseListener(this);
+
+        for(int face=0; face<6; face++)
+            faceColorTexts[face].addMouseListener(this);
+    }
 
 //**********************************************************************************************************************
 
@@ -477,6 +509,11 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         updateScramblePreview();
         averageText.setText(averageViewFormatX); averageText.setCaretPosition(0);
         sessionText.setText(sessionViewFormatX); sessionText.setCaretPosition(0);
+
+        pyraminxView.setPyraminxColors(pyraminxColorsX);
+        pyraminxView.newScramble("Pyraminx", "");
+        megaminxView.setMegaminxColors(megaminxColorsX);
+        megaminxView.newScramble("Megaminx", "");
     } // end OptionsToGUI
 
 //**********************************************************************************************************************

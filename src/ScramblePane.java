@@ -275,10 +275,10 @@ public class ScramblePane extends JPanel implements Constants{
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(1.5F));
 
-        int xShift = 125, yShift = 58; // for the second/back cluster of 6 faces (was 141, 0)
+        int xShift = 125, yShift = 48; // for the second/back cluster of 6 faces (was 141, 0)
         //int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
         int xCenter = (myWidth-xShift)/2, yCenter = (myHeight-yShift-20)/2 + 20;
-        float radius = 25; // hard code for now
+        float radius = 24; // hard code for now
         float face_gap = 4;
         float big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
 //System.err.print("xShift:" + xShift + "\n");
