@@ -172,16 +172,16 @@ public class Client extends NetcubeMode{
                 updateStats();
             }
         } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getLocalSessionView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Local Session Times", getLocalSessionView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getLocalAverageView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Local Rolling Average", getLocalAverageView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Session Times", getRemoteSessionView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Remote Session Times", getRemoteSessionView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Rolling Average", getRemoteAverageView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Remote Rolling Average", getRemoteAverageView(), optionsMenu.textBackgrColorX);
             win.setVisible(true);
         }
     } // end actionPerformed
