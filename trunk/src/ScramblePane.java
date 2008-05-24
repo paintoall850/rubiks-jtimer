@@ -24,7 +24,7 @@ import java.util.*;
 import javax.swing.border.Border;
 import java.awt.image.BufferedImage;
 
-public class ScramblePane extends JPanel implements Constants{
+public class ScramblePane extends JComponent implements Constants{
     private static final int MIN_CUBE_SIZE = 2, MAX_CUBE_SIZE = 5; // constants
     private Color[] cubeColors = new Color[6];
     private Color[] pyraminxColors = new Color[4];
