@@ -477,7 +477,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 if(userChoice == JFileChooser.APPROVE_OPTION)
                     saveToFile(getAverageView(), fc.getSelectedFile());
             } else {
-                JOptionPane.showMessageDialog(this, "Not enough cubes have been solved to calculate an average.");
+                JOptionPane.showMessageDialog(this, "Not enough solves completed to calculate an average.");
             }
         } else if(source == exitItem){
             System.exit(0);
@@ -1071,7 +1071,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         bestAverageText.setText("Average: " + sBestAverage + "\nIndividual Times: " + sBestIndvTimes);
 
-        sessionStatsLabel.setText("<html>Recent Time: " + sRecentTime + "<br>Previous Time: " + sPrevTime + "<br>Progress: <font color=\"" + sProgressColor + "\">" + sProgress + "</font><br><br>Cubes Solved: " + numberSolved + "<br>Session Average: " + sSessionAverage + "</html>");
+        sessionStatsLabel.setText("<html>Recent Time: " + sRecentTime + "<br>Previous Time: " + sPrevTime + "<br>Progress: <font color=\"" + sProgressColor + "\">" + sProgress + "</font><br><br>Total Solves: " + numberSolved + "<br>Session Average: " + sSessionAverage + "</html>");
 
         sessionDetailsEnabled = (size > 0);
         averageDetailsEnabled = (sBestAverage != "N/A");
