@@ -45,7 +45,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     JLabel puzzleLabel, countdownLabel, averageSyntaxLabel, sessionSyntaxLabel, startupLabel, colorLabel;
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
     JLabel[] faceCLabels = new JLabel[6];
-    JLabel faceColorLabel, previewLabel, pyraminxViewLabel, megaminxViewLabel;
+    JLabel faceColorLabel, previewLabel;//, pyraminxViewLabel, megaminxViewLabel;
     ScramblePane pyraminxView, megaminxView;
 
     JComboBox puzzleCombo, countdownCombo;
@@ -130,15 +130,17 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
                     ScramblePreview[face][i][j].setBorder(blackLine);
                 }
 
-        pyraminxViewLabel = new JLabel();
-        pyraminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
+        //pyraminxViewLabel = new JLabel();
+        //pyraminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
         pyraminxView = new ScramblePane(269+3,200);// was 282,235);
         pyraminxView.setLayout(null);
+        pyraminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
 
-        megaminxViewLabel = new JLabel();
-        megaminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
+        //megaminxViewLabel = new JLabel();
+        //megaminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
         megaminxView = new ScramblePane(269+3,200);// was 282,235);
         megaminxView.setLayout(null);
+        megaminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
 
         sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
@@ -246,9 +248,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
         setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
 
-        pyraminxViewLabel.setBounds(10,5,269+3,200); // copy below
+        //pyraminxViewLabel.setBounds(10,5,269+3,200); // copy below
         pyraminxView.setBounds(10,5,269+3,200); // was 282,235);
-        megaminxViewLabel.setBounds((579-15)-(269+3),5,269+3,200); // copy below
+        //megaminxViewLabel.setBounds((579-15)-(269+3),5,269+3,200); // copy below
         megaminxView.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
 
 }
@@ -294,9 +296,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         minxSchemeTab = new JPanel();
         minxSchemeTab.setLayout(null);
-        minxSchemeTab.add(pyraminxViewLabel);
+        //minxSchemeTab.add(pyraminxViewLabel);
         minxSchemeTab.add(pyraminxView);
-        minxSchemeTab.add(megaminxViewLabel);
+        //minxSchemeTab.add(megaminxViewLabel);
         minxSchemeTab.add(megaminxView);
 
         bestTab = new JPanel();
