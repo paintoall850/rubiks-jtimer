@@ -35,7 +35,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     //protected InstructionScreen instructionScreen;
     //protected AboutScreen aboutScreen;
 
-    //protected ScramblePane scramblePane;
+    protected ScramblePane scramblePane;
     protected String newAlg;
 
     JLabel usernameLabel, serverIpLabel, serverPortLabel;//, handicapLabel;
@@ -110,8 +110,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
 
         this.optionsMenu = optionsMenu;
-        //myBackgrColor = textBackgrColor;
         newAlg = ""; // just in case...
+        scramblePane = new ScramblePane(310+40, 215+20); // needs to be changed in two places
+        scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
+        scramblePane.setLayout(null);
+        scramblePane.setCubeColors(optionsMenu.cubeColorsX);
+        scramblePane.setPyraminxColors(optionsMenu.pyraminxColorsX);
+        scramblePane.setMegaminxColors(optionsMenu.megaminxColorsX);
+        //updateScramblePane(); // not here, comboBox might not be stable yet
 
         // GUI Object creation
         usernameLabel = new JLabel("Username:");
@@ -239,6 +245,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         scrambleText.setBounds(215,25,333+17,115);
         timerLabel.setBounds(215,157,333+17,75);
 
+        scramblePane.setBounds(535+40,5,310+40,215+20); // needs to be changed in two places
+
         chatScrollPane.setBounds(10,150,190,245);
         userIsTyping.setBounds(10,400,20,20);
         chatText.setBounds(35,400,85,20);
@@ -270,13 +278,18 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(serverPortText);
         //contentPane.add(handicapText);
         contentPane.add(connectButton);
+
         contentPane.add(chatScrollPane);
         contentPane.add(userIsTyping);
         contentPane.add(chatText);
         contentPane.add(sendMessageButton);
+
         contentPane.add(useThisAlgLabel);
         contentPane.add(scrambleText);
         contentPane.add(timerLabel);
+
+        contentPane.add(scramblePane);
+
         contentPane.add(localTimeUsernameLabel);
         contentPane.add(remoteTimeUsernameLabel);
         contentPane.add(localTimeLabel);
@@ -285,12 +298,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(localSessionDetailButton);
         contentPane.add(remoteAverageDetailButton);
         contentPane.add(remoteSessionDetailButton);
+
         contentPane.add(puzzleLabel);
         contentPane.add(puzzleCombo);
         contentPane.add(countdownLabel);
         contentPane.add(countdownCombo);
         contentPane.add(startButton);
         contentPane.add(popButton);
+
         contentPane.add(smallPicture);
         //contentPane.add(bigPicture);
     }
@@ -349,10 +364,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         smallPicture.setVisible(true);
 
         //hide everything
-        chatScrollPane.setVisible(false);
-        userIsTyping.setVisible(false);
-        chatText.setVisible(false);
-        sendMessageButton.setVisible(false);
         puzzleLabel.setVisible(false);
         puzzleCombo.setVisible(false);
         countdownLabel.setVisible(false);
@@ -360,13 +371,20 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         startButton.setVisible(false);
         popButton.setVisible(false);
 
+        chatScrollPane.setVisible(false);
+        userIsTyping.setVisible(false);
+        chatText.setVisible(false);
+        sendMessageButton.setVisible(false);
+
         useThisAlgLabel.setVisible(false);
         scrambleText.setVisible(false);
         timerLabel.setVisible(false);
-        localTimeLabel.setVisible(false);
-        remoteTimeLabel.setVisible(false);
+        scramblePane.setVisible(false);
+
         localTimeUsernameLabel.setVisible(false);
         remoteTimeUsernameLabel.setVisible(false);
+        localTimeLabel.setVisible(false);
+        remoteTimeLabel.setVisible(false);
         localAverageDetailButton.setVisible(false);
         localSessionDetailButton.setVisible(false);
         remoteSessionDetailButton.setVisible(false);
@@ -392,10 +410,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         smallPicture.setVisible(false);
 
         //show everything
-        chatScrollPane.setVisible(true);
-        userIsTyping.setVisible(true);
-        chatText.setVisible(true);
-        sendMessageButton.setVisible(true);
         puzzleLabel.setVisible(true);
         puzzleCombo.setVisible(true);
         countdownLabel.setVisible(true);
@@ -403,19 +417,32 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         startButton.setVisible(true);
         popButton.setVisible(true);
 
+        chatScrollPane.setVisible(true);
+        userIsTyping.setVisible(true);
+        chatText.setVisible(true);
+        sendMessageButton.setVisible(true);
+
         useThisAlgLabel.setVisible(true);
         scrambleText.setVisible(true);
         timerLabel.setVisible(true);
-        localTimeLabel.setVisible(true);
-        remoteTimeLabel.setVisible(true);
+        scramblePane.setVisible(true);
+
         localTimeUsernameLabel.setVisible(true);
         remoteTimeUsernameLabel.setVisible(true);
+        localTimeLabel.setVisible(true);
+        remoteTimeLabel.setVisible(true);
         localAverageDetailButton.setVisible(true);
         localSessionDetailButton.setVisible(true);
         remoteSessionDetailButton.setVisible(true);
         remoteAverageDetailButton.setVisible(true);
 
     } // end showGUI
+
+//**********************************************************************************************************************
+
+    protected void updateScramblePane(){
+        scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll(ALG_BREAK, " "));
+    }
 
 //**********************************************************************************************************************
 

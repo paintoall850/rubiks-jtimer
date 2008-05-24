@@ -205,7 +205,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
-        scramblePane = new ScramblePane(282, 216+20); // needs to be changed in two places
+        scramblePane = new ScramblePane(282, 215+20); // needs to be changed in two places
         //scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane.setLayout(null);
 
@@ -300,7 +300,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         timerLabel.setBounds(215,125+12+20,333,75);
         timerArea.setBounds(215,125+20,333,75+21);
 
-        scramblePane.setBounds(563,5,282,216+20); // needs to be changed in two places
+        scramblePane.setBounds(563,5,282,215+20); // needs to be changed in two places
 
         // total width is 834 if there is a 10 margin on each side
         // so use formula: margin = (834-12*width-11*separation)/2 + 10
