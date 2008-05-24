@@ -38,6 +38,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     protected ScramblePane scramblePane;
     protected String newAlg;
 
+    protected static final String sessionViewFormat = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nUsername: %U\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
+    protected static final String averageViewFormat = "----- " + APP_TITLE + " Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
+
     JLabel usernameLabel, serverIpLabel, serverPortLabel;
     JLabel useThisAlgLabel, timerLabel, localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
     JLabel puzzleLabel, countdownLabel, bigPicture, smallPicture, userIsTyping;
@@ -723,14 +726,15 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     } // end reset
 
 //**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
 
     protected final String getLocalSessionView(){
-        String sessionViewFormat = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nUsername: %U\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<sessionIndex; i++){
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + localSessionTimes[i] + "          " + sessionScrambles[i] + "\n";
-            timesOnly = timesOnly + localSessionTimes[i] + "\n";
+            timesAndScrambles += (i+1) + ")          " + localSessionTimes[i] + "          " + sessionScrambles[i] + "\n";
+            timesOnly += localSessionTimes[i] + "\n";
         }
 
         String returnMe = sessionViewFormat;
@@ -750,15 +754,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getLocalAverageView(){
-        String averageViewFormat = "----- " + APP_TITLE + " Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){
             String currentTime = localCurrentAverage[i];
             if(Float.parseFloat(currentTime) == localCurrentFastest || Float.parseFloat(currentTime) == localCurrentSlowest)
                 currentTime = "(" + currentTime + ")";
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + localCurrentScrambles[i] + "\n";
-            timesOnly = timesOnly + currentTime + "\n";
+            timesAndScrambles += (i+1) + ")          " + currentTime + "          " + localCurrentScrambles[i] + "\n";
+            timesOnly += currentTime + "\n";
         }
 
         String returnMe = averageViewFormat;
@@ -776,12 +779,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getRemoteSessionView(){
-        String sessionViewFormat = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nUsername: %U\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<sessionIndex; i++){
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + remoteSessionTimes[i] + "          " + sessionScrambles[i] + "\n";
-            timesOnly = timesOnly + remoteSessionTimes[i] + "\n";
+            timesAndScrambles += (i+1) + ")          " + remoteSessionTimes[i] + "          " + sessionScrambles[i] + "\n";
+            timesOnly += remoteSessionTimes[i] + "\n";
         }
 
         String returnMe = sessionViewFormat;
@@ -801,15 +803,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected final String getRemoteAverageView(){
-        String averageViewFormat = "----- " + APP_TITLE + " Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
         String timesAndScrambles = "", timesOnly = "";
 
         for(int i=0; i<12; i++){
             String currentTime = remoteCurrentAverage[i];
             if(Float.parseFloat(currentTime) == remoteCurrentFastest || Float.parseFloat(currentTime) == remoteCurrentSlowest)
                 currentTime = "(" + currentTime + ")";
-            timesAndScrambles = timesAndScrambles + (i+1) + ")          " + currentTime + "          " + remoteCurrentScrambles[i] + "\n";
-            timesOnly = timesOnly + currentTime + "\n";
+            timesAndScrambles += (i+1) + ")          " + currentTime + "          " + remoteCurrentScrambles[i] + "\n";
+            timesOnly += currentTime + "\n";
         }
 
         String returnMe = averageViewFormat;
