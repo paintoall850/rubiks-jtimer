@@ -278,13 +278,12 @@ public class ScramblePane extends JPanel implements Constants{
         myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = myImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setStroke(new BasicStroke(1.5F));
 
         int xShift = 125, yShift = 48; // for the second/back cluster of 6 faces (was 141, 0)
         //int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
         int xCenter = (myWidth-xShift)/2, yCenter = (myHeight-yShift-20)/2 + 20;
         float radius = 24; // hard code for now
-        float face_gap = 4;
+        float face_gap = 7;
         float big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
 //System.err.print("xShift:" + xShift + "\n");
 //System.err.print("yShift:" + yShift + "\n");
@@ -354,7 +353,9 @@ public class ScramblePane extends JPanel implements Constants{
             g2d.fillPolygon(stickers[i]); // fill each sticker
         }
         g2d.setColor(Color.black);
+        g2d.setStroke(new BasicStroke(3F));
         g2d.drawPolygon(pent); // draw the outer pentagon
+        g2d.setStroke(new BasicStroke(1.5F));
         for(int i=0; i<5; i++) // now draw the 5 lines inside
             g2d.drawLine(xs[i], ys[i], xs[5 + (i+3)%5], ys[5 + (i+3)%5]);
     }
@@ -548,12 +549,11 @@ public class ScramblePane extends JPanel implements Constants{
         myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = myImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setStroke(new BasicStroke(1.5F));
 
         int xCenter = myWidth/2;//141;//myWidth/2;
         int yCenter = myHeight/2-19;//98;//myHeight/2 - 20;
         float radius = Math.min(myWidth, myHeight-20) * 0.24F;//52;//Math.min(myWidth, myHeight) * 0.2;
-        float face_gap = 6;
+        float face_gap = 7;
         float big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
 //System.err.print("xCenter:" + xCenter + "\n");
 //System.err.print("yCenter:" + yCenter + "\n");
@@ -606,7 +606,9 @@ public class ScramblePane extends JPanel implements Constants{
             g2d.fillPolygon(stickers[i]); // fill each sticker
         }
         g2d.setColor(Color.black);
+        g2d.setStroke(new BasicStroke(3F));
         g2d.drawPolygon(tri); // draw the outer triangle
+        g2d.setStroke(new BasicStroke(1.5F));
         for(int i=0; i<3; i++) // draw 3 long lines inside
             g2d.drawLine(xs[i], ys[i], xs[3 + (i+1)%3], ys[3 + (i+1)%3]);
         for(int i=0; i<3; i++) // draw 3 short lines inside
