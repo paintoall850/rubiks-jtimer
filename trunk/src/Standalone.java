@@ -290,17 +290,17 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         puzzleCombo.setBounds(10,25,90,20);
         countdownLabel.setBounds(110,5,90,20);
         countdownCombo.setBounds(110,25,90,20);
-        startButton.setBounds(10,50,190,70+20);
-        discardButton.setBounds(10,125+20,190,45);
-        popButton.setBounds(10,175+20,90,45);
-        plusTwoButton.setBounds(110,175+20,90,45);
+        startButton.setBounds(10,50,190,90);
+        discardButton.setBounds(10,145,190,45);
+        popButton.setBounds(10,195,90,45);
+        plusTwoButton.setBounds(110,195,90,45);
 
         useThisAlgLabel.setBounds(215,5,333,20);
         scrambleText.setBounds(215,25,333,115);
-        timerLabel.setBounds(215,125+12+20,333,75);
-        timerArea.setBounds(215,125+20,333,75+21);
+        timerLabel.setBounds(215,145+12,333,75);
+        timerArea.setBounds(215,145,333,75+21);
 
-        scramblePane.setBounds(563,5,282,215+20); // needs to be changed in two places
+        scramblePane.setBounds(563,5,282,235); // needs to be changed in two places
 
         // total width is 834 if there is a 10 margin on each side
         // so use formula: margin = (834-12*width-11*separation)/2 + 10
@@ -429,8 +429,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             }*/
         } else if(source == sessionResetButton){
             if(optionsMenu.showResetConfirmX){
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", 0);
-                if(choice == 1){
+                int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(choice != JOptionPane.YES_OPTION){
                     returnFocus();
                     return;
                 }
@@ -542,8 +542,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         } else if(source == optionsItem){
             optionsMenu.setVisible(true);
         } else if(source == serverItem){
-            int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", 0);
-            if(choice == 1){
+            int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(choice != JOptionPane.YES_OPTION){
                 returnFocus();
                 return;
             }
@@ -552,8 +552,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             server.setVisible(true);
             disposeAll();
         } else if(source == clientItem){
-            int choice = JOptionPane.showConfirmDialog(this, "Switching to Client Mode destroys main window session. Are you sure?", "Warning!", 0);
-            if(choice == 1){
+            int choice = JOptionPane.showConfirmDialog(this, "Switching to Client Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(choice != JOptionPane.YES_OPTION){
                 returnFocus();
                 return;
             }
