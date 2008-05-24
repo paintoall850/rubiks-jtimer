@@ -131,7 +131,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         averageSyntaxLabel = new JLabel("<html>%A - Average<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%T - Date and Time<br>%S - Slowest Time<br>%Z - Puzzle Name</html>");
         averageSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
-        sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Cubes Solved<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
+        sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
         confirmBox = new JCheckBox("Session Reset Warning Window");
         showMinutesBox = new JCheckBox("Use mm:ss.xx Format");
@@ -452,7 +452,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         megaminxColorsX[11] = new Color(255,128,0); // orange
 
         averageViewFormatX = "----- " + APP_TITLE + " Best Average for %T -----\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
-        sessionViewFormatX = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nCubes Solved: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+        sessionViewFormatX = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
 
         OptionsToGUI();
     } // end resetOptions

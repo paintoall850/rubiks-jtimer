@@ -42,7 +42,7 @@ public interface Constants{
     static final String[] countdownChoices = {"0", "3", "5", "10", "15"};
 
     // needs to be changed in ScrambleMegaminx.java too
-    static final String ALG_BREAK = "[.]"; // was "@" (not it's treated as regular expression)
+    static final String ALG_BREAK = "[.]"; // was "@" (note it's treated as regular expression)
     static final String APP_TITLE = "Rubik's JTimer";
     static final String ERROR_MESS = "There has been an error, please inform Doug that you saw this message.";
 }
