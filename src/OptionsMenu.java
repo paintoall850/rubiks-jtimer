@@ -45,7 +45,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     JLabel puzzleLabel, countdownLabel, averageSyntaxLabel, sessionSyntaxLabel, startupLabel, colorLabel;
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
     JLabel[] faceCLabels = new JLabel[6];
-    JLabel faceColorLabel, previewLabel;
+    JLabel faceColorLabel, previewLabel, pyraminxViewLabel, megaminxViewLabel;
     ScramblePane pyraminxView, megaminxView;
 
     JComboBox puzzleCombo, countdownCombo;
@@ -130,12 +130,15 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
                     ScramblePreview[face][i][j].setBorder(blackLine);
                 }
 
-        pyraminxView = new ScramblePane(319-50+3,190+10);// was 282,235);
+        pyraminxViewLabel = new JLabel();
+        pyraminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
+        pyraminxView = new ScramblePane(269+3,200);// was 282,235);
         pyraminxView.setLayout(null);
-        pyraminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
-        megaminxView = new ScramblePane(319-50+3,190+10);// was 282,235);
+
+        megaminxViewLabel = new JLabel();
+        megaminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
+        megaminxView = new ScramblePane(269+3,200);// was 282,235);
         megaminxView.setLayout(null);
-        megaminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
 
         sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
@@ -188,19 +191,19 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
     private void setTheBounds(){
 
-        tabs.setBounds(10,5,679-100,240);
+        tabs.setBounds(10,5,579,240);
         saveButton.setBounds(10,255,186,30);
         resetButton.setBounds(186+20,255,186,30);
         cancelButton.setBounds(2*186+30,255,186,30);
 
-        startupLabel.setBounds(10,5,319-50+3,190+10);
-        colorLabel.setBounds(339-50+3,5,319-50+3,190+10);
-        faceColorLabel.setBounds(10,5,319-50+3,190+10);
-        previewLabel.setBounds(339-50+3,5,319-50+3,190+10);
-        sessionScrollPane.setBounds(12,10,358+6,183+10);
-        averageScrollPane.setBounds(12,10,358+6,183+10);
-        sessionSyntaxLabel.setBounds(378+6,5,180,190+10);
-        averageSyntaxLabel.setBounds(378+6,5,180,190+10);
+        startupLabel.setBounds(10,5,269+3,200);
+        colorLabel.setBounds(289+3,5,269+3,200);
+        faceColorLabel.setBounds(10,5,269+3,200);
+        previewLabel.setBounds(289+3,5,269+3,200);
+        sessionScrollPane.setBounds(12,10,358+6,193);
+        averageScrollPane.setBounds(12,10,358+6,193);
+        sessionSyntaxLabel.setBounds(378+6,5,180,200);
+        averageSyntaxLabel.setBounds(378+6,5,180,200);
 
         puzzleLabel.setBounds(30,25,90,20);
         puzzleCombo.setBounds(30,45,90,20);
@@ -209,31 +212,31 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         confirmBox.setBounds(30,75,230,20);
         showMinutesBox.setBounds(30,105,230,20);
 
-        countdownColorText.setBounds(359-50,30,20,20);
-        countdownCLabel.setBounds(384-50,30,100,20);
-        timerColorText.setBounds(359-50,60,20,20);
-        timerCLabel.setBounds(384-50,60,100,20);
-        textBackgrColorText.setBounds(359-50,90,20,20);
-        textBackgrCLabel.setBounds(384-50,90,100,20);
-        currentColorText.setBounds(359+120-50,30,20,20);
-        currentCLabel.setBounds(384+120-50,30,200,20);
-        fastestColorText.setBounds(359+120-50,60,20,20);
-        fastestCLabel.setBounds(384+120-50,60,200,20);
-        slowestColorText.setBounds(359+120-50,90,20,20);
-        slowestCLabel.setBounds(384+120-50,90,200,20);
+        countdownColorText.setBounds(309,30,20,20);
+        countdownCLabel.setBounds(334,30,100,20);
+        timerColorText.setBounds(309,60,20,20);
+        timerCLabel.setBounds(334,60,100,20);
+        textBackgrColorText.setBounds(309,90,20,20);
+        textBackgrCLabel.setBounds(334,90,100,20);
+        currentColorText.setBounds(309+120,30,20,20);
+        currentCLabel.setBounds(334+120,30,200,20);
+        fastestColorText.setBounds(309+120,60,20,20);
+        fastestCLabel.setBounds(334+120,60,200,20);
+        slowestColorText.setBounds(309+120,90,20,20);
+        slowestCLabel.setBounds(334+120,90,200,20);
 
-        faceColorTexts[0].setBounds(110-20,90+5,20,20);
-        faceCLabels[0].setBounds(110+25-20,90+5,60,20);
-        faceColorTexts[1].setBounds(230-20,90+5,20,20);
-        faceCLabels[1].setBounds(230+25-20,90+5,60,20);
-        faceColorTexts[2].setBounds(50-20,90+5,20,20);
-        faceCLabels[2].setBounds(50+25-20,90+5,60,20);
-        faceColorTexts[3].setBounds(170-20,90+5,20,20);
-        faceCLabels[3].setBounds(170+25-20,90+5,60,20);
-        faceColorTexts[4].setBounds(110-20,115+5,20,20);
-        faceCLabels[4].setBounds(110+25-20,115+5,60,20);
-        faceColorTexts[5].setBounds(110-20,65+5,20,20);
-        faceCLabels[5].setBounds(110+25-20,65+5,60,20);
+        faceColorTexts[0].setBounds(90,95,20,20);
+        faceCLabels[0].setBounds(90+25,95,60,20);
+        faceColorTexts[1].setBounds(210,95,20,20);
+        faceCLabels[1].setBounds(210+25,95,60,20);
+        faceColorTexts[2].setBounds(30,95,20,20);
+        faceCLabels[2].setBounds(30+25,95,60,20);
+        faceColorTexts[3].setBounds(150,95,20,20);
+        faceCLabels[3].setBounds(150+25,95,60,20);
+        faceColorTexts[4].setBounds(90,120,20,20);
+        faceCLabels[4].setBounds(90+25,120,60,20);
+        faceColorTexts[5].setBounds(90,70,20,20);
+        faceCLabels[5].setBounds(90+25,70,60,20);
 
         int x = -71, y = 9;
         setFaceBounds(ScramblePreview[0], 3, 450+x, 75+y, 15);
@@ -243,8 +246,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
         setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
 
-        pyraminxView.setBounds(10,5,319-50+3,190+10); // was 282,235);
-        megaminxView.setBounds(579-15-(319-50+3),5,319-50+3,190+10); // was 282,235);
+        pyraminxViewLabel.setBounds(10,5,269+3,200); // copy below
+        pyraminxView.setBounds(10,5,269+3,200); // was 282,235);
+        megaminxViewLabel.setBounds((579-15)-(269+3),5,269+3,200); // copy below
+        megaminxView.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
 
 }
 
@@ -289,7 +294,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         minxSchemeTab = new JPanel();
         minxSchemeTab.setLayout(null);
+        minxSchemeTab.add(pyraminxViewLabel);
         minxSchemeTab.add(pyraminxView);
+        minxSchemeTab.add(megaminxViewLabel);
         minxSchemeTab.add(megaminxView);
 
         bestTab = new JPanel();
