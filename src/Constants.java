@@ -1,6 +1,6 @@
 /*
- * JNetCube
- * Copyright (C) 2007 Chris Hunt
+ * Rubik's JTimer - Copyright (C) 2008 Doug Li
+ * JNetCube - Copyright (C) 2007 Chris Hunt
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,4 +44,5 @@ public interface Constants{
     // needs to be changed in ScrambleMegaminx.java too
     static final String ALG_BREAK = "[.]"; // was "@" (not it's treated as regular expression)
     static final String APP_TITLE = "Rubik's JTimer";
+    static final String ERROR_MESS = "There has been an error, please inform Doug that you saw this message.";
 }
