@@ -25,7 +25,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.border.Border;
 
-public class OptionsMenu extends JFrame implements ActionListener, MouseListener, Constants{
+public class OptionsMenu extends JFrame implements ActionListener, MouseListener, ScramblePane.ColorListener, Constants{
     private static final String FACE_NAMES[] = {"Front", "Back", "Left", "Right", "Down", "Up"};
     private static final String FILENAME = "rjt.properties";
 
@@ -315,7 +315,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabs.add(generalTab, "General");
         tabs.add(cubeSchemeTab, "Cube Colors");
-        //tabs.add(minxSchemeTab, "Pyraminx & Megaminx Colors");
+        tabs.add(minxSchemeTab, "Pyraminx & Megaminx Colors");
         tabs.add(sessionTab, "Session Times");
         tabs.add(bestTab, "Best Average");
     }
@@ -337,6 +337,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         for(int face=0; face<6; face++)
             faceColorTexts[face].addMouseListener(this);
+
+        pyraminxView.addColorListener(this);
+        megaminxView.addColorListener(this);
     }
 
 //**********************************************************************************************************************
@@ -564,17 +567,17 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         else if(source == fastestColorText) makeColorChooser(fastestColorText, "Fastest Time In Average");
         else if(source == slowestColorText) makeColorChooser(slowestColorText, "Slowest Time In Average");
         else if(source == faceColorTexts[0])
-            {if(makeColorChooser(faceColorTexts[0], "Front Face")) updateScramblePreview();}
+            {if(makeColorChooser(faceColorTexts[0], "Front Face of Cube")) updateScramblePreview();}
         else if(source == faceColorTexts[1])
-            {if(makeColorChooser(faceColorTexts[1],  "Back Face")) updateScramblePreview();}
+            {if(makeColorChooser(faceColorTexts[1],  "Back Face of Cube")) updateScramblePreview();}
         else if(source == faceColorTexts[2])
-            {if(makeColorChooser(faceColorTexts[2],  "Left Face")) updateScramblePreview();}
+            {if(makeColorChooser(faceColorTexts[2],  "Left Face of Cube")) updateScramblePreview();}
         else if(source == faceColorTexts[3])
-            {if(makeColorChooser(faceColorTexts[3], "Right Face")) updateScramblePreview();}
+            {if(makeColorChooser(faceColorTexts[3], "Right Face of Cube")) updateScramblePreview();}
         else if(source == faceColorTexts[4])
-            {if(makeColorChooser(faceColorTexts[4],  "Down Face")) updateScramblePreview();}
+            {if(makeColorChooser(faceColorTexts[4],  "Down Face of Cube")) updateScramblePreview();}
         else if(source == faceColorTexts[5])
-            {if(makeColorChooser(faceColorTexts[5],    "Up Face")) updateScramblePreview();}
+            {if(makeColorChooser(faceColorTexts[5],    "Up Face of Cube")) updateScramblePreview();}
     }
 
 //**********************************************************************************************************************
@@ -587,6 +590,16 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         }
         else
             return false;
+    }
+
+//**********************************************************************************************************************
+
+    public void faceClicked(ScramblePane scramblePane, int face, Color[] puzzleColors, String s){
+        Color newColor = JColorChooser.showDialog(this, s, puzzleColors[face]);
+        if(newColor != null){
+            puzzleColors[face] = newColor;
+            scramblePane.updateScreen();
+        }
     }
 
 //**********************************************************************************************************************

@@ -20,17 +20,27 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.border.Border;
 import java.awt.image.BufferedImage;
 
-public class ScramblePane extends JPanel implements Constants{
+public class ScramblePane extends JPanel implements MouseListener, Constants{
     private static final int MIN_CUBE_SIZE = 2, MAX_CUBE_SIZE = 5; // constants
+
     private Color[] cubeColors = new Color[6];
     private Color[] pyraminxColors = new Color[4];
     private Color[] megaminxColors = new Color[12];
+
     private JTextArea[][][][] CubeFace;
+
     private BufferedImage myImage;
+    private ColorListener colorListener;
+    private Polygon[] pyraminxFaces = new Polygon[4];
+    private Polygon[] megaminxFaces = new Polygon[12];
+
+    private String myPuzzle = "nothing";
+    private String myScramble = "";
     private int myWidth, myHeight; // would prefer to get these with function calls, but they don't work
 
 //**********************************************************************************************************************
@@ -47,6 +57,9 @@ public class ScramblePane extends JPanel implements Constants{
         for(int face=0; face<4; face++) pyraminxColors[face] = Color.black; // just incase...
         for(int face=0; face<12; face++) megaminxColors[face] = Color.black; // just incase...
 
+        for(int face=0; face<4; face++) pyraminxFaces[face] = new Polygon(); // just incase...
+        for(int face=0; face<12; face++) megaminxFaces[face] = new Polygon(); // just incase...
+
         for(int size=MIN_CUBE_SIZE; size<=MAX_CUBE_SIZE; size++){
             prepareCube(size);
             setCubeBounds(size);
@@ -62,13 +75,9 @@ public class ScramblePane extends JPanel implements Constants{
 //**********************************************************************************************************************
 
     public void newScramble(String puzzle, String scrambleAlg){
-        clearScreen();
-             if(puzzle.equals("2x2x2")) scrambleCube(2, puzzle, scrambleAlg);
-        else if(puzzle.equals("3x3x3")) scrambleCube(3, puzzle, scrambleAlg);
-        else if(puzzle.equals("4x4x4")) scrambleCube(4, puzzle, scrambleAlg);
-        else if(puzzle.equals("5x5x5")) scrambleCube(5, puzzle, scrambleAlg);
-        else if(puzzle.equals("Pyraminx")) scramblePyraminx(puzzle, scrambleAlg);
-        else if(puzzle.equals("Megaminx")) scrambleMegaminx(puzzle, scrambleAlg);
+        myPuzzle = puzzle;
+        myScramble = scrambleAlg;
+        updateScreen();
     }
 
 //**********************************************************************************************************************
@@ -82,14 +91,87 @@ public class ScramblePane extends JPanel implements Constants{
 
 //**********************************************************************************************************************
 
-    public void setCubeColors(Color[] newColors){
-        cubeColors = newColors;
+    public void updateScreen(){
+        clearScreen();
+             if(myPuzzle.equals("2x2x2")) scrambleCube(2);
+        else if(myPuzzle.equals("3x3x3")) scrambleCube(3);
+        else if(myPuzzle.equals("4x4x4")) scrambleCube(4);
+        else if(myPuzzle.equals("5x5x5")) scrambleCube(5);
+        else if(myPuzzle.equals("Pyraminx")) scramblePyraminx();
+        else if(myPuzzle.equals("Megaminx")) scrambleMegaminx();
     }
-    public void setPyraminxColors(Color[] newColors){
-        pyraminxColors = newColors;
+
+//**********************************************************************************************************************
+
+    public void setCubeColors(Color[] newColors){cubeColors = newColors;}
+    public void setPyraminxColors(Color[] newColors){pyraminxColors = newColors;}
+    public void setMegaminxColors(Color[] newColors){megaminxColors = newColors;}
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    public static interface ColorListener{
+        public abstract void faceClicked(ScramblePane scramblePane, int face, Color[] puzzleColors, String s);
     }
-    public void setMegaminxColors(Color[] newColors){
-        megaminxColors = newColors;
+
+//**********************************************************************************************************************
+
+    public void mouseReleased(MouseEvent e){}
+    public void mousePressed(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+
+//**********************************************************************************************************************
+
+    public void mouseClicked(MouseEvent e){
+        int x = e.getX(), y = e.getY();
+//System.err.print("x:" + x + "\n");
+//System.err.print("y:" + y + "\n");
+
+        if(myPuzzle.equals("Pyraminx")){
+                 if(pyraminxFaces[0].contains(x,y))
+                colorListener.faceClicked(this, 0, pyraminxColors, "Front Face of Pyraminx");
+            else if(pyraminxFaces[1].contains(x,y))
+                colorListener.faceClicked(this, 1, pyraminxColors, "Right Face of Pyraminx");
+            else if(pyraminxFaces[2].contains(x,y))
+                colorListener.faceClicked(this, 2, pyraminxColors, "Down Face of Pyraminx");
+            else if(pyraminxFaces[3].contains(x,y))
+                colorListener.faceClicked(this, 3, pyraminxColors, "Left Face of Pyraminx");
+        }
+        else if(myPuzzle.equals("Megaminx")){
+                 if(megaminxFaces[0].contains(x,y))
+                colorListener.faceClicked(this, 0, megaminxColors, "Front Face (A) of Megaminx");
+            else if(megaminxFaces[1].contains(x,y))
+                colorListener.faceClicked(this, 1, megaminxColors, "Up Face (B) of Megaminx");
+            else if(megaminxFaces[2].contains(x,y))
+                colorListener.faceClicked(this, 2, megaminxColors, "Upper-Right Face (C) of Megaminx");
+            else if(megaminxFaces[3].contains(x,y))
+                colorListener.faceClicked(this, 3, megaminxColors, "Lower-Right Face (D) of Megaminx");
+            else if(megaminxFaces[4].contains(x,y))
+                colorListener.faceClicked(this, 4, megaminxColors, "Lower-Left Face (E) of Megaminx");
+            else if(megaminxFaces[5].contains(x,y))
+                colorListener.faceClicked(this, 5, megaminxColors, "Upper-Left Face (F) of Megaminx");
+            else if(megaminxFaces[6].contains(x,y))
+                colorListener.faceClicked(this, 6, megaminxColors, "Back Face (a) of Megaminx");
+            else if(megaminxFaces[7].contains(x,y))
+                colorListener.faceClicked(this, 7, megaminxColors, "Down Face (b) of Megaminx");
+            else if(megaminxFaces[8].contains(x,y))
+                colorListener.faceClicked(this, 8, megaminxColors, "Lower-Back-Right Face (f) of Megaminx");
+            else if(megaminxFaces[9].contains(x,y))
+                colorListener.faceClicked(this, 9, megaminxColors, "Upper-Back-Right Face (e) of Megaminx");
+            else if(megaminxFaces[10].contains(x,y))
+                colorListener.faceClicked(this, 10, megaminxColors, "Upper-Back-Left Face (d) of Megaminx");
+            else if(megaminxFaces[11].contains(x,y))
+                colorListener.faceClicked(this, 11, megaminxColors, "Lower-Back-Left Face (c) of Megaminx");
+        }
+    }
+
+//**********************************************************************************************************************
+
+    public void addColorListener(ColorListener colorListener){
+        addMouseListener(this);
+        this.colorListener = colorListener;
     }
 
 //**********************************************************************************************************************
@@ -176,8 +258,8 @@ public class ScramblePane extends JPanel implements Constants{
 
 //**********************************************************************************************************************
 
-    private void scrambleCube(int size, String puzzle, String scrambleAlg){
-        StringTokenizer moves = new StringTokenizer(scrambleAlg);
+    private void scrambleCube(int size){
+        StringTokenizer moves = new StringTokenizer(myScramble);
         String move = "null";
         boolean failed = false;
 
@@ -192,7 +274,7 @@ public class ScramblePane extends JPanel implements Constants{
             int dir = 1;
             if(move.endsWith("'")){move = move.substring(0, move.length()-1); dir = 3;}
             if(move.endsWith("2")){move = move.substring(0, move.length()-1); dir = 2;}
-            //JOptionPane.showMessageDialog(this, "For " + puzzle + ": <" + move + "> gives " + dir + ".");
+            //JOptionPane.showMessageDialog(this, "For " + myPuzzle + ": <" + move + "> gives " + dir + ".");
 
                  if(move.equals("F")){doCubeTurn(size, state, 0, 0, dir);}
             else if(move.equals("B")){doCubeTurn(size, state, 1, 0, dir);}
@@ -229,7 +311,7 @@ public class ScramblePane extends JPanel implements Constants{
         }
 
         if(failed)
-            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
+            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
             drawCube(size, state);
     }
@@ -282,7 +364,7 @@ public class ScramblePane extends JPanel implements Constants{
         int xShift = 125, yShift = 48; // for the second/back cluster of 6 faces (was 141, 0)
         //int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
         int xCenter = (myWidth-xShift)/2, yCenter = (myHeight-yShift-20)/2 + 20;
-        float radius = 24; // hard code for now
+        float radius = Math.min(myWidth, myHeight-20) * 0.112F;//24; // hard code for now
         float face_gap = 7;
         float big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
 //System.err.print("xShift:" + xShift + "\n");
@@ -294,25 +376,26 @@ public class ScramblePane extends JPanel implements Constants{
         Polygon big_pent = regular_poly(5, big_radius, true); // auxiliary: for drawing outer 5 faces of cluster
         big_pent.translate(xCenter, yCenter);
 
-        drawMinxFace(g2d, radius, xCenter, yCenter, false, state[0]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[0], big_pent.ypoints[0], true, state[1]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[1], big_pent.ypoints[1], true, state[2]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[2], big_pent.ypoints[2], true, state[3]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[3], big_pent.ypoints[3], true, state[4]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[4], big_pent.ypoints[4], true, state[5]);
-        drawMinxFace(g2d, radius, xCenter + xShift, yCenter + yShift, false, state[6]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[0] + xShift, big_pent.ypoints[0] + yShift, true, state[7]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[1] + xShift, big_pent.ypoints[1] + yShift, true, state[8]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[2] + xShift, big_pent.ypoints[2] + yShift, true, state[9]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[3] + xShift, big_pent.ypoints[3] + yShift, true, state[10]);
-        drawMinxFace(g2d, radius, big_pent.xpoints[4] + xShift, big_pent.ypoints[4] + yShift, true, state[11]);
+        megaminxFaces[ 0] = drawMinxFace(g2d, radius, xCenter, yCenter, false, state[0]);
+        megaminxFaces[ 1] = drawMinxFace(g2d, radius, big_pent.xpoints[0], big_pent.ypoints[0], true, state[1]);
+        megaminxFaces[ 2] = drawMinxFace(g2d, radius, big_pent.xpoints[1], big_pent.ypoints[1], true, state[2]);
+        megaminxFaces[ 3] = drawMinxFace(g2d, radius, big_pent.xpoints[2], big_pent.ypoints[2], true, state[3]);
+        megaminxFaces[ 4] = drawMinxFace(g2d, radius, big_pent.xpoints[3], big_pent.ypoints[3], true, state[4]);
+        megaminxFaces[ 5] = drawMinxFace(g2d, radius, big_pent.xpoints[4], big_pent.ypoints[4], true, state[5]);
+
+        megaminxFaces[ 6] = drawMinxFace(g2d, radius, xCenter + xShift, yCenter + yShift, false, state[6]);
+        megaminxFaces[ 7] = drawMinxFace(g2d, radius, big_pent.xpoints[0] + xShift, big_pent.ypoints[0] + yShift, true, state[7]);
+        megaminxFaces[ 8] = drawMinxFace(g2d, radius, big_pent.xpoints[1] + xShift, big_pent.ypoints[1] + yShift, true, state[8]);
+        megaminxFaces[ 9] = drawMinxFace(g2d, radius, big_pent.xpoints[2] + xShift, big_pent.ypoints[2] + yShift, true, state[9]);
+        megaminxFaces[10] = drawMinxFace(g2d, radius, big_pent.xpoints[3] + xShift, big_pent.ypoints[3] + yShift, true, state[10]);
+        megaminxFaces[11] = drawMinxFace(g2d, radius, big_pent.xpoints[4] + xShift, big_pent.ypoints[4] + yShift, true, state[11]);
 
         repaint();
     }
 
 //**********************************************************************************************************************
 
-    private void drawMinxFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
+    private Polygon drawMinxFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
         Polygon pent = regular_poly(5, r, pointup);
         pent.translate(x_offset, y_offset);
 
@@ -358,12 +441,14 @@ public class ScramblePane extends JPanel implements Constants{
         g2d.setStroke(new BasicStroke(1.5F));
         for(int i=0; i<5; i++) // now draw the 5 lines inside
             g2d.drawLine(xs[i], ys[i], xs[5 + (i+3)%5], ys[5 + (i+3)%5]);
+
+        return pent;
     }
 
 //**********************************************************************************************************************
 
-    private void scrambleMegaminx(String puzzle, String scrambleAlg){
-        StringTokenizer moves = new StringTokenizer(scrambleAlg);
+    private void scrambleMegaminx(){
+        StringTokenizer moves = new StringTokenizer(myScramble);
         String move = "null";
         boolean failed = false;
 
@@ -429,7 +514,7 @@ public class ScramblePane extends JPanel implements Constants{
         }
 
         if(failed)
-            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
+            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
             drawMegaminx(state);
     }
@@ -562,17 +647,17 @@ public class ScramblePane extends JPanel implements Constants{
         Polygon big_tri = regular_poly(3, big_radius, false); // auxiliary: for drawing the outer 3 faces
         big_tri.translate(xCenter, yCenter);
 
-        drawPyraFace(g2d, radius, xCenter, yCenter, true, state[0]);
-        drawPyraFace(g2d, radius, big_tri.xpoints[2], big_tri.ypoints[2], false, state[1]);
-        drawPyraFace(g2d, radius, big_tri.xpoints[0], big_tri.ypoints[0], false, state[2]);
-        drawPyraFace(g2d, radius, big_tri.xpoints[1], big_tri.ypoints[1], false, state[3]);
+        pyraminxFaces[0] = drawPyraFace(g2d, radius, xCenter, yCenter, true, state[0]);
+        pyraminxFaces[1] = drawPyraFace(g2d, radius, big_tri.xpoints[2], big_tri.ypoints[2], false, state[1]);
+        pyraminxFaces[2] = drawPyraFace(g2d, radius, big_tri.xpoints[0], big_tri.ypoints[0], false, state[2]);
+        pyraminxFaces[3] = drawPyraFace(g2d, radius, big_tri.xpoints[1], big_tri.ypoints[1], false, state[3]);
 
         repaint();
     }
 
 //**********************************************************************************************************************
 
-    private void drawPyraFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
+    private Polygon drawPyraFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
         Polygon tri = regular_poly(3, r, pointup);
         tri.translate(x_offset, y_offset);
 
@@ -613,12 +698,14 @@ public class ScramblePane extends JPanel implements Constants{
             g2d.drawLine(xs[i], ys[i], xs[3 + (i+1)%3], ys[3 + (i+1)%3]);
         for(int i=0; i<3; i++) // draw 3 short lines inside
             g2d.drawLine(xs[i], ys[i], xs[3 + (i+2)%3], ys[3 + (i+2)%3]);
+
+        return tri;
     }
 
 //**********************************************************************************************************************
 
-    private void scramblePyraminx(String puzzle, String scrambleAlg){
-        StringTokenizer moves = new StringTokenizer(scrambleAlg);
+    private void scramblePyraminx(){
+        StringTokenizer moves = new StringTokenizer(myScramble);
         String move = "null";
         boolean failed = false;
 
@@ -646,7 +733,7 @@ public class ScramblePane extends JPanel implements Constants{
         }
 
         if(failed)
-            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + puzzle + ": <"+ move + ">.");
+            JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
             drawPyraminx(state);
     }
