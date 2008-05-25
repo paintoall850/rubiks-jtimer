@@ -384,10 +384,6 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         slowestColorX = slowestColorText.getBackground();
         for(int face=0; face<6; face++)
             cubeColorsX[face] = faceColorTexts[face].getBackground();
-//        for(int face=0; face<4; face++)
-//            pyraminxColorsX[face] = ???[face].getBackground();
-//        for(int face=0; face<12; face++)
-//            megaminxColorsX[face] = ???[face].getBackground();
         averageViewFormatX = averageText.getText();
         sessionViewFormatX = sessionText.getText();
 
@@ -618,6 +614,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
                     ScramblePreview[face][i][j].setBackground(faceColorTexts[face].getBackground());
     }
 
+//**********************************************************************************************************************
+//**********************************************************************************************************************
 //**********************************************************************************************************************
 
     // to override key ordering, so that it's alphabetical on stores

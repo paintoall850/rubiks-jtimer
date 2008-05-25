@@ -36,6 +36,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
     private BufferedImage myImage;
     private ColorListener colorListener;
+    private Polygon[] cubeFacesX = new Polygon[6];
     private Polygon[] pyraminxFaces = new Polygon[4];
     private Polygon[] megaminxFaces = new Polygon[12];
 
@@ -57,6 +58,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int face=0; face<4; face++) pyraminxColors[face] = Color.black; // just incase...
         for(int face=0; face<12; face++) megaminxColors[face] = Color.black; // just incase...
 
+        for(int face=0; face<6; face++) cubeFacesX[face] = new Polygon(); // just incase...
         for(int face=0; face<4; face++) pyraminxFaces[face] = new Polygon(); // just incase...
         for(int face=0; face<12; face++) megaminxFaces[face] = new Polygon(); // just incase...
 
@@ -313,7 +315,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         if(failed)
             JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
-            drawCube(size, state);
+            drawCubeX(size, state); // Line to change to switch the drawing style.
     }
 
 //**********************************************************************************************************************
@@ -350,6 +352,91 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                 for(int i=0; i<((size+1)/2); i++)
                     for(int j=0; j<(size/2); j++)
                         cycle(state[face][i][j], state[face][j][size-i-1], state[face][size-i-1][size-j-1], state[face][size-j-1][i]);
+    }
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    private void drawCubeX(int size, int[][][][] state){
+        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = myImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int margin = 15;
+        int face_gap = 7;
+        //int face_pixels = 60;
+        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, ((myHeight-19) - 2*face_gap - 2*margin)/3);
+//System.err.print("myWidth:" + myWidth + "\n");
+//System.err.print("myHeight:" + myHeight + "\n");
+//System.err.print("margin:" + margin + "\n");
+//System.err.print("face_pixels:" + face_pixels + "\n");
+        int n = face_pixels + face_gap;
+        //int x = 15, y = 19; // nudge factors
+        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = ((myHeight-19) - 3*face_pixels - 2*face_gap)/2;
+        y += 14; // nudge away from title
+//System.err.print("x:" + x + "\n");
+//System.err.print("y:" + y + "\n");
+
+        cubeFacesX[0] = drawCubeFaceX(g2d, size, face_pixels, 1*n + x, 1*n + y, state[0]);
+        cubeFacesX[1] = drawCubeFaceX(g2d, size, face_pixels, 3*n + x, 1*n + y, state[1]);
+        cubeFacesX[2] = drawCubeFaceX(g2d, size, face_pixels, 0*n + x, 1*n + y, state[2]);
+        cubeFacesX[3] = drawCubeFaceX(g2d, size, face_pixels, 2*n + x, 1*n + y, state[3]);
+        cubeFacesX[4] = drawCubeFaceX(g2d, size, face_pixels, 1*n + x, 2*n + y, state[4]);
+        cubeFacesX[5] = drawCubeFaceX(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
+
+        repaint();
+    }
+
+//**********************************************************************************************************************
+
+    private Polygon drawCubeFaceX(Graphics2D g2d, int size, int face_pixels, int x_offset, int y_offset, int[][][] state){
+        Polygon square = square_poly(face_pixels);
+        square.translate(x_offset, y_offset);
+
+        int xs[][] = new int[4][size+1], ys[][] = new int[4][size+1]; // the points that are on the edges, including outer
+        for(int i=0; i<size+1; i++){
+            float w = i/(float)size;
+            xs[0][i] = (int)Math.round(w*square.xpoints[1] + (1F-w)*square.xpoints[0]);
+            ys[0][i] = (int)Math.round(w*square.ypoints[1] + (1F-w)*square.ypoints[0]);
+            xs[1][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[1]);
+            ys[1][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[1]);
+            xs[2][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[3]);
+            ys[2][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[3]);
+            xs[3][i] = (int)Math.round(w*square.xpoints[3] + (1F-w)*square.xpoints[0]);
+            ys[3][i] = (int)Math.round(w*square.ypoints[3] + (1F-w)*square.ypoints[0]);
+        }
+
+        Point inside_point[][] = new Point[size+1][size+1]; // for the internal points
+        for(int i=0; i<size+1; i++)
+            for(int j=0; j<size+1; j++)
+                inside_point[i][j] = getLineIntersection(   xs[1][i], ys[1][i],
+                                                            xs[3][i], ys[3][i],
+                                                            xs[0][j], ys[0][j],
+                                                            xs[2][j], ys[2][j]);
+
+        Polygon stickers[][] = new Polygon[size][size];
+        for(int i=0; i<size; i++)
+            for(int j=0; j<size; j++){
+                stickers[i][j] = new Polygon();
+                stickers[i][j].addPoint(inside_point[i][j].x, inside_point[i][j].y);
+                stickers[i][j].addPoint(inside_point[i][j+1].x, inside_point[i][j+1].y);
+                stickers[i][j].addPoint(inside_point[i+1][j+1].x, inside_point[i+1][j+1].y);
+                stickers[i][j].addPoint(inside_point[i+1][j].x, inside_point[i+1][j].y);
+                g2d.setColor(cubeColors[state[i][j][0]]);
+                g2d.fillPolygon(stickers[i][j]); // fill each sticker
+            }
+
+        g2d.setColor(Color.black);
+        g2d.setStroke(new BasicStroke(3F));
+        g2d.drawPolygon(square); // draw the outer square
+        g2d.setStroke(new BasicStroke(1.5F));
+        for(int i=1; i<size; i++) // draw horizontal inside lines
+            g2d.drawLine(xs[1][i], ys[1][i], xs[3][i], ys[3][i]);
+        for(int j=1; j<size; j++) // draw vertical inside lines
+            g2d.drawLine(xs[0][j], ys[0][j], xs[2][j], ys[2][j]);
+
+        return square;
     }
 
 //**********************************************************************************************************************
@@ -401,10 +488,10 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
         int xs[] = new int[10], ys[] = new int[10]; // the 10 points that are on the edges
         for(int i=0; i<5; i++){
-            xs[i] = (int)Math.round(0.45D*pent.xpoints[(i+1)%5] + 0.55D*pent.xpoints[i]);
-            ys[i] = (int)Math.round(0.45D*pent.ypoints[(i+1)%5] + 0.55D*pent.ypoints[i]);
-            xs[5+i] = (int)Math.round(0.55D*pent.xpoints[(i+1)%5] + 0.45D*pent.xpoints[i]);
-            ys[5+i] = (int)Math.round(0.55D*pent.ypoints[(i+1)%5] + 0.45D*pent.ypoints[i]);
+            xs[i] = (int)Math.round(0.45F*pent.xpoints[(i+1)%5] + 0.55F*pent.xpoints[i]);
+            ys[i] = (int)Math.round(0.45F*pent.ypoints[(i+1)%5] + 0.55F*pent.ypoints[i]);
+            xs[5+i] = (int)Math.round(0.55F*pent.xpoints[(i+1)%5] + 0.45F*pent.xpoints[i]);
+            ys[5+i] = (int)Math.round(0.55F*pent.ypoints[(i+1)%5] + 0.45F*pent.ypoints[i]);
         }
 
         Point inside_pent[] = new Point[5]; // for internal pentagon, i.e. center
@@ -663,10 +750,10 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
         int xs[] = new int[6], ys[] = new int[6]; // the 6 points that are on the edges
         for(int i=0; i<3; i++){
-            xs[i] = (int)Math.round(1.0D*tri.xpoints[(i+1)%3]/3.0D + 2.0D*tri.xpoints[i]/3.0D);
-            ys[i] = (int)Math.round(1.0D*tri.ypoints[(i+1)%3]/3.0D + 2.0D*tri.ypoints[i]/3.0D);
-            xs[3+i] = (int)Math.round(2.0D*tri.xpoints[(i+1)%3]/3.0D + 1.0D*tri.xpoints[i]/3.0D);
-            ys[3+i] = (int)Math.round(2.0D*tri.ypoints[(i+1)%3]/3.0D + 1.0D*tri.ypoints[i]/3.0D);
+            xs[i] = (int)Math.round(1F*tri.xpoints[(i+1)%3]/3F + 2F*tri.xpoints[i]/3F);
+            ys[i] = (int)Math.round(1F*tri.ypoints[(i+1)%3]/3F + 2F*tri.ypoints[i]/3F);
+            xs[3+i] = (int)Math.round(2F*tri.xpoints[(i+1)%3]/3F + 1F*tri.xpoints[i]/3F);
+            ys[3+i] = (int)Math.round(2F*tri.ypoints[(i+1)%3]/3F + 1F*tri.ypoints[i]/3F);
         }
 
         Polygon stickers[] = new Polygon[9];
@@ -791,6 +878,17 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             poly.addPoint((int)Math.round(r*Math.cos(i*2*Math.PI/n + offset)),
                           (int)Math.round(r*Math.sin(i*2*Math.PI/n + offset)));
         return poly;
+    }
+
+//**********************************************************************************************************************
+
+    private Polygon square_poly(int n){
+        Polygon square = new Polygon();
+        square.addPoint(0, 0);
+        square.addPoint(n, 0);
+        square.addPoint(n, n);
+        square.addPoint(0, n);
+        return square;
     }
 
 //**********************************************************************************************************************
