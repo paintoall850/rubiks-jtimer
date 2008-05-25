@@ -131,41 +131,33 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //System.err.print("x:" + x + "\n");
 //System.err.print("y:" + y + "\n");
 
-        if(myPuzzle.equals("Pyraminx")){
-                 if(pyraminxFaces[0].contains(x,y))
-                colorListener.faceClicked(this, 0, pyraminxColors, "Front Face of Pyraminx");
-            else if(pyraminxFaces[1].contains(x,y))
-                colorListener.faceClicked(this, 1, pyraminxColors, "Right Face of Pyraminx");
-            else if(pyraminxFaces[2].contains(x,y))
-                colorListener.faceClicked(this, 2, pyraminxColors, "Down Face of Pyraminx");
-            else if(pyraminxFaces[3].contains(x,y))
-                colorListener.faceClicked(this, 3, pyraminxColors, "Left Face of Pyraminx");
+        if(myPuzzle.equals("2x2x2") || myPuzzle.equals("3x3x3") || myPuzzle.equals("4x4x4") || myPuzzle.equals("5x5x5")){
+                 if(cubeFacesX[0].contains(x,y))  colorListener.faceClicked(this, 0, cubeColors, "Front Face of Cube");
+            else if(cubeFacesX[1].contains(x,y))  colorListener.faceClicked(this, 1, cubeColors, "Back Face of Cube");
+            else if(cubeFacesX[2].contains(x,y))  colorListener.faceClicked(this, 2, cubeColors, "Left Face of Cube");
+            else if(cubeFacesX[3].contains(x,y))  colorListener.faceClicked(this, 3, cubeColors, "Right Face of Cube");
+            else if(cubeFacesX[4].contains(x,y))  colorListener.faceClicked(this, 4, cubeColors, "Down Face of Cube");
+            else if(cubeFacesX[5].contains(x,y))  colorListener.faceClicked(this, 5, cubeColors, "Up Face of Cube");
+        }
+        else if(myPuzzle.equals("Pyraminx")){
+                 if(pyraminxFaces[0].contains(x,y)) colorListener.faceClicked(this, 0, pyraminxColors, "Front Face of Pyraminx");
+            else if(pyraminxFaces[1].contains(x,y)) colorListener.faceClicked(this, 1, pyraminxColors, "Right Face of Pyraminx");
+            else if(pyraminxFaces[2].contains(x,y)) colorListener.faceClicked(this, 2, pyraminxColors, "Down Face of Pyraminx");
+            else if(pyraminxFaces[3].contains(x,y)) colorListener.faceClicked(this, 3, pyraminxColors, "Left Face of Pyraminx");
         }
         else if(myPuzzle.equals("Megaminx")){
-                 if(megaminxFaces[0].contains(x,y))
-                colorListener.faceClicked(this, 0, megaminxColors, "Front Face (A) of Megaminx");
-            else if(megaminxFaces[1].contains(x,y))
-                colorListener.faceClicked(this, 1, megaminxColors, "Up Face (B) of Megaminx");
-            else if(megaminxFaces[2].contains(x,y))
-                colorListener.faceClicked(this, 2, megaminxColors, "Upper-Right Face (C) of Megaminx");
-            else if(megaminxFaces[3].contains(x,y))
-                colorListener.faceClicked(this, 3, megaminxColors, "Lower-Right Face (D) of Megaminx");
-            else if(megaminxFaces[4].contains(x,y))
-                colorListener.faceClicked(this, 4, megaminxColors, "Lower-Left Face (E) of Megaminx");
-            else if(megaminxFaces[5].contains(x,y))
-                colorListener.faceClicked(this, 5, megaminxColors, "Upper-Left Face (F) of Megaminx");
-            else if(megaminxFaces[6].contains(x,y))
-                colorListener.faceClicked(this, 6, megaminxColors, "Back Face (a) of Megaminx");
-            else if(megaminxFaces[7].contains(x,y))
-                colorListener.faceClicked(this, 7, megaminxColors, "Down Face (b) of Megaminx");
-            else if(megaminxFaces[8].contains(x,y))
-                colorListener.faceClicked(this, 8, megaminxColors, "Lower-Back-Right Face (f) of Megaminx");
-            else if(megaminxFaces[9].contains(x,y))
-                colorListener.faceClicked(this, 9, megaminxColors, "Upper-Back-Right Face (e) of Megaminx");
-            else if(megaminxFaces[10].contains(x,y))
-                colorListener.faceClicked(this, 10, megaminxColors, "Upper-Back-Left Face (d) of Megaminx");
-            else if(megaminxFaces[11].contains(x,y))
-                colorListener.faceClicked(this, 11, megaminxColors, "Lower-Back-Left Face (c) of Megaminx");
+                 if(megaminxFaces[ 0].contains(x,y)) colorListener.faceClicked(this,  0, megaminxColors, "Front Face (A) of Megaminx");
+            else if(megaminxFaces[ 1].contains(x,y)) colorListener.faceClicked(this,  1, megaminxColors, "Up Face (B) of Megaminx");
+            else if(megaminxFaces[ 2].contains(x,y)) colorListener.faceClicked(this,  2, megaminxColors, "Upper-Right Face (C) of Megaminx");
+            else if(megaminxFaces[ 3].contains(x,y)) colorListener.faceClicked(this,  3, megaminxColors, "Lower-Right Face (D) of Megaminx");
+            else if(megaminxFaces[ 4].contains(x,y)) colorListener.faceClicked(this,  4, megaminxColors, "Lower-Left Face (E) of Megaminx");
+            else if(megaminxFaces[ 5].contains(x,y)) colorListener.faceClicked(this,  5, megaminxColors, "Upper-Left Face (F) of Megaminx");
+            else if(megaminxFaces[ 6].contains(x,y)) colorListener.faceClicked(this,  6, megaminxColors, "Back Face (a) of Megaminx");
+            else if(megaminxFaces[ 7].contains(x,y)) colorListener.faceClicked(this,  7, megaminxColors, "Down Face (b) of Megaminx");
+            else if(megaminxFaces[ 8].contains(x,y)) colorListener.faceClicked(this,  8, megaminxColors, "Lower-Back-Right Face (f) of Megaminx");
+            else if(megaminxFaces[ 9].contains(x,y)) colorListener.faceClicked(this,  9, megaminxColors, "Upper-Back-Right Face (e) of Megaminx");
+            else if(megaminxFaces[10].contains(x,y)) colorListener.faceClicked(this, 10, megaminxColors, "Upper-Back-Left Face (d) of Megaminx");
+            else if(megaminxFaces[11].contains(x,y)) colorListener.faceClicked(this, 11, megaminxColors, "Lower-Back-Left Face (c) of Megaminx");
         }
     }
 
@@ -378,19 +370,19 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //System.err.print("x:" + x + "\n");
 //System.err.print("y:" + y + "\n");
 
-        cubeFacesX[0] = drawCubeFaceX(g2d, size, face_pixels, 1*n + x, 1*n + y, state[0]);
-        cubeFacesX[1] = drawCubeFaceX(g2d, size, face_pixels, 3*n + x, 1*n + y, state[1]);
-        cubeFacesX[2] = drawCubeFaceX(g2d, size, face_pixels, 0*n + x, 1*n + y, state[2]);
-        cubeFacesX[3] = drawCubeFaceX(g2d, size, face_pixels, 2*n + x, 1*n + y, state[3]);
-        cubeFacesX[4] = drawCubeFaceX(g2d, size, face_pixels, 1*n + x, 2*n + y, state[4]);
-        cubeFacesX[5] = drawCubeFaceX(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
+        cubeFacesX[0] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 1*n + y, state[0]);
+        cubeFacesX[1] = drawCubeFace(g2d, size, face_pixels, 3*n + x, 1*n + y, state[1]);
+        cubeFacesX[2] = drawCubeFace(g2d, size, face_pixels, 0*n + x, 1*n + y, state[2]);
+        cubeFacesX[3] = drawCubeFace(g2d, size, face_pixels, 2*n + x, 1*n + y, state[3]);
+        cubeFacesX[4] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 2*n + y, state[4]);
+        cubeFacesX[5] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
 
         repaint();
     }
 
 //**********************************************************************************************************************
 
-    private Polygon drawCubeFaceX(Graphics2D g2d, int size, int face_pixels, int x_offset, int y_offset, int[][][] state){
+    private Polygon drawCubeFace(Graphics2D g2d, int size, int face_pixels, int x_offset, int y_offset, int[][][] state){
         Polygon square = square_poly(face_pixels);
         square.translate(x_offset, y_offset);
 
@@ -888,6 +880,19 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         square.addPoint(n, 0);
         square.addPoint(n, n);
         square.addPoint(0, n);
+        return square;
+    }
+
+//**********************************************************************************************************************
+
+    private Polygon square_polyX(int n){
+        Polygon square = new Polygon();
+        float r = n*(float)Math.sqrt(0.5);
+        float offset = (float)(-13*Math.PI/16);
+        for(int i=0; i<4; i++)
+            square.addPoint((int)Math.round(r*Math.cos(i*2*Math.PI/4 + offset)),
+                          (int)Math.round(r*Math.sin(i*2*Math.PI/4 + offset)));
+        square.translate(n/2, n/2);
         return square;
     }
 
