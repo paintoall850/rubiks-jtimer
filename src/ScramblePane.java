@@ -478,32 +478,32 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         Polygon pent = regular_poly(5, r, pointup);
         pent.translate(x_offset, y_offset);
 
-        int xs[] = new int[10], ys[] = new int[10]; // the 10 points that are on the edges
+        int xs[][] = new int[5][2], ys[][] = new int[5][2]; // the 10 points that are on the edges
         for(int i=0; i<5; i++){
-            xs[i] = (int)Math.round(0.45F*pent.xpoints[(i+1)%5] + 0.55F*pent.xpoints[i]);
-            ys[i] = (int)Math.round(0.45F*pent.ypoints[(i+1)%5] + 0.55F*pent.ypoints[i]);
-            xs[5+i] = (int)Math.round(0.55F*pent.xpoints[(i+1)%5] + 0.45F*pent.xpoints[i]);
-            ys[5+i] = (int)Math.round(0.55F*pent.ypoints[(i+1)%5] + 0.45F*pent.ypoints[i]);
+            xs[i][0] = (int)Math.round(0.45F*pent.xpoints[(i+1)%5] + 0.55F*pent.xpoints[i]);
+            ys[i][0] = (int)Math.round(0.45F*pent.ypoints[(i+1)%5] + 0.55F*pent.ypoints[i]);
+            xs[i][1] = (int)Math.round(0.55F*pent.xpoints[(i+1)%5] + 0.45F*pent.xpoints[i]);
+            ys[i][1] = (int)Math.round(0.55F*pent.ypoints[(i+1)%5] + 0.45F*pent.ypoints[i]);
         }
 
         Point inside_pent[] = new Point[5]; // for internal pentagon, i.e. center
         for(int i=0; i<5; i++)
-            inside_pent[i] = getLineIntersection(   xs[i], ys[i],
-                                                    xs[5 + (3+i)%5], ys[5 + (3+i)%5],
-                                                    xs[(i+1)%5], ys[(i+1)%5],
-                                                    xs[5 + (4+i)%5], ys[5 + (4+i)%5]);
+            inside_pent[i] = getLineIntersection(   xs[(i+0)%5][0], ys[(i+0)%5][0],
+                                                    xs[(i+3)%5][1], ys[(i+3)%5][1],
+                                                    xs[(i+1)%5][0], ys[(i+1)%5][0],
+                                                    xs[(i+4)%5][1], ys[(i+4)%5][1]);
 
         Polygon stickers[] = new Polygon[11];
         for(int i=0; i<11; i++) stickers[i] = new Polygon();
         for(int i=0; i<5; i++){ // repeat for each set
             // corner sticker
             stickers[2*i].addPoint(pent.xpoints[i], pent.ypoints[i]);
-            stickers[2*i].addPoint(xs[i], ys[i]);
+            stickers[2*i].addPoint(xs[i][0], ys[i][0]);
             stickers[2*i].addPoint(inside_pent[i].x, inside_pent[i].y);
-            stickers[2*i].addPoint(xs[5 + (i+4)%5], ys[5 + (i+4)%5]);
+            stickers[2*i].addPoint(xs[(i+4)%5][1], ys[(i+4)%5][1]);
             // edge sticker
-            stickers[2*i+1].addPoint(xs[i], ys[i]);
-            stickers[2*i+1].addPoint(xs[5 + i], ys[5 + i]);
+            stickers[2*i+1].addPoint(xs[i][0], ys[i][0]);
+            stickers[2*i+1].addPoint(xs[i][1], ys[i][1]);
             stickers[2*i+1].addPoint(inside_pent[(i+1)%5].x, inside_pent[(i+1)%5].y);
             stickers[2*i+1].addPoint(inside_pent[i].x, inside_pent[i].y);
             // center sticker
@@ -519,7 +519,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         g2d.drawPolygon(pent); // draw the outer pentagon
         g2d.setStroke(new BasicStroke(1.5F));
         for(int i=0; i<5; i++) // now draw the 5 lines inside
-            g2d.drawLine(xs[i], ys[i], xs[5 + (i+3)%5], ys[5 + (i+3)%5]);
+            g2d.drawLine(xs[i][0], ys[i][0], xs[(i+3)%5][1], ys[(i+3)%5][1]);
 
         return pent;
     }
@@ -740,12 +740,12 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         Polygon tri = regular_poly(3, r, pointup);
         tri.translate(x_offset, y_offset);
 
-        int xs[] = new int[6], ys[] = new int[6]; // the 6 points that are on the edges
+        int xs[][] = new int[3][2], ys[][] = new int[3][2]; // the 6 points that are on the edges
         for(int i=0; i<3; i++){
-            xs[i] = (int)Math.round(1F*tri.xpoints[(i+1)%3]/3F + 2F*tri.xpoints[i]/3F);
-            ys[i] = (int)Math.round(1F*tri.ypoints[(i+1)%3]/3F + 2F*tri.ypoints[i]/3F);
-            xs[3+i] = (int)Math.round(2F*tri.xpoints[(i+1)%3]/3F + 1F*tri.xpoints[i]/3F);
-            ys[3+i] = (int)Math.round(2F*tri.ypoints[(i+1)%3]/3F + 1F*tri.ypoints[i]/3F);
+            xs[i][0] = (int)Math.round(1F*tri.xpoints[(i+1)%3]/3F + 2F*tri.xpoints[i]/3F);
+            ys[i][0] = (int)Math.round(1F*tri.ypoints[(i+1)%3]/3F + 2F*tri.ypoints[i]/3F);
+            xs[i][1] = (int)Math.round(2F*tri.xpoints[(i+1)%3]/3F + 1F*tri.xpoints[i]/3F);
+            ys[i][1] = (int)Math.round(2F*tri.ypoints[(i+1)%3]/3F + 1F*tri.ypoints[i]/3F);
         }
 
         Polygon stickers[] = new Polygon[9];
@@ -753,16 +753,16 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int i=0; i<3; i++){ // repeat for each set
             // tip sticker
             stickers[i+6].addPoint(tri.xpoints[i], tri.ypoints[i]);
-            stickers[i+6].addPoint(xs[i], ys[i]);
-            stickers[i+6].addPoint(xs[3 + (i+2)%3], ys[3 + (i+2)%3]);
+            stickers[i+6].addPoint(xs[i][0], ys[i][0]);
+            stickers[i+6].addPoint(xs[(i+2)%3][1], ys[(i+2)%3][1]);
             // center sticker
-            stickers[2*i].addPoint(xs[i], ys[i]);
-            stickers[2*i].addPoint(x_offset, y_offset);
-            stickers[2*i].addPoint(xs[3 + (i+2)%3], ys[3 + (i+2)%3]);
+            stickers[2*i].addPoint(xs[i][0], ys[i][0]);
+            stickers[2*i].addPoint(x_offset, y_offset); // not such a robust choice...
+            stickers[2*i].addPoint(xs[(i+2)%3][1], ys[(i+2)%3][1]);
             // edge sticker
-            stickers[2*i+1].addPoint(xs[i], ys[i]);
-            stickers[2*i+1].addPoint(xs[3 + i], ys[3 + i]);
-            stickers[2*i+1].addPoint(x_offset, y_offset);
+            stickers[2*i+1].addPoint(xs[i][0], ys[i][0]);
+            stickers[2*i+1].addPoint(xs[i][1], ys[i][1]);
+            stickers[2*i+1].addPoint(x_offset, y_offset); // not such a robust choice...
         }
 
         for(int i=0; i<9; i++){
@@ -774,9 +774,9 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         g2d.drawPolygon(tri); // draw the outer triangle
         g2d.setStroke(new BasicStroke(1.5F));
         for(int i=0; i<3; i++) // draw 3 long lines inside
-            g2d.drawLine(xs[i], ys[i], xs[3 + (i+1)%3], ys[3 + (i+1)%3]);
+            g2d.drawLine(xs[i][0], ys[i][0], xs[(i+1)%3][1], ys[(i+1)%3][1]);
         for(int i=0; i<3; i++) // draw 3 short lines inside
-            g2d.drawLine(xs[i], ys[i], xs[3 + (i+2)%3], ys[3 + (i+2)%3]);
+            g2d.drawLine(xs[i][0], ys[i][0], xs[(i+2)%3][1], ys[(i+2)%3][1]);
 
         return tri;
     }
