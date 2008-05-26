@@ -28,7 +28,7 @@ import java.io.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.border.*;
 
-public class Standalone extends JFrame implements ActionListener, Runnable, Constants{
+public class Standalone extends JFrame implements ActionListener, Runnable, OptionsMenu.OptionsListener, Constants{
 
     private OptionsMenu optionsMenu;
     private ScrambleGenerator scrambleGenerator;
@@ -40,9 +40,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     private TimerArea timerArea;
     private String newAlg;
 
-    JButton startButton, discardButton, popButton, plusTwoButton;//, averageModeButton;
+    JButton startButton, discardButton, popButton, plusTwoButton;
     JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
-    JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;//, scramblePaneLabel;
+    JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
     JLabel sessionStatsLabel, rollingAverageLabel, bestAverageLabel;
     JMenuBar jMenuBar;
     JMenu fileMenu, toolsMenu, networkMenu, helpMenu;
@@ -52,8 +52,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     JLabel[] averageLabels, timeLabels;
     SmartButton[] smartButton;
-
-    //private boolean averageOfFiveMode;
 
     volatile Thread timerThread;
     AudioClip countdownClip = null;
@@ -161,7 +159,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         setJMenuBar(jMenuBar);
 
         // inialize Popup Windows
-        optionsMenu = new OptionsMenu(this); // pass it this so that it can update GUI when needed
+        optionsMenu = new OptionsMenu();
         scrambleGenerator = new ScrambleGenerator();
         instructionScreen = new InstructionScreen();
         aboutScreen = new AboutScreen();
@@ -205,8 +203,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
-        //scramblePaneLabel = new JLabel();
-        //scramblePaneLable.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
         scramblePane = new ScramblePane(282, 215+20); // needs to be changed in two places
         scramblePane.setLayout(null);
         //scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
@@ -233,7 +229,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         enterPressesWhenFocused(discardButton);
         enterPressesWhenFocused(popButton);
         enterPressesWhenFocused(plusTwoButton);
-        //enterPressesWhenFocused(averageModeButton);
         enterPressesWhenFocused(sessionResetButton);
         enterPressesWhenFocused(sessionDetailedViewButton);
         enterPressesWhenFocused(averageDetailedViewButton);
@@ -250,6 +245,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         stopTime = 0;
 
 
+        optionsMenu.addOptionsListener(this); // pass it this so that it can update GUI when needed
         optionsMenu.loadOptions(); // inital load of options
         solveTable = new SolveTable(optionsMenu.puzzleX);
         updateLabels(optionsMenu.puzzleX);
@@ -328,7 +324,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         sessionDetailedViewButton.setBounds(241,326,160,20);
         insertTimeButton.setBounds(241,351,160,20);
         sessionResetButton.setBounds(241,376,160,20);
-        //averageModeButton.setBounds(663,326,160,20);
     }
 
 //**********************************************************************************************************************
@@ -351,7 +346,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         discardButton.addActionListener(this);
         popButton.addActionListener(this);
         plusTwoButton.addActionListener(this);
-        //averageModeButton.addActionListener(this);
         sessionDetailedViewButton.addActionListener(this);
         averageDetailedViewButton.addActionListener(this);
         sessionResetButton.addActionListener(this);
@@ -370,12 +364,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
         contentPane.add(discardButton);
         contentPane.add(popButton);
         contentPane.add(plusTwoButton);
-        //contentPane.add(averageModeButton);
         contentPane.add(useThisAlgLabel);
         contentPane.add(scrambleText);
         contentPane.add(timerLabel);
         //contentPane.add(timerArea);
-        //contentPane.add(scramblePaneLabel);
         contentPane.add(scramblePane);
         contentPane.add(sessionStatsLabel);
         contentPane.add(rollingAverageLabel);
@@ -408,29 +400,20 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             buttonsOn();
             updateScrambleAlgs();
         } else if(source == popButton){
-            //acceptsSincePop = 0;
             popButton.setText("Popped!");
-            try{
-                acceptTimeX(stopTime-startTime, true, false);
-            } catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this, ERROR_MESS);
-                System.out.println(ex.getMessage());
-            }
+//            try{
+                acceptTime(stopTime-startTime, true, false);
+//            } catch(NumberFormatException ex){
+//                JOptionPane.showMessageDialog(this, ERROR_MESS);
+//                System.out.println(ex.getMessage());
+//            }
         } else if(source == plusTwoButton){
-            try{
-                acceptTimeX(stopTime-startTime, false, true);
-            } catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this, ERROR_MESS);
-                System.out.println(ex.getMessage());
-            }
-/*        } else if(source == averageModeButton){
-            if(averageModeButton.getText().equals("Average of 5 Mode")){
-                averageModeButton.setText("Average of 10 Mode");
-                averageOfFiveMode = true;
-            } else{
-                averageModeButton.setText("Average of 5 Mode");
-                averageOfFiveMode = false;
-            }*/
+//            try{
+                acceptTime(stopTime-startTime, false, true);
+//            } catch(NumberFormatException ex){
+//                JOptionPane.showMessageDialog(this, ERROR_MESS);
+//                System.out.println(ex.getMessage());
+//            }
         } else if(source == sessionResetButton){
             if(optionsMenu.showResetConfirmX){
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -447,8 +430,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             solveTable.setPuzzle(puzzle);
             updateLabels(puzzle);
 
-//popButton.setText("POP");
-//acceptsSincePop = 12;
             if(solveTable.okayToPop())
                 popButton.setText("POP");
             else
@@ -456,7 +437,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
             hasImported = false;
             importedIndex = 0;
-            updateStatsX();
+            updateStats();
             buttonsOn();
             updateScrambleAlgs();
         } else if(source == countdownCombo){
@@ -522,11 +503,11 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:");
             if(input == null) return;
             if(input.equalsIgnoreCase("POP")){
-                try{
-                    acceptTimeX(0, true, false);
-                } catch(NumberFormatException ex){
-                    JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
-                }
+//                try{
+                    acceptTime(0, true, false);
+//                } catch(NumberFormatException ex){
+//                    JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
+//                }
                 return;
             }
             float inputTime = 0;
@@ -536,12 +517,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
                 JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
                 return;
             }
-            try{
-                acceptTimeX(Math.round(inputTime * 1000));
-            } catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this, ERROR_MESS);
-                System.out.println(ex.getMessage());
-            }
+//            try{
+                acceptTime(Math.round(inputTime * 1000));
+//            } catch(NumberFormatException ex){
+//                JOptionPane.showMessageDialog(this, ERROR_MESS);
+//                System.out.println(ex.getMessage());
+//            }
             insertTimeButton.requestFocus();
         } else if(source == optionsItem){
             optionsMenu.setVisible(true);
@@ -816,7 +797,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
             float time = (stopTime-startTime)/1000F;
             timerLabel.setText(timeToString(time, true));
             startButton.setText("Accept Time");
-            if(solveTable.okayToPop()){//if(acceptsSincePop >= 12){
+            if(solveTable.okayToPop()){
                 popButton.setText("POP");
                 popButton.setEnabled(true);
             } else{
@@ -830,12 +811,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
     public void timerAccept(){
-        try{
-            acceptTimeX(stopTime-startTime);
-        } catch(NumberFormatException ex){
-            JOptionPane.showMessageDialog(this, ERROR_MESS);
-            System.out.println(ex.getMessage());
-        }
+//        try{
+            acceptTime(stopTime-startTime);
+//        } catch(NumberFormatException ex){
+//            JOptionPane.showMessageDialog(this, ERROR_MESS);
+//            System.out.println(ex.getMessage());
+//        }
     }
 
 //**********************************************************************************************************************
@@ -857,7 +838,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
 //**********************************************************************************************************************
 
-    public void updateGUI(){
+    private void updateGUI(){
         scramblePane.setCubeColors(optionsMenu.cubeColorsX);
         scramblePane.setPyraminxColors(optionsMenu.pyraminxColorsX);
         scramblePane.setMegaminxColors(optionsMenu.megaminxColorsX);
@@ -867,21 +848,28 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
     } //OptionsToGUI
 
 //**********************************************************************************************************************
-//**********************************************************************************************************************
-//**********************************************************************************************************************
 
-    private void acceptTimeX(long time) throws NumberFormatException{
-        acceptTimeX(time, false, false);
+    // for OptionsListener interface
+    public void optionsCallback(){
+        updateGUI();
+        updateStats();
     }
 
-    private void acceptTimeX(long time, boolean isPop, boolean isPlus2) throws NumberFormatException{
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    private void acceptTime(long time){
+        acceptTime(time, false, false);
+    }
+
+    private void acceptTime(long time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
         int time100 = Math.round(time/10F);
         solveTable.addSolve(time100, newAlg, isPop, isPlus2);
-        //acceptsSincePop++;
-        updateStatsX();
+        updateStats();
         buttonsOn();
         updateScrambleAlgs();
-    } // end acceptTimeX
+    } // end acceptTime
 
 //**********************************************************************************************************************
 
@@ -908,19 +896,18 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     private void resetTheSession(){
         popButton.setText("POP");
-        //acceptsSincePop = 12;
         hasImported = false;
         importedIndex = 0;
 
         solveTable.sessionReset();
-        updateStatsX();
+        updateStats();
         buttonsOn();
         updateScrambleAlgs();
     }
 
 //**********************************************************************************************************************
 
-    public void updateStatsX(){
+    private void updateStats(){
         int size = solveTable.getSize();
         final String BLACK = "#000000", RED = "#FF0000", BLUE = "#0000FF", TIE = "FF8000";
 
@@ -1086,7 +1073,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Cons
 
     private void updateLabels(String puzzle){
         useThisAlgLabel.setText("Use this " + puzzle + " Scramble Algorithm:");
-        //scramblePaneLabel.setBorder(BorderFactory.createTitledBorder(theBorder, puzzle + " Scramble View"));
         scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, puzzle + " Scramble View"));
         sessionStatsLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Session Statistics for " + puzzle));
         rollingAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Rolling Average for " + puzzle));

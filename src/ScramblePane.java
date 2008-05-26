@@ -35,7 +35,6 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //    private JTextArea[][][][] CubeFace;
 
     private BufferedImage myImage;
-    private ColorListener colorListener;
     private Polygon[] cubeFacesX = new Polygon[6];
     private Polygon[] pyraminxFaces = new Polygon[4];
     private Polygon[] megaminxFaces = new Polygon[12];
@@ -113,8 +112,15 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
+    private ColorListener colorListener;
+
     public static interface ColorListener{
         public abstract void faceClicked(ScramblePane scramblePane, int face, Color[] puzzleColors, String s);
+    }
+
+    public void addColorListener(ColorListener colorListener){
+        addMouseListener(this);
+        this.colorListener = colorListener;
     }
 
 //**********************************************************************************************************************
@@ -159,13 +165,6 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             else if(megaminxFaces[10].contains(x,y)) colorListener.faceClicked(this, 10, megaminxColors, "Upper-Back-Left Face (d) of Megaminx");
             else if(megaminxFaces[11].contains(x,y)) colorListener.faceClicked(this, 11, megaminxColors, "Lower-Back-Left Face (c) of Megaminx");
         }
-    }
-
-//**********************************************************************************************************************
-
-    public void addColorListener(ColorListener colorListener){
-        addMouseListener(this);
-        this.colorListener = colorListener;
     }
 
 //**********************************************************************************************************************
