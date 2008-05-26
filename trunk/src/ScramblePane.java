@@ -26,13 +26,10 @@ import javax.swing.border.Border;
 import java.awt.image.BufferedImage;
 
 public class ScramblePane extends JPanel implements MouseListener, Constants{
-//    private static final int MIN_CUBE_SIZE = 2, MAX_CUBE_SIZE = 5; // constants
 
     private Color[] cubeColors = new Color[6];
     private Color[] pyraminxColors = new Color[4];
     private Color[] megaminxColors = new Color[12];
-
-//    private JTextArea[][][][] CubeFace;
 
     private BufferedImage myImage;
     private Polygon[] cubeFacesX = new Polygon[6];
@@ -52,7 +49,6 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //System.err.print("getWidth():" + this.getWidth() + "\n");
 //System.err.print("getHeight():" + this.getHeight() + "\n");
 
-//        CubeFace = new JTextArea[MAX_CUBE_SIZE+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
         for(int face=0; face<6; face++) cubeColors[face] = Color.black; // just incase...
         for(int face=0; face<4; face++) pyraminxColors[face] = Color.black; // just incase...
         for(int face=0; face<12; face++) megaminxColors[face] = Color.black; // just incase...
@@ -61,15 +57,6 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int face=0; face<4; face++) pyraminxFaces[face] = new Polygon(); // just incase...
         for(int face=0; face<12; face++) megaminxFaces[face] = new Polygon(); // just incase...
 
-/*        for(int size=MIN_CUBE_SIZE; size<=MAX_CUBE_SIZE; size++){
-            prepareCube(size);
-            setCubeBounds(size);
-            //add to contentPane
-            for(int face=0; face<6; face++)
-                for(int i=0; i<size; i++)
-                    for(int j=0; j<size; j++)
-                       add(CubeFace[size][face][i][j]);
-        }*/
         clearScreen();
     }
 
@@ -83,10 +70,12 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
+    private void clearImage(){
+        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
+    }
+
     private void clearScreen(){
-//        for(int size=MIN_CUBE_SIZE; size<=MAX_CUBE_SIZE; size++)
-//            setCubeVisible(size, false);
-        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB); // should clear it...
+        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
         repaint();
     }
 
@@ -134,8 +123,6 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
     public void mouseClicked(MouseEvent e){
         int x = e.getX(), y = e.getY();
-//System.err.print("x:" + x + "\n");
-//System.err.print("y:" + y + "\n");
 
         if(myPuzzle.equals("2x2x2") || myPuzzle.equals("3x3x3") || myPuzzle.equals("4x4x4") || myPuzzle.equals("5x5x5")){
                  if(cubeFacesX[0].contains(x,y))  colorListener.faceClicked(this, 0, cubeColors, "Front Face of Cube");
@@ -170,25 +157,13 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
-/*
-    private void prepareCube(int size){
-        CubeFace[size] = new JTextArea[6][size][size];
 
-        for(int face=0; face<6; face++)
-            for(int i=0; i<size; i++)
-                for(int j=0; j<size; j++){
-                    CubeFace[size][face][i][j] = new JTextArea();
-                    CubeFace[size][face][i][j].setEditable(false);
-                    CubeFace[size][face][i][j].setFocusable(false);
-                    CubeFace[size][face][i][j].setBorder(blackLine);
-                }
-    }
+    private void drawCubeX(int size, int[][][][] state){
+        clearImage(); Graphics2D g2d = myImage.createGraphics();
+        //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
 
-//**********************************************************************************************************************
-
-    private void setCubeBounds(int size){
-        int margin = 14;
-        int face_gap = 4;
+        int margin = 15;
+        int face_gap = 7;
         //int face_pixels = 60;
         int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, ((myHeight-19) - 2*face_gap - 2*margin)/3);
 //System.err.print("myWidth:" + myWidth + "\n");
@@ -202,53 +177,68 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //System.err.print("x:" + x + "\n");
 //System.err.print("y:" + y + "\n");
 
-        setCubeFaceBounds(CubeFace[size][0], size, 1*n + x, 1*n + y, face_pixels/size);
-        setCubeFaceBounds(CubeFace[size][1], size, 3*n + x, 1*n + y, face_pixels/size);
-        setCubeFaceBounds(CubeFace[size][2], size, 0*n + x, 1*n + y, face_pixels/size);
-        setCubeFaceBounds(CubeFace[size][3], size, 2*n + x, 1*n + y, face_pixels/size);
-        setCubeFaceBounds(CubeFace[size][4], size, 1*n + x, 2*n + y, face_pixels/size);
-        setCubeFaceBounds(CubeFace[size][5], size, 1*n + x, 0*n + y, face_pixels/size);
+        cubeFacesX[0] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 1*n + y, state[0]);
+        cubeFacesX[1] = drawCubeFace(g2d, size, face_pixels, 3*n + x, 1*n + y, state[1]);
+        cubeFacesX[2] = drawCubeFace(g2d, size, face_pixels, 0*n + x, 1*n + y, state[2]);
+        cubeFacesX[3] = drawCubeFace(g2d, size, face_pixels, 2*n + x, 1*n + y, state[3]);
+        cubeFacesX[4] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 2*n + y, state[4]);
+        cubeFacesX[5] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
+
+        repaint();
     }
 
-    private void setCubeFaceBounds(JTextArea[][] aFace, int size, int x, int y, int px){
+//**********************************************************************************************************************
+
+    private Polygon drawCubeFace(Graphics2D g2d, int size, int face_pixels, int x_offset, int y_offset, int[][][] state){
+        Polygon square = square_poly(face_pixels);
+        square.translate(x_offset, y_offset);
+
+        int xs[][] = new int[4][size+1], ys[][] = new int[4][size+1]; // the points that are on the edges, including outer
+        for(int i=0; i<size+1; i++){
+            float w = i/(float)size;
+            xs[0][i] = (int)Math.round(w*square.xpoints[1] + (1F-w)*square.xpoints[0]);
+            ys[0][i] = (int)Math.round(w*square.ypoints[1] + (1F-w)*square.ypoints[0]);
+            xs[1][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[1]);
+            ys[1][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[1]);
+            xs[2][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[3]);
+            ys[2][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[3]);
+            xs[3][i] = (int)Math.round(w*square.xpoints[3] + (1F-w)*square.xpoints[0]);
+            ys[3][i] = (int)Math.round(w*square.ypoints[3] + (1F-w)*square.ypoints[0]);
+        }
+
+        Point lattice_points[][] = new Point[size+1][size+1]; // for the internal points
+        for(int i=0; i<size+1; i++)
+            for(int j=0; j<size+1; j++)
+                lattice_points[i][j] = RJT_Utils.intersectionPoint(
+                            xs[1][i], ys[1][i],
+                            xs[3][i], ys[3][i],
+                            xs[0][j], ys[0][j],
+                            xs[2][j], ys[2][j]);
+
+        Polygon stickers[][] = new Polygon[size][size];
         for(int i=0; i<size; i++)
-            for(int j=0; j<size; j++)
-                aFace[i][j].setBounds(j*px+x, i*px+y, px, px);
+            for(int j=0; j<size; j++){
+                stickers[i][j] = new Polygon();
+                stickers[i][j].addPoint(lattice_points[i][j].x, lattice_points[i][j].y);
+                stickers[i][j].addPoint(lattice_points[i][j+1].x, lattice_points[i][j+1].y);
+                stickers[i][j].addPoint(lattice_points[i+1][j+1].x, lattice_points[i+1][j+1].y);
+                stickers[i][j].addPoint(lattice_points[i+1][j].x, lattice_points[i+1][j].y);
+                g2d.setColor(cubeColors[state[i][j][0]]);
+                g2d.fillPolygon(stickers[i][j]); // fill each sticker
+            }
+
+        g2d.setColor(Color.black);
+        g2d.setStroke(new BasicStroke(3F));
+        g2d.drawPolygon(square); // draw the outer square
+        g2d.setStroke(new BasicStroke(1.5F));
+        for(int i=1; i<size; i++) // draw horizontal inside lines
+            g2d.drawLine(xs[1][i], ys[1][i], xs[3][i], ys[3][i]);
+        for(int j=1; j<size; j++) // draw vertical inside lines
+            g2d.drawLine(xs[0][j], ys[0][j], xs[2][j], ys[2][j]);
+
+        return square;
     }
 
-//**********************************************************************************************************************
-
-    private void resetCube(int size){
-        for(int face=0; face<6; face++)
-            for(int i=0; i<size; i++)
-                for(int j=0; j<size; j++)
-                    CubeFace[size][face][i][j].setBackground(cubeColors[face]);
-    }
-
-//**********************************************************************************************************************
-
-    private void setCubeVisible(int size, boolean show){
-        for(int face=0; face<6; face++)
-            for(int i=0; i<size; i++)
-                for(int j=0; j<size; j++)
-                    CubeFace[size][face][i][j].setVisible(show);
-    }
-*/
-//**********************************************************************************************************************
-//**********************************************************************************************************************
-//**********************************************************************************************************************
-// new Cube routines that don't rely on JTextArea manips
-/*
-    private void drawCube(int size, int[][][][] state){
-        for(int face=0; face<6; face++)
-            for(int i=0; i<size; i++)
-                for(int j=0; j<size; j++){
-                    Color c = cubeColors[state[face][i][j][0]];
-                    CubeFace[size][face][i][j].setBackground(c);
-                }
-        setCubeVisible(size, true);
-    }
-*/
 //**********************************************************************************************************************
 
     private void scrambleCube(int size){
@@ -306,7 +296,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         if(failed)
             JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
-            drawCubeX(size, state); // Line to change to switch the drawing style.
+            drawCubeX(size, state);
     }
 
 //**********************************************************************************************************************
@@ -330,11 +320,11 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int d=0; d<tdir; d++){
             for(int i=0; i<size; i++){
                 if(tface == 0) //doing F
-                    cycle(state[5][size-tslice-1][size-i-1], state[3][size-i-1][tslice], state[4][tslice][i], state[2][i][size-tslice-1]);
+                    RJT_Utils.cycle(state[5][size-tslice-1][size-i-1], state[3][size-i-1][tslice], state[4][tslice][i], state[2][i][size-tslice-1]);
                 else if(tface == 2) // doing L
-                    cycle(state[5][i][tslice], state[0][i][tslice], state[4][i][tslice], state[1][size-i-1][size-tslice-1]);
+                    RJT_Utils.cycle(state[5][i][tslice], state[0][i][tslice], state[4][i][tslice], state[1][size-i-1][size-tslice-1]);
                 else if(tface == 4) // doing D
-                    cycle(state[0][size-tslice-1][i], state[3][size-tslice-1][i], state[1][size-tslice-1][i], state[2][size-tslice-1][i]);
+                    RJT_Utils.cycle(state[0][size-tslice-1][i], state[3][size-tslice-1][i], state[1][size-tslice-1][i], state[2][size-tslice-1][i]);
             }
         }
 
@@ -342,92 +332,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             for(int d=0; d<dir; d++)
                 for(int i=0; i<((size+1)/2); i++)
                     for(int j=0; j<(size/2); j++)
-                        cycle(state[face][i][j], state[face][j][size-i-1], state[face][size-i-1][size-j-1], state[face][size-j-1][i]);
-    }
-
-//**********************************************************************************************************************
-//**********************************************************************************************************************
-//**********************************************************************************************************************
-
-    private void drawCubeX(int size, int[][][][] state){
-        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = myImage.createGraphics();
-        //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
-
-        int margin = 15;
-        int face_gap = 7;
-        //int face_pixels = 60;
-        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, ((myHeight-19) - 2*face_gap - 2*margin)/3);
-//System.err.print("myWidth:" + myWidth + "\n");
-//System.err.print("myHeight:" + myHeight + "\n");
-//System.err.print("margin:" + margin + "\n");
-//System.err.print("face_pixels:" + face_pixels + "\n");
-        int n = face_pixels + face_gap;
-        //int x = 15, y = 19; // nudge factors
-        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = ((myHeight-19) - 3*face_pixels - 2*face_gap)/2;
-        y += 14; // nudge away from title
-//System.err.print("x:" + x + "\n");
-//System.err.print("y:" + y + "\n");
-
-        cubeFacesX[0] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 1*n + y, state[0]);
-        cubeFacesX[1] = drawCubeFace(g2d, size, face_pixels, 3*n + x, 1*n + y, state[1]);
-        cubeFacesX[2] = drawCubeFace(g2d, size, face_pixels, 0*n + x, 1*n + y, state[2]);
-        cubeFacesX[3] = drawCubeFace(g2d, size, face_pixels, 2*n + x, 1*n + y, state[3]);
-        cubeFacesX[4] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 2*n + y, state[4]);
-        cubeFacesX[5] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
-
-        repaint();
-    }
-
-//**********************************************************************************************************************
-
-    private Polygon drawCubeFace(Graphics2D g2d, int size, int face_pixels, int x_offset, int y_offset, int[][][] state){
-        Polygon square = square_poly(face_pixels);
-        square.translate(x_offset, y_offset);
-
-        int xs[][] = new int[4][size+1], ys[][] = new int[4][size+1]; // the points that are on the edges, including outer
-        for(int i=0; i<size+1; i++){
-            float w = i/(float)size;
-            xs[0][i] = (int)Math.round(w*square.xpoints[1] + (1F-w)*square.xpoints[0]);
-            ys[0][i] = (int)Math.round(w*square.ypoints[1] + (1F-w)*square.ypoints[0]);
-            xs[1][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[1]);
-            ys[1][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[1]);
-            xs[2][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[3]);
-            ys[2][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[3]);
-            xs[3][i] = (int)Math.round(w*square.xpoints[3] + (1F-w)*square.xpoints[0]);
-            ys[3][i] = (int)Math.round(w*square.ypoints[3] + (1F-w)*square.ypoints[0]);
-        }
-
-        Point lattice_points[][] = new Point[size+1][size+1]; // for the internal points
-        for(int i=0; i<size+1; i++)
-            for(int j=0; j<size+1; j++)
-                lattice_points[i][j] = getLineIntersection( xs[1][i], ys[1][i],
-                                                            xs[3][i], ys[3][i],
-                                                            xs[0][j], ys[0][j],
-                                                            xs[2][j], ys[2][j]);
-
-        Polygon stickers[][] = new Polygon[size][size];
-        for(int i=0; i<size; i++)
-            for(int j=0; j<size; j++){
-                stickers[i][j] = new Polygon();
-                stickers[i][j].addPoint(lattice_points[i][j].x, lattice_points[i][j].y);
-                stickers[i][j].addPoint(lattice_points[i][j+1].x, lattice_points[i][j+1].y);
-                stickers[i][j].addPoint(lattice_points[i+1][j+1].x, lattice_points[i+1][j+1].y);
-                stickers[i][j].addPoint(lattice_points[i+1][j].x, lattice_points[i+1][j].y);
-                g2d.setColor(cubeColors[state[i][j][0]]);
-                g2d.fillPolygon(stickers[i][j]); // fill each sticker
-            }
-
-        g2d.setColor(Color.black);
-        g2d.setStroke(new BasicStroke(3F));
-        g2d.drawPolygon(square); // draw the outer square
-        g2d.setStroke(new BasicStroke(1.5F));
-        for(int i=1; i<size; i++) // draw horizontal inside lines
-            g2d.drawLine(xs[1][i], ys[1][i], xs[3][i], ys[3][i]);
-        for(int j=1; j<size; j++) // draw vertical inside lines
-            g2d.drawLine(xs[0][j], ys[0][j], xs[2][j], ys[2][j]);
-
-        return square;
+                        RJT_Utils.cycle(state[face][i][j], state[face][j][size-i-1], state[face][size-i-1][size-j-1], state[face][size-j-1][i]);
     }
 
 //**********************************************************************************************************************
@@ -435,8 +340,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     private void drawMegaminx(int[][][] state){
-        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = myImage.createGraphics();
+        clearImage(); Graphics2D g2d = myImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int xShift = 125, yShift = 48; // for the second/back cluster of 6 faces (was 141, 0)
@@ -451,7 +355,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //System.err.print("yCenter:" + yCenter + "\n");
 //System.err.print("radius:" + radius + "\n");
 
-        Polygon big_pent = regular_poly(5, big_radius, true); // auxiliary: for drawing outer 5 faces of cluster
+        Polygon big_pent = RJT_Utils.regular_poly(5, big_radius, true); // auxiliary: for drawing outer 5 faces of cluster
         big_pent.translate(xCenter, yCenter);
 
         megaminxFaces[ 0] = drawMinxFace(g2d, radius, xCenter, yCenter, false, state[0]);
@@ -474,7 +378,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     private Polygon drawMinxFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
-        Polygon pent = regular_poly(5, r, pointup);
+        Polygon pent = RJT_Utils.regular_poly(5, r, pointup);
         pent.translate(x_offset, y_offset);
 
         int xs[][] = new int[5][2], ys[][] = new int[5][2]; // the 10 points that are on the edges
@@ -487,10 +391,11 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
         Point inside_pent[] = new Point[5]; // for internal pentagon, i.e. center
         for(int i=0; i<5; i++)
-            inside_pent[i] = getLineIntersection(   xs[(i+0)%5][0], ys[(i+0)%5][0],
-                                                    xs[(i+3)%5][1], ys[(i+3)%5][1],
-                                                    xs[(i+1)%5][0], ys[(i+1)%5][0],
-                                                    xs[(i+4)%5][1], ys[(i+4)%5][1]);
+            inside_pent[i] = RJT_Utils.intersectionPoint(
+                        xs[(i+0)%5][0], ys[(i+0)%5][0],
+                        xs[(i+3)%5][1], ys[(i+3)%5][1],
+                        xs[(i+1)%5][0], ys[(i+1)%5][0],
+                        xs[(i+4)%5][1], ys[(i+4)%5][1]);
 
         Polygon stickers[] = new Polygon[11];
         for(int i=0; i<11; i++) stickers[i] = new Polygon();
@@ -584,7 +489,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             else if(move.equals("F")) doMinxFaceTurn(state, 5, dir);
             else if(move.equals("a")) doMinxFaceTurn(state, 6, dir);
             else if(move.equals("b")) doMinxFaceTurn(state, 7, dir);
-            else if(move.equals("f")) doMinxFaceTurn(state, 8, dir); // c,d,e,f reversed on CCT, this is right
+            else if(move.equals("f")) doMinxFaceTurn(state, 8, dir); // c,d,e,f reversed, this is correct
             else if(move.equals("e")) doMinxFaceTurn(state, 9, dir);
             else if(move.equals("d")) doMinxFaceTurn(state,10, dir);
             else if(move.equals("c")) doMinxFaceTurn(state,11, dir);
@@ -632,8 +537,8 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             }
 
             //pure face rotation time
-            cycle(state[face][0], state[face][2], state[face][4], state[face][6], state[face][8]); // corners
-            cycle(state[face][1], state[face][3], state[face][5], state[face][7], state[face][9]); // edges
+            RJT_Utils.cycle(state[face][0], state[face][2], state[face][4], state[face][6], state[face][8]); // corners
+            RJT_Utils.cycle(state[face][1], state[face][3], state[face][5], state[face][7], state[face][9]); // edges
         }
     }
 
@@ -643,11 +548,11 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                                         int f0, int f1, int f2, int f3, int f4,
                                         int x0, int x1, int x2, int x3, int x4){
         for(int i=0; i<3; i++) // the three stickers on the edge, so like c/e/c
-            cycle(  state[(f0+plus6)%12][(x0+i)%10],
-                    state[(f1+plus6)%12][(x1+i)%10],
-                    state[(f2+plus6)%12][(x2+i)%10],
-                    state[(f3+plus6)%12][(x3+i)%10],
-                    state[(f4+plus6)%12][(x4+i)%10]);
+            RJT_Utils.cycle(state[(f0+plus6)%12][(x0+i)%10],
+                            state[(f1+plus6)%12][(x1+i)%10],
+                            state[(f2+plus6)%12][(x2+i)%10],
+                            state[(f3+plus6)%12][(x3+i)%10],
+                            state[(f4+plus6)%12][(x4+i)%10]);
     }
 
 //**********************************************************************************************************************
@@ -690,18 +595,18 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
     private void helperMinxSliceAssist(int[][][] state, int plus6,
                                         int f0, int f1, int f2, int f3, int f4,
                                         int x0, int x1, int x2, int x3, int x4){
-        cycle(  state[(f0+plus6)%12][10],
-                state[(f1+plus6)%12][10],
-                state[(f2+plus6)%12][10],
-                state[(f3+plus6)%12][10],
-                state[(f4+plus6)%12][10]); // centers get cycled
+        RJT_Utils.cycle(state[(f0+plus6)%12][10],
+                        state[(f1+plus6)%12][10],
+                        state[(f2+plus6)%12][10],
+                        state[(f3+plus6)%12][10],
+                        state[(f4+plus6)%12][10]); // centers get cycled
 
         for(int i=0; i<7; i++) // for each of the 7 non-centers on the face
-            cycle(  state[(f0+plus6)%12][(x0+i+3)%10],
-                    state[(f1+plus6)%12][(x1+i+3)%10],
-                    state[(f2+plus6)%12][(x2+i+3)%10],
-                    state[(f3+plus6)%12][(x3+i+3)%10],
-                    state[(f4+plus6)%12][(x4+i+3)%10]);
+            RJT_Utils.cycle(state[(f0+plus6)%12][(x0+i+3)%10],
+                            state[(f1+plus6)%12][(x1+i+3)%10],
+                            state[(f2+plus6)%12][(x2+i+3)%10],
+                            state[(f3+plus6)%12][(x3+i+3)%10],
+                            state[(f4+plus6)%12][(x4+i+3)%10]);
     }
 
 //**********************************************************************************************************************
@@ -709,20 +614,19 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     private void drawPyraminx(int[][][] state){
-        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = myImage.createGraphics();
+        clearImage(); Graphics2D g2d = myImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int xCenter = myWidth/2;//141;//myWidth/2;
-        int yCenter = myHeight/2-19;//98;//myHeight/2 - 20;
-        float radius = Math.min(myWidth, myHeight-20) * 0.24F;//52;//Math.min(myWidth, myHeight) * 0.2;
+        int xCenter = myWidth/2;//141;
+        int yCenter = myHeight/2-19;//98;
+        float radius = Math.min(myWidth, myHeight-20) * 0.24F;//52;
         float face_gap = 7;
         float big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
 //System.err.print("xCenter:" + xCenter + "\n");
 //System.err.print("yCenter:" + yCenter + "\n");
 //System.err.print("radius:" + radius + "\n");
 
-        Polygon big_tri = regular_poly(3, big_radius, false); // auxiliary: for drawing the outer 3 faces
+        Polygon big_tri = RJT_Utils.regular_poly(3, big_radius, false); // auxiliary: for drawing the outer 3 faces
         big_tri.translate(xCenter, yCenter);
 
         pyraminxFaces[0] = drawPyraFace(g2d, radius, xCenter, yCenter, true, state[0]);
@@ -736,7 +640,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     private Polygon drawPyraFace(Graphics2D g2d, float r, int x_offset, int y_offset, boolean pointup, int[][] state){
-        Polygon tri = regular_poly(3, r, pointup);
+        Polygon tri = RJT_Utils.regular_poly(3, r, pointup);
         tri.translate(x_offset, y_offset);
 
         int xs[][] = new int[3][2], ys[][] = new int[3][2]; // the 6 points that are on the edges
@@ -825,19 +729,19 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             switch(face){
                 case 0:
                     for(int i=0; i<3; i++)
-                        cycle(state[0][(5+i)%6], state[3][(3+i)%6], state[1][(1+i)%6]);
+                        RJT_Utils.cycle(state[0][(5+i)%6], state[3][(3+i)%6], state[1][(1+i)%6]);
                     break;
                 case 1:
                     for(int i=0; i<3; i++)
-                        cycle(state[0][(3+i)%6], state[2][(1+i)%6], state[3][(5+i)%6]);
+                        RJT_Utils.cycle(state[0][(3+i)%6], state[2][(1+i)%6], state[3][(5+i)%6]);
                     break;
                 case 2:
                     for(int i=0; i<3; i++)
-                        cycle(state[0][(1+i)%6], state[1][(5+i)%6], state[2][(3+i)%6]);
+                        RJT_Utils.cycle(state[0][(1+i)%6], state[1][(5+i)%6], state[2][(3+i)%6]);
                     break;
                 case 3:
                     for(int i=0; i<3; i++)
-                        cycle(state[2][(5+i)%6], state[1][(3+i)%6], state[3][(1+i)%6]);
+                        RJT_Utils.cycle(state[2][(5+i)%6], state[1][(3+i)%6], state[3][(1+i)%6]);
                     break;
             }
 
@@ -851,10 +755,10 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         dir %= 3;
         for(int d=0; d<dir; d++)
             switch(face){
-                case 0: cycle(state[0][6], state[3][8], state[1][7]); break;
-                case 1: cycle(state[0][8], state[2][7], state[3][6]); break;
-                case 2: cycle(state[0][7], state[1][6], state[2][8]); break;
-                case 3: cycle(state[2][6], state[1][8], state[3][7]); break;
+                case 0: RJT_Utils.cycle(state[0][6], state[3][8], state[1][7]); break;
+                case 1: RJT_Utils.cycle(state[0][8], state[2][7], state[3][6]); break;
+                case 2: RJT_Utils.cycle(state[0][7], state[1][6], state[2][8]); break;
+                case 3: RJT_Utils.cycle(state[2][6], state[1][8], state[3][7]); break;
             }
     }
 
@@ -862,18 +766,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    private Polygon regular_poly(int n, float r, boolean pointup){
-        Polygon poly = new Polygon();
-        float offset = (float)(pointup ? -Math.PI/2 : Math.PI/2);
-        for(int i=0; i<n; i++)
-            poly.addPoint((int)Math.round(r*Math.cos(i*2*Math.PI/n + offset)),
-                          (int)Math.round(r*Math.sin(i*2*Math.PI/n + offset)));
-        return poly;
-    }
-
-//**********************************************************************************************************************
-
-    private Polygon square_poly(int n){
+    private static final Polygon square_poly(int n){
         Polygon square = new Polygon();
         square.addPoint(0, 0);
         square.addPoint(n, 0);
@@ -884,7 +777,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    private Polygon square_polyX(int n){
+    private static final Polygon square_polyX(int n){
         Polygon square = new Polygon();
         float r = n*(float)Math.sqrt(0.5);
         float offset = (float)(-13*Math.PI/16);
@@ -897,51 +790,8 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    private static Point getLineIntersection(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
-        float norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
-        float x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
-        float y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
-
-        return new Point((int)Math.round(x_inter), (int)Math.round(y_inter));
-    }
-
-//**********************************************************************************************************************
-
-    private static float DET(float a, float b, float c, float d){
-        return (a*d - b*c);
-    }
-
-//**********************************************************************************************************************
-
-    private void cycle(int n0[], int n1[], int n2[]){
-        int temp = n2[0];
-        n2[0] = n1[0];
-        n1[0] = n0[0];
-        n0[0] = temp;
-    }
-
-    private void cycle(int n0[], int n1[], int n2[], int n3[]){
-        int temp = n3[0];
-        n3[0] = n2[0];
-        n2[0] = n1[0];
-        n1[0] = n0[0];
-        n0[0] = temp;
-    }
-
-    private void cycle(int n0[], int n1[], int n2[], int n3[], int n4[]){
-        int temp = n4[0];
-        n4[0] = n3[0];
-        n3[0] = n2[0];
-        n2[0] = n1[0];
-        n1[0] = n0[0];
-        n0[0] = temp;
-    }
-
-//**********************************************************************************************************************
-
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         g.drawImage(myImage, 0, 0, null);
     }
-
 }
