@@ -38,14 +38,8 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
 
         // configure JFrame
         setTitle(windowTitle);
-        setSize(625, 340+10);
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
-
-        // center frame on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+        RJT_Utils.centerJFrame(this, 625, 340+10);
+        RJT_Utils.configureJFrame(this);
 
         // main textArea
         JTextArea window = new JTextArea();
@@ -91,4 +85,5 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
             }
         }
     } // end saveToFile
+
 }

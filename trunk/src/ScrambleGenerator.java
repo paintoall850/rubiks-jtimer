@@ -41,9 +41,8 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
 
         // configure JFrame
         setTitle("Scramble Generator");
-        centerFrameOnScreen(225, 155);
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
+        RJT_Utils.centerJFrame(this, 225, 155);
+        RJT_Utils.configureJFrame(this);
 
         puzzleLabel = new JLabel("Puzzle:");
         puzzleCombo = new JComboBox(puzzleChoices);
@@ -78,15 +77,6 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
         formatPrint.setSelected(true);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end contructor
-
-//**********************************************************************************************************************
-
-    private void centerFrameOnScreen(int width, int height){
-        setSize(width, height);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
-    }
 
 //**********************************************************************************************************************
 

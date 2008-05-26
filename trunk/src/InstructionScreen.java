@@ -31,18 +31,14 @@ public class InstructionScreen extends JFrame implements Constants{
 
         // configure JFrame
         setTitle("Instructions for " + APP_TITLE);
-        setSize(325, 425);
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
-
-        // center frame on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+        RJT_Utils.centerJFrame(this, 325, 425);
+        RJT_Utils.configureJFrame(this);
 
         JLabel instLabel = new JLabel("<html>instructions go here...</html>");
         instLabel.setVerticalAlignment(SwingConstants.TOP);
+
         instLabel.setBounds(10,10,300,400);
+
         contentPane.add(instLabel);
 
         setDefaultCloseOperation(HIDE_ON_CLOSE);

@@ -54,11 +54,11 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     SmartButton[] smartButton;
 
     volatile Thread timerThread;
+    private boolean runningCountdown;
     AudioClip countdownClip = null;
 
     SolveTable solveTable;
     private boolean sessionDetailsEnabled, averageDetailsEnabled;
-    private boolean runningCountdown;
     private int countingDown;
     private long startTime, stopTime;
 
@@ -99,9 +99,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         // configure JFrame
         setTitle(APP_TITLE);
-        centerFrameOnScreen(860, 570);
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
+        RJT_Utils.centerJFrame(this, 860, 570);
+        RJT_Utils.configureJFrame(this);
 
         ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
@@ -270,15 +269,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         startButton.requestFocus();
 
     } // end constructor
-
-//**********************************************************************************************************************
-
-    private void centerFrameOnScreen(int width, int height){
-        setSize(width, height);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
-    }
 
 //**********************************************************************************************************************
 

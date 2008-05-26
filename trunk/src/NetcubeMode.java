@@ -44,22 +44,20 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     JLabel usernameLabel, serverIpLabel, serverPortLabel, bigPicture, smallPicture;
     JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel, userIsTyping;//, scramblePaneLabel;
     JLabel localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
-    JTextField usernameText, serverIpText, serverPortText;
-    JTextField chatText;
+    JTextField usernameText, serverIpText, serverPortText, chatText;
     JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
     JTextPane chatPane;
     StyledDocument chatDoc;
     Style redStyle, blueStyle, blackStyle;
     AudioClip chatSound, countdownClip, bing1, bing2, startupClip;
     JTextArea scrambleText;
-    String remoteUsername;
+    String remoteUsername, remoteTime;
     JComboBox puzzleCombo, countdownCombo;
     JScrollPane chatScrollPane;
     java.util.Timer timerThread;
     int countdown;
     long startTime, stopTime;
     DecimalFormat ssxx, ss;
-    String remoteTime;
     boolean isTyping, remoteIsTyping;
     ImageIcon typeOn, typeOff;
 
@@ -85,8 +83,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     public NetcubeMode(OptionsMenu optionsMenu){
         // configure JFrame
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
+        RJT_Utils.configureJFrame(this);
 
         try { //configure chatSound
             chatSound = Applet.newAudioClip(getClass().getResource("blip.wav"));
@@ -208,15 +205,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         // set everything to defaults
         reset();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
-
-//**********************************************************************************************************************
-
-    private void centerFrameOnScreen(int width, int height){
-        setSize(width, height);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
     }
 
 //**********************************************************************************************************************
@@ -349,7 +337,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected void hideGUI(){
-        centerFrameOnScreen(695, 170);
+        RJT_Utils.centerJFrame(this, 695, 170);
 
         usernameLabel.setVisible(true);
         serverIpLabel.setVisible(true);
@@ -394,7 +382,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected void showGUI(){
-        centerFrameOnScreen(860+80, 465);
+        RJT_Utils.centerJFrame(this, 860+80, 465);
 
         usernameLabel.setVisible(false);
         serverIpLabel.setVisible(false);

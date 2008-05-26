@@ -64,9 +64,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         // configure JFrame
         setTitle("Options for " + APP_TITLE + " (stored in " + FILENAME + ")");
-        centerFrameOnScreen(604, 325);
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
+        RJT_Utils.centerJFrame(this, 604, 325);
+        RJT_Utils.configureJFrame(this);
 
         startupLabel = new JLabel();
         startupLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Start-up Options"));
@@ -174,15 +173,6 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         loadOptions();
     } // end constructor
-
-//**********************************************************************************************************************
-
-    private void centerFrameOnScreen(int width, int height){
-        setSize(width, height);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
-    }
 
 //**********************************************************************************************************************
 

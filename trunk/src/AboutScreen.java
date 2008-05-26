@@ -30,18 +30,12 @@ public class AboutScreen extends JFrame implements Constants{
 
         // configure JFrame
         setTitle("About " + APP_TITLE);
-        setSize(660, 255);
-        setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
-        setResizable(false);
-
-        // center frame on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int appWidth = getSize().width, appHeight = getSize().height;
-        setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+        RJT_Utils.centerJFrame(this, 660, 255);
+        RJT_Utils.configureJFrame(this);
 
         JLabel cowPic = new JLabel(new ImageIcon(getClass().getResource("Cow.jpg")));
-        cowPic.setBorder(BorderFactory.createLineBorder(Color.black));
-        JLabel aboutLabel = new JLabel("<html><font size=\"7\">" + APP_TITLE + "</font><br>Package Updated: May 25, 2008<br><br>Derived from JNetCube which was designed and written by Chris Hunt (<u>huntca@plu.edu</u>) for the cubing community.<br><br>5x5 Scramble Viewer, \"re-skin\", various bug fixes, and minor changes contributed by Doug Li.<br>Contact him for feature requests and possible bugs at <u>DougCube@gmail.com</u>.</html>");
+        cowPic.setBorder(blackLine);
+        JLabel aboutLabel = new JLabel("<html><font size=\"7\">" + APP_TITLE + "</font><br>Package Updated: May 26, 2008<br><br>Derived from JNetCube which was designed and written by Chris Hunt (<u>huntca@plu.edu</u>) for the cubing community.<br><br>5x5 Scramble Viewer, \"re-skin\", various bug fixes, and minor changes contributed by Doug Li.<br>Contact him for feature requests and possible bugs at <u>DougCube@gmail.com</u>.</html>");
         aboutLabel.setVerticalAlignment(SwingConstants.TOP);
 
         cowPic.setBounds(10,10,215,200);
