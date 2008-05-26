@@ -15,11 +15,11 @@
 //import java.util.Vector;
 
 public class ScrambleMegaminx{
-    private final String[][] faces = {{"R"}, {"D", "Y"}};
-    private final String[] directions = {"-", "--", "+", "++"};
-    private final int defaultLength = 70;
+//    private final String[][] faces = {{"R"}, {"D", "Y"}};
+//    private final String[] directions = {"-", "--", "+", "++"};
+//    private final int defaultLength = 70;
 
-    public ScrambleMegaminx(){}
+//    public ScrambleMegaminx(){}
 /*
     public String generateScramble(int length){
         String scramble = "";
@@ -66,15 +66,14 @@ public class ScrambleMegaminx{
         String scramble = "";
         int rand = 0;
         for(int line=0; line<7; line++){
-            if(line != 0) scramble = scramble + ".";//"          ";// was "@" briefly too
+            if(line != 0) scramble += ".";//"          ";// was "@" briefly too
             for(int i=0; i<10; i++){
                 rand = (int)(Math.random()*2);
-                scramble = scramble + (i%2==1 ? "D" : "R") + (rand==1 ? "++ " : "-- ");
+                scramble += (i%2==1 ? "D" : "R") + (rand==1 ? "++ " : "-- ");
             }
             //rand = (int)(Math.random()*2);
-            scramble = scramble + "U" + (rand==1 ? "" : "'"); // force the U to be tied with last ++/--
+            scramble += "U" + (rand==1 ? "" : "'"); // force the U to be tied with last ++/--
         }
         return scramble;
-
     }
 }

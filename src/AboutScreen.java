@@ -41,7 +41,7 @@ public class AboutScreen extends JFrame implements Constants{
 
         JLabel cowPic = new JLabel(new ImageIcon(getClass().getResource("Cow.jpg")));
         cowPic.setBorder(BorderFactory.createLineBorder(Color.black));
-        JLabel aboutLabel = new JLabel("<html><font size=\"7\">" + APP_TITLE + "</font><br>Package Updated: May 23, 2008<br><br>Derived from JNetCube which was designed and written by Chris Hunt (<u>huntca@plu.edu</u>) for the cubing community.<br><br>5x5 Scramble Viewer, \"re-skin\", various bug fixes, and minor changes contributed by Doug Li.<br>Contact him for feature requests and possible bugs at <u>DougCube@gmail.com</u>.</html>");
+        JLabel aboutLabel = new JLabel("<html><font size=\"7\">" + APP_TITLE + "</font><br>Package Updated: May 25, 2008<br><br>Derived from JNetCube which was designed and written by Chris Hunt (<u>huntca@plu.edu</u>) for the cubing community.<br><br>5x5 Scramble Viewer, \"re-skin\", various bug fixes, and minor changes contributed by Doug Li.<br>Contact him for feature requests and possible bugs at <u>DougCube@gmail.com</u>.</html>");
         aboutLabel.setVerticalAlignment(SwingConstants.TOP);
 
         cowPic.setBounds(10,10,215,200);

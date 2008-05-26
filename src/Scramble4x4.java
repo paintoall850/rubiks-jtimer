@@ -94,7 +94,7 @@ public class Scramble4x4{
         do generateMove();
         while(isSameFace(currentArray, currentFace, previousArray, previousFace));
 
-        scramble = scramble + " " + formatedMove;
+        scramble += " " + formatedMove;
 
         oldArray = previousArray;
         oldGroup = previousGroup;
@@ -126,7 +126,7 @@ public class Scramble4x4{
         }
 
         //add third move to scramble
-        scramble = scramble + " " + formatedMove;
+        scramble += " " + formatedMove;
 
         deadArray = oldArray;
         deadGroup = oldGroup;
@@ -168,7 +168,7 @@ public class Scramble4x4{
                 }
             }
 
-            scramble = scramble + " " + formatedMove;
+            scramble += " " + formatedMove;
 
             deadArray = oldArray;
             deadGroup = oldGroup;

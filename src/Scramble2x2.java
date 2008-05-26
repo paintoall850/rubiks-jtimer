@@ -52,7 +52,7 @@ public class Scramble2x2{
         for(int i=0; i<24; i++){
             do generateMove();
             while(isSameFace(currentArray, currentFace, previousArray, previousFace) || isParallel(currentArray, previousArray));
-            scramble = scramble + " " + formatedMove;
+            scramble += " " + formatedMove;
             previousArray = currentArray;
             previousFace = currentFace;
         }
@@ -65,10 +65,8 @@ public class Scramble2x2{
             if(((thisFace == 0 || thisFace == 1 || thisFace == 2) && (thatFace == 0 || thatFace == 1 || thatFace == 2)) ||
                ((thisFace == 3 || thisFace == 4 || thisFace == 5) && (thatFace == 3 || thatFace == 4 || thatFace == 5)))
                 return true;
-            else
-                return false;
-        } else
-            return false;
+        }
+        return false;
     } // end isSameFace
 
     private boolean isParallel(int thisArray, int thatArray){
