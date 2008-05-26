@@ -25,9 +25,6 @@ public class Scramble3x3{
     private int oldArray, oldFace, previousArray, previousFace, currentArray, currentFace;
     private String formatedMove;
 
-    public Scramble3x3(){
-    }
-
     private void generateMove(){
         currentArray = (int)(Math.random()*3);
         currentFace = (int)(Math.random()*6);
