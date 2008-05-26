@@ -52,7 +52,7 @@ public class Scramble3x3{
         do generateMove();
         while(isSameFace(currentArray, currentFace, previousArray, previousFace));
 
-        scramble = scramble + " " + formatedMove;
+        scramble += " " + formatedMove;
         oldArray = previousArray;
         oldFace = previousFace;
         previousArray = currentArray;
@@ -73,7 +73,7 @@ public class Scramble3x3{
                     generateMove();
             }
 
-            scramble = scramble + " " + formatedMove;
+            scramble += " " + formatedMove;
 
             oldArray = previousArray;
             oldFace = previousFace;

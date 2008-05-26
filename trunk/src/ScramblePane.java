@@ -26,13 +26,13 @@ import javax.swing.border.Border;
 import java.awt.image.BufferedImage;
 
 public class ScramblePane extends JPanel implements MouseListener, Constants{
-    private static final int MIN_CUBE_SIZE = 2, MAX_CUBE_SIZE = 5; // constants
+//    private static final int MIN_CUBE_SIZE = 2, MAX_CUBE_SIZE = 5; // constants
 
     private Color[] cubeColors = new Color[6];
     private Color[] pyraminxColors = new Color[4];
     private Color[] megaminxColors = new Color[12];
 
-    private JTextArea[][][][] CubeFace;
+//    private JTextArea[][][][] CubeFace;
 
     private BufferedImage myImage;
     private ColorListener colorListener;
@@ -53,7 +53,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //System.err.print("getWidth():" + this.getWidth() + "\n");
 //System.err.print("getHeight():" + this.getHeight() + "\n");
 
-        CubeFace = new JTextArea[MAX_CUBE_SIZE+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
+//        CubeFace = new JTextArea[MAX_CUBE_SIZE+1][][][]; // ignoring 0x0, and 1x1 case (although 1x1 would work)
         for(int face=0; face<6; face++) cubeColors[face] = Color.black; // just incase...
         for(int face=0; face<4; face++) pyraminxColors[face] = Color.black; // just incase...
         for(int face=0; face<12; face++) megaminxColors[face] = Color.black; // just incase...
@@ -62,7 +62,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int face=0; face<4; face++) pyraminxFaces[face] = new Polygon(); // just incase...
         for(int face=0; face<12; face++) megaminxFaces[face] = new Polygon(); // just incase...
 
-        for(int size=MIN_CUBE_SIZE; size<=MAX_CUBE_SIZE; size++){
+/*        for(int size=MIN_CUBE_SIZE; size<=MAX_CUBE_SIZE; size++){
             prepareCube(size);
             setCubeBounds(size);
             //add to contentPane
@@ -70,7 +70,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                 for(int i=0; i<size; i++)
                     for(int j=0; j<size; j++)
                        add(CubeFace[size][face][i][j]);
-        }
+        }*/
         clearScreen();
     }
 
@@ -85,8 +85,8 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     private void clearScreen(){
-        for(int size=MIN_CUBE_SIZE; size<=MAX_CUBE_SIZE; size++)
-            setCubeVisible(size, false);
+//        for(int size=MIN_CUBE_SIZE; size<=MAX_CUBE_SIZE; size++)
+//            setCubeVisible(size, false);
         myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB); // should clear it...
         repaint();
     }
@@ -171,7 +171,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
-
+/*
     private void prepareCube(int size){
         CubeFace[size] = new JTextArea[6][size][size];
 
@@ -234,12 +234,12 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                 for(int j=0; j<size; j++)
                     CubeFace[size][face][i][j].setVisible(show);
     }
-
+*/
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 // new Cube routines that don't rely on JTextArea manips
-
+/*
     private void drawCube(int size, int[][][][] state){
         for(int face=0; face<6; face++)
             for(int i=0; i<size; i++)
@@ -249,7 +249,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                 }
         setCubeVisible(size, true);
     }
-
+*/
 //**********************************************************************************************************************
 
     private void scrambleCube(int size){

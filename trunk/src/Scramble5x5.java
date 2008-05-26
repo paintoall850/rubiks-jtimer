@@ -96,7 +96,7 @@ public class Scramble5x5{
         while(isSameFace(currentArray, currentFace, previousArray, previousFace));
 
         //add second move to scramble
-        scramble = scramble + " " + formatedMove;
+        scramble += " " + formatedMove;
 
         //store previous and current move so that we can generate a new one
         oldArray = previousArray;
@@ -128,7 +128,7 @@ public class Scramble5x5{
         }
 
         //add third move to scramble
-        scramble = scramble + " " + formatedMove;
+        scramble += " " + formatedMove;
 
         //store previous and current move so that we can generate a new one
         deadArray = oldArray;
@@ -171,7 +171,7 @@ public class Scramble5x5{
                 }
             }
 
-            scramble = scramble + " " + formatedMove;
+            scramble += " " + formatedMove;
 
             deadArray = oldArray;
             deadGroup = oldGroup;

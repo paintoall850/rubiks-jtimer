@@ -51,30 +51,30 @@ public class ScramblePyraminx{
         tipChoice = (int)(Math.random()*3);
         switch (tipChoice){
             case 0: tipsTurned--; break;
-            case 1: scramble = scramble + " u"; break;
-            case 2: scramble = scramble + " u'"; break;
+            case 1: scramble += " u"; break;
+            case 2: scramble += " u'"; break;
         }
         tipChoice = (int)(Math.random()*3);
         switch (tipChoice){
             case 0: tipsTurned--; break;
-            case 1: scramble = scramble + " l"; break;
-            case 2: scramble = scramble + " l'"; break;
+            case 1: scramble += " l"; break;
+            case 2: scramble += " l'"; break;
         }
         tipChoice = (int)(Math.random()*3);
         switch (tipChoice){
             case 0: tipsTurned--; break;
-            case 1: scramble = scramble + " r"; break;
-            case 2: scramble = scramble + " r'"; break;
+            case 1: scramble += " r"; break;
+            case 2: scramble += " r'"; break;
         }
         tipChoice = (int)(Math.random()*3);
         switch(tipChoice){
             case 0: tipsTurned--; break;
-            case 1: scramble = scramble + " b"; break;
-            case 2: scramble = scramble + " b'"; break;
+            case 1: scramble += " b"; break;
+            case 2: scramble += " b'"; break;
         }
 
         generateCoreMove();
-        scramble = scramble + " " + formatedMove;
+        scramble += " " + formatedMove;
         previousArray = currentArray;
         previousFace = currentFace;
 
@@ -83,13 +83,13 @@ public class ScramblePyraminx{
             generateCoreMove();
             while(previousArray == currentArray)
                 generateCoreMove();
-            scramble = scramble + " " + formatedMove;
+            scramble += " " + formatedMove;
             previousArray = currentArray;
             previousFace = currentFace;
         }
 
-        if(scramble.startsWith(" ")) // truncate leading space (if there is one, but there should be)
-            scramble = scramble.substring(1, scramble.length());
-        return scramble;
+//        if(scramble.startsWith(" ")) // truncate leading space (if there is one, but there should be)
+//            scramble = scramble.substring(1, scramble.length());
+        return scramble.trim();
     } // end Generate Scramble
 }
