@@ -26,7 +26,19 @@ public abstract class RJT_Utils implements Constants{
 
 //**********************************************************************************************************************
 
+    public static final void centerJFrame(JFrame jFrame, int width, int height){
+        jFrame.setSize(width, height);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int appWidth = jFrame.getSize().width, appHeight = jFrame.getSize().height;
+        jFrame.setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+    }
 
+//**********************************************************************************************************************
+
+    public static final void configureJFrame(JFrame jFrame){
+        jFrame.setIconImage((new ImageIcon(jFrame.getClass().getResource("Cow.gif"))).getImage());
+        jFrame.setResizable(false);
+    }
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************
