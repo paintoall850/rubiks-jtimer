@@ -43,7 +43,7 @@ public class SolveTable implements Constants{
         currentPuzzle = puzzle;
 
         if(!myTable.containsKey(currentPuzzle))
-            myTable.put(currentPuzzle, new Vector<Solve>(100, 100));
+            myTable.put(currentPuzzle, new Vector<Solve>(40, 20));
     }
 
 //**********************************************************************************************************************
