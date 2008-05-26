@@ -353,7 +353,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
     private void drawCubeX(int size, int[][][][] state){
         myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = myImage.createGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
 
         int margin = 15;
         int face_gap = 7;
@@ -399,10 +399,10 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             ys[3][i] = (int)Math.round(w*square.ypoints[3] + (1F-w)*square.ypoints[0]);
         }
 
-        Point inside_point[][] = new Point[size+1][size+1]; // for the internal points
+        Point lattice_points[][] = new Point[size+1][size+1]; // for the internal points
         for(int i=0; i<size+1; i++)
             for(int j=0; j<size+1; j++)
-                inside_point[i][j] = getLineIntersection(   xs[1][i], ys[1][i],
+                lattice_points[i][j] = getLineIntersection( xs[1][i], ys[1][i],
                                                             xs[3][i], ys[3][i],
                                                             xs[0][j], ys[0][j],
                                                             xs[2][j], ys[2][j]);
@@ -411,10 +411,10 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int i=0; i<size; i++)
             for(int j=0; j<size; j++){
                 stickers[i][j] = new Polygon();
-                stickers[i][j].addPoint(inside_point[i][j].x, inside_point[i][j].y);
-                stickers[i][j].addPoint(inside_point[i][j+1].x, inside_point[i][j+1].y);
-                stickers[i][j].addPoint(inside_point[i+1][j+1].x, inside_point[i+1][j+1].y);
-                stickers[i][j].addPoint(inside_point[i+1][j].x, inside_point[i+1][j].y);
+                stickers[i][j].addPoint(lattice_points[i][j].x, lattice_points[i][j].y);
+                stickers[i][j].addPoint(lattice_points[i][j+1].x, lattice_points[i][j+1].y);
+                stickers[i][j].addPoint(lattice_points[i+1][j+1].x, lattice_points[i+1][j+1].y);
+                stickers[i][j].addPoint(lattice_points[i+1][j].x, lattice_points[i+1][j].y);
                 g2d.setColor(cubeColors[state[i][j][0]]);
                 g2d.fillPolygon(stickers[i][j]); // fill each sticker
             }
