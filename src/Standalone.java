@@ -890,7 +890,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         //timerLabel.setVisible(false);
 
         returnFocus();
-    }
+    } // end buttonsOn
 
 //**********************************************************************************************************************
 
@@ -903,7 +903,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         updateStats();
         buttonsOn();
         updateScrambleAlgs();
-    }
+    } // end resetTheSession
 
 //**********************************************************************************************************************
 
@@ -1067,7 +1067,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         sessionDetailsEnabled = (size > 0);
         averageDetailsEnabled = (sBestAverage != "N/A");
 
-    } // end updateStatsX
+    } // end updateStats
 
 //**********************************************************************************************************************
 

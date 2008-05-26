@@ -25,6 +25,8 @@ public class Scramble3x3{
     private int oldArray, oldFace, previousArray, previousFace, currentArray, currentFace;
     private String formatedMove;
 
+//**********************************************************************************************************************
+
     private void generateMove(){
         currentArray = (int)(Math.random()*3);
         currentFace = (int)(Math.random()*6);
@@ -38,6 +40,8 @@ public class Scramble3x3{
 
         formatedMove = arrayChoice[currentFace];
     }
+
+//**********************************************************************************************************************
 
     public String generateScramble(){
         String scramble = "";
@@ -80,6 +84,8 @@ public class Scramble3x3{
 
         return scramble;
     } // end Generate Scramble
+
+//**********************************************************************************************************************
 
     private boolean isSameFace(int thisArray, int thisFace, int thatArray, int thatFace){
         if(thisArray == thatArray)

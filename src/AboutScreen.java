@@ -52,4 +52,5 @@ public class AboutScreen extends JFrame implements Constants{
 
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end AboutScreen
+
 }

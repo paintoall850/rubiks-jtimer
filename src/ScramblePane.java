@@ -43,7 +43,8 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     public ScramblePane(int width, int height){
-        myWidth = width; myHeight = height; // needs gettin' rid of
+        myWidth = width; // needs gettin' rid of
+        myHeight = height; // needs gettin' rid of
 //System.err.print("width:" + width + "\n");
 //System.err.print("height:" + height + "\n");
 //System.err.print("getWidth():" + this.getWidth() + "\n");
@@ -57,7 +58,13 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int face=0; face<4; face++) pyraminxFaces[face] = new Polygon(); // just incase...
         for(int face=0; face<12; face++) megaminxFaces[face] = new Polygon(); // just incase...
 
-        clearScreen();
+        clearImage();
+    }
+
+//**********************************************************************************************************************
+
+    private void clearImage(){
+        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
     }
 
 //**********************************************************************************************************************
@@ -70,19 +77,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    private void clearImage(){
-        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
-    }
-
-    private void clearScreen(){
-        myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
-        repaint();
-    }
-
-//**********************************************************************************************************************
-
     public void updateScreen(){
-        clearScreen();
              if(myPuzzle.equals("2x2x2")) scrambleCube(2);
         else if(myPuzzle.equals("3x3x3")) scrambleCube(3);
         else if(myPuzzle.equals("4x4x4")) scrambleCube(4);
@@ -152,13 +147,13 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             else if(megaminxFaces[10].contains(x,y)) colorListener.faceClicked(this, 10, megaminxColors, "Upper-Back-Left Face (d) of Megaminx");
             else if(megaminxFaces[11].contains(x,y)) colorListener.faceClicked(this, 11, megaminxColors, "Lower-Back-Left Face (c) of Megaminx");
         }
-    }
+    } // end mouseClicked
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    private void drawCubeX(int size, int[][][][] state){
+    private void drawCube(int size, int[][][][] state){
         clearImage(); Graphics2D g2d = myImage.createGraphics();
         //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
 
@@ -185,7 +180,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         cubeFacesX[5] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
 
         repaint();
-    }
+    } // end drawCube
 
 //**********************************************************************************************************************
 
@@ -237,7 +232,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             g2d.drawLine(xs[0][j], ys[0][j], xs[2][j], ys[2][j]);
 
         return square;
-    }
+    } // end drawCubeFace
 
 //**********************************************************************************************************************
 
@@ -296,8 +291,8 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         if(failed)
             JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
-            drawCubeX(size, state);
-    }
+            drawCube(size, state);
+    } // end scrambleCube
 
 //**********************************************************************************************************************
 
@@ -333,7 +328,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                 for(int i=0; i<((size+1)/2); i++)
                     for(int j=0; j<(size/2); j++)
                         RJT_Utils.cycle(state[face][i][j], state[face][j][size-i-1], state[face][size-i-1][size-j-1], state[face][size-j-1][i]);
-    }
+    } // end doCubeTurn
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************
@@ -373,7 +368,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         megaminxFaces[11] = drawMinxFace(g2d, radius, big_pent.xpoints[4] + xShift, big_pent.ypoints[4] + yShift, true, state[11]);
 
         repaint();
-    }
+    } // end drawMegaminx
 
 //**********************************************************************************************************************
 
@@ -426,7 +421,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             g2d.drawLine(xs[i][0], ys[i][0], xs[(i+3)%5][1], ys[(i+3)%5][1]);
 
         return pent;
-    }
+    } // drawMinxFace
 
 //**********************************************************************************************************************
 
@@ -500,7 +495,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
             drawMegaminx(state);
-    }
+    } // scrambleMegaminx
 
 //**********************************************************************************************************************
 
@@ -540,7 +535,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             RJT_Utils.cycle(state[face][0], state[face][2], state[face][4], state[face][6], state[face][8]); // corners
             RJT_Utils.cycle(state[face][1], state[face][3], state[face][5], state[face][7], state[face][9]); // edges
         }
-    }
+    } // end doMinxFaceTurn
 
 //**********************************************************************************************************************
 
@@ -553,7 +548,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                             state[(f2+plus6)%12][(x2+i)%10],
                             state[(f3+plus6)%12][(x3+i)%10],
                             state[(f4+plus6)%12][(x4+i)%10]);
-    }
+    } // end helperMinxFaceTurn
 
 //**********************************************************************************************************************
 
@@ -588,7 +583,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                     break;
             }
         }
-    }
+    } // end doMinxSliceAssist
 
 //**********************************************************************************************************************
 
@@ -607,7 +602,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                             state[(f2+plus6)%12][(x2+i+3)%10],
                             state[(f3+plus6)%12][(x3+i+3)%10],
                             state[(f4+plus6)%12][(x4+i+3)%10]);
-    }
+    } // end helperMinxSliceAssist
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************
@@ -635,7 +630,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         pyraminxFaces[3] = drawPyraFace(g2d, radius, big_tri.xpoints[1], big_tri.ypoints[1], false, state[3]);
 
         repaint();
-    }
+    } // end drawPyraminx
 
 //**********************************************************************************************************************
 
@@ -682,7 +677,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             g2d.drawLine(xs[i][0], ys[i][0], xs[(i+2)%3][1], ys[(i+2)%3][1]);
 
         return tri;
-    }
+    } // end drawPyraFace
 
 //**********************************************************************************************************************
 
@@ -718,7 +713,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <"+ move + ">.");
         else
             drawPyraminx(state);
-    }
+    } // end scramblePyraminx
 
 //**********************************************************************************************************************
 
@@ -746,7 +741,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
             }
 
         doPyraTipsTurn(state, face, dir);
-    }
+    } // end doPyraCoreTurn
 
 //**********************************************************************************************************************
 
@@ -760,7 +755,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
                 case 2: RJT_Utils.cycle(state[0][7], state[1][6], state[2][8]); break;
                 case 3: RJT_Utils.cycle(state[2][6], state[1][8], state[3][7]); break;
             }
-    }
+    } // end doPyraTipsTurn
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************

@@ -26,8 +26,7 @@ public class ScramblePyraminx{
     private int previousArray, previousFace, currentArray, currentFace;
     private String formatedMove;
 
-    public ScramblePyraminx(){
-    }
+//**********************************************************************************************************************
 
     private void generateCoreMove(){
         currentArray = (int)(Math.random()*4);
@@ -43,6 +42,8 @@ public class ScramblePyraminx{
 
         formatedMove = arrayChoice[currentFace];
     }
+
+//**********************************************************************************************************************
 
     public String generateScramble(){
         String scramble = "";

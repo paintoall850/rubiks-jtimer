@@ -23,6 +23,8 @@ public class Scramble5x5{
     private int deadArray, deadGroup, deadFace, oldArray, oldGroup, oldFace, previousArray, previousGroup, previousFace, currentArray, currentGroup, currentFace;
     private String formatedMove;
 
+//**********************************************************************************************************************
+
     public Scramble5x5(){
         UandD = new String[3][4];
         UandD[0][0] = "U";
@@ -67,6 +69,8 @@ public class Scramble5x5{
         LandR[2][3] = "R2";
     }
 
+//**********************************************************************************************************************
+
     private void generateMove(){
         currentArray = (int)(Math.random()*3);
         currentGroup = (int)(Math.random()*3);
@@ -81,6 +85,8 @@ public class Scramble5x5{
 
         formatedMove = arrayChoice[currentGroup][currentFace];
     }
+
+//**********************************************************************************************************************
 
     public String generateScramble(){
         String scramble = "";
@@ -188,6 +194,8 @@ public class Scramble5x5{
 
         return scramble;
     } // end Generate Scramble
+
+//**********************************************************************************************************************
 
     private boolean isSameFace(int thisArray, int thisFace, int thatArray, int thatFace){
         return ((thisArray == thatArray) && (thisFace == thatFace));
