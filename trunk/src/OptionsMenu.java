@@ -38,14 +38,13 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     public Color[] megaminxColorsX = new Color[12];
     public String averageViewFormatX, sessionViewFormatX;
 
-    private Standalone myStandalone;
     JTabbedPane tabs;
     JPanel generalTab, cubeSchemeTab, minxSchemeTab, sessionTab, bestTab;
-    JButton saveButton, resetButton, cancelButton;
+    JButton saveButton, applyButton, resetButton, closeButton;
     JLabel puzzleLabel, countdownLabel, averageSyntaxLabel, sessionSyntaxLabel, startupLabel, colorLabel;
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
     JLabel[] faceCLabels = new JLabel[6];
-    JLabel faceColorLabel, previewLabel;//, pyraminxViewLabel, megaminxViewLabel;
+    JLabel faceColorLabel, previewLabel;
     ScramblePane pyraminxView, megaminxView;
 
     JComboBox puzzleCombo, countdownCombo;
@@ -58,7 +57,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
 //**********************************************************************************************************************
 
-    public OptionsMenu(Standalone standalone){
+    public OptionsMenu(){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -68,8 +67,6 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         centerFrameOnScreen(604, 325);
         setIconImage((new ImageIcon(getClass().getResource("Cow.gif"))).getImage());
         setResizable(false);
-
-        myStandalone = standalone;
 
         startupLabel = new JLabel();
         startupLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Start-up Options"));
@@ -130,14 +127,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
                     ScramblePreview[face][i][j].setBorder(blackLine);
                 }
 
-        //pyraminxViewLabel = new JLabel();
-        //pyraminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
         pyraminxView = new ScramblePane(269+3,200);// was 282,235);
         pyraminxView.setLayout(null);
         pyraminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
 
-        //megaminxViewLabel = new JLabel();
-        //megaminxViewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
         megaminxView = new ScramblePane(269+3,200);// was 282,235);
         megaminxView.setLayout(null);
         megaminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
@@ -158,9 +151,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         averageScrollPane = new JScrollPane(averageText);
         averageScrollPane.setBorder(blackLine);
 
-        saveButton = new JButton("Save Options");
-        resetButton = new JButton("Reset All Options");
-        cancelButton = new JButton("Cancel");
+        saveButton = new JButton("Save and Apply");
+        applyButton = new JButton("Apply Only");
+        resetButton = new JButton("Reset All");
+        closeButton = new JButton("Close");
 
         // call big add tabs and content function
         addStuffToTabs();
@@ -171,8 +165,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         // add Content
         contentPane.add(tabs);
         contentPane.add(saveButton);
+        contentPane.add(applyButton);
         contentPane.add(resetButton);
-        contentPane.add(cancelButton);
+        contentPane.add(closeButton);
 
         // add ActionListeners
         addTheActionListeners();
@@ -194,9 +189,14 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     private void setTheBounds(){
 
         tabs.setBounds(10,5,579,240);
-        saveButton.setBounds(10,255,186,30);
-        resetButton.setBounds(186+20,255,186,30);
-        cancelButton.setBounds(2*186+30,255,186,30);
+        //saveButton.setBounds(10,255,186,30);
+        //resetButton.setBounds(186+20,255,186,30);
+        //cancelButton.setBounds(2*186+30,255,186,30);
+
+        saveButton.setBounds(10,255,137,30);
+        applyButton.setBounds(137+20,255,137,30);
+        resetButton.setBounds(2*137+30,255,137,30);
+        closeButton.setBounds(3*137+40,255,137,30);
 
         startupLabel.setBounds(10,5,269+3,200);
         colorLabel.setBounds(289+3,5,269+3,200);
@@ -248,9 +248,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
         setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
 
-        //pyraminxViewLabel.setBounds(10,5,269+3,200); // copy below
         pyraminxView.setBounds(10,5,269+3,200); // was 282,235);
-        //megaminxViewLabel.setBounds((579-15)-(269+3),5,269+3,200); // copy below
         megaminxView.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
 
 }
@@ -296,9 +294,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         minxSchemeTab = new JPanel();
         minxSchemeTab.setLayout(null);
-        //minxSchemeTab.add(pyraminxViewLabel);
         minxSchemeTab.add(pyraminxView);
-        //minxSchemeTab.add(megaminxViewLabel);
         minxSchemeTab.add(megaminxView);
 
         bestTab = new JPanel();
@@ -325,8 +321,9 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     private void addTheActionListeners(){
 
         saveButton.addActionListener(this);
+        applyButton.addActionListener(this);
         resetButton.addActionListener(this);
-        cancelButton.addActionListener(this);
+        closeButton.addActionListener(this);
 
         countdownColorText.addMouseListener(this);
         timerColorText.addMouseListener(this);
@@ -349,11 +346,11 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         if(source == saveButton){
             saveOptions();
-            myStandalone.updateGUI();
-            myStandalone.updateStatsX();
-            this.setVisible(false); //this.dispose();
-        } else if(source == cancelButton){
-            this.setVisible(false); //this.dispose();
+            optionsListener.optionsCallback();
+        } else if(source == applyButton){
+            optionsListener.optionsCallback();
+        } else if(source == closeButton){
+            this.setVisible(false);
         } else if(source == resetButton){
             resetOptions();
             averageText.setCaretPosition(0);
@@ -418,6 +415,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     }
 
 //**********************************************************************************************************************
+
     public void loadOptions(){
         try{
             SortedProperties props = new SortedProperties();
@@ -590,6 +588,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
 //**********************************************************************************************************************
 
+    // this is for the ColorListener interface
     public void faceClicked(ScramblePane scramblePane, int face, Color[] puzzleColors, String s){
         Color newColor = JColorChooser.showDialog(this, s, puzzleColors[face]);
         if(newColor != null){
@@ -612,6 +611,20 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             for(int i=0; i<3; i++)
                 for(int j=0; j<3; j++)
                     ScramblePreview[face][i][j].setBackground(faceColorTexts[face].getBackground());
+    }
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    private OptionsListener optionsListener;
+
+    public static interface OptionsListener{
+        public abstract void optionsCallback();
+    }
+
+    public void addOptionsListener(OptionsListener optionsListener){
+        this.optionsListener = optionsListener;
     }
 
 //**********************************************************************************************************************
