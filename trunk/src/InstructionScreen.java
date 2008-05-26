@@ -47,4 +47,5 @@ public class InstructionScreen extends JFrame implements Constants{
 
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end InstructionScreen
+
 }

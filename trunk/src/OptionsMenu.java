@@ -45,7 +45,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
     JLabel[] faceCLabels = new JLabel[6];
     JLabel faceColorLabel, previewLabel;
-    ScramblePane pyraminxView, megaminxView;
+    ScramblePane pyraminxViewer, megaminxViewer;
 
     JComboBox puzzleCombo, countdownCombo;
     JCheckBox confirmBox, showMinutesBox;
@@ -127,13 +127,13 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
                     ScramblePreview[face][i][j].setBorder(blackLine);
                 }
 
-        pyraminxView = new ScramblePane(269+3,200);// was 282,235);
-        pyraminxView.setLayout(null);
-        pyraminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
+        pyraminxViewer = new ScramblePane(269+3,200);// was 282,235);
+        pyraminxViewer.setLayout(null);
+        pyraminxViewer.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
 
-        megaminxView = new ScramblePane(269+3,200);// was 282,235);
-        megaminxView.setLayout(null);
-        megaminxView.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
+        megaminxViewer = new ScramblePane(269+3,200);// was 282,235);
+        megaminxViewer.setLayout(null);
+        megaminxViewer.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
 
         sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
@@ -248,8 +248,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
         setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
 
-        pyraminxView.setBounds(10,5,269+3,200); // was 282,235);
-        megaminxView.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
+        pyraminxViewer.setBounds(10,5,269+3,200); // was 282,235);
+        megaminxViewer.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
 
 }
 
@@ -294,8 +294,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         minxSchemeTab = new JPanel();
         minxSchemeTab.setLayout(null);
-        minxSchemeTab.add(pyraminxView);
-        minxSchemeTab.add(megaminxView);
+        minxSchemeTab.add(pyraminxViewer);
+        minxSchemeTab.add(megaminxViewer);
 
         bestTab = new JPanel();
         bestTab.setLayout(null);
@@ -335,8 +335,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         for(int face=0; face<6; face++)
             faceColorTexts[face].addMouseListener(this);
 
-        pyraminxView.addColorListener(this);
-        megaminxView.addColorListener(this);
+        pyraminxViewer.addColorListener(this);
+        megaminxViewer.addColorListener(this);
     }
 
 //**********************************************************************************************************************
@@ -515,10 +515,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         averageText.setText(averageViewFormatX); averageText.setCaretPosition(0);
         sessionText.setText(sessionViewFormatX); sessionText.setCaretPosition(0);
 
-        pyraminxView.setPyraminxColors(pyraminxColorsX);
-        pyraminxView.newScramble("Pyraminx", "");
-        megaminxView.setMegaminxColors(megaminxColorsX);
-        megaminxView.newScramble("Megaminx", "");
+        pyraminxViewer.setPyraminxColors(pyraminxColorsX);
+        pyraminxViewer.newScramble("Pyraminx", "");
+        megaminxViewer.setMegaminxColors(megaminxColorsX);
+        megaminxViewer.newScramble("Megaminx", "");
     } // end OptionsToGUI
 
 //**********************************************************************************************************************
