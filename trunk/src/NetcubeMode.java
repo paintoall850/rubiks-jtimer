@@ -817,15 +817,15 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         }
 
         String returnMe = sessionViewFormat;
-        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-        returnMe = findAndReplace(returnMe, "%U", usernameText.getText());
-        returnMe = findAndReplace(returnMe, "%A", ssxx.format(localCurrentSessionAverage));
-        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-        returnMe = findAndReplace(returnMe, "%F", ssxx.format(localSessionFastest));
-        returnMe = findAndReplace(returnMe, "%S", ssxx.format(localSessionSlowest));
-        returnMe = findAndReplace(returnMe, "%C", localCubesSolved+"");
-        returnMe = findAndReplace(returnMe, "%P", localNumOfPops+"");
+        returnMe = returnMe.replaceAll("%T", new Date()+"");
+        returnMe = returnMe.replaceAll("%U", usernameText.getText());
+        returnMe = returnMe.replaceAll("%A", ssxx.format(localCurrentSessionAverage));
+        returnMe = returnMe.replaceAll("%I", timesAndScrambles);
+        returnMe = returnMe.replaceAll("%O", timesOnly);
+        returnMe = returnMe.replaceAll("%F", ssxx.format(localSessionFastest));
+        returnMe = returnMe.replaceAll("%S", ssxx.format(localSessionSlowest));
+        returnMe = returnMe.replaceAll("%C", localCubesSolved+"");
+        returnMe = returnMe.replaceAll("%P", localNumOfPops+"");
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getLocalSessionView
@@ -844,13 +844,13 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         }
 
         String returnMe = averageViewFormat;
-        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-        returnMe = findAndReplace(returnMe, "%U", usernameText.getText());
-        returnMe = findAndReplace(returnMe, "%A", ssxx.format(localCurrentRollingAverage));
-        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-        returnMe = findAndReplace(returnMe, "%F", ssxx.format(localCurrentFastest));
-        returnMe = findAndReplace(returnMe, "%S", ssxx.format(localCurrentSlowest));
+        returnMe = returnMe.replaceAll("%T", new Date()+"");
+        returnMe = returnMe.replaceAll("%U", usernameText.getText());
+        returnMe = returnMe.replaceAll("%A", ssxx.format(localCurrentRollingAverage));
+        returnMe = returnMe.replaceAll("%I", timesAndScrambles);
+        returnMe = returnMe.replaceAll("%O", timesOnly);
+        returnMe = returnMe.replaceAll("%F", ssxx.format(localCurrentFastest));
+        returnMe = returnMe.replaceAll("%S", ssxx.format(localCurrentSlowest));
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getLocalAverageView
@@ -866,15 +866,15 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         }
 
         String returnMe = sessionViewFormat;
-        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-        returnMe = findAndReplace(returnMe, "%U", remoteUsername);
-        returnMe = findAndReplace(returnMe, "%A", ssxx.format(remoteCurrentSessionAverage));
-        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-        returnMe = findAndReplace(returnMe, "%F", ssxx.format(remoteSessionFastest));
-        returnMe = findAndReplace(returnMe, "%S", ssxx.format(remoteSessionSlowest));
-        returnMe = findAndReplace(returnMe, "%C", remoteCubesSolved+"");
-        returnMe = findAndReplace(returnMe, "%P", remoteNumOfPops+"");
+        returnMe = returnMe.replaceAll("%T", new Date()+"");
+        returnMe = returnMe.replaceAll("%U", remoteUsername);
+        returnMe = returnMe.replaceAll("%A", ssxx.format(remoteCurrentSessionAverage));
+        returnMe = returnMe.replaceAll("%I", timesAndScrambles);
+        returnMe = returnMe.replaceAll("%O", timesOnly);
+        returnMe = returnMe.replaceAll("%F", ssxx.format(remoteSessionFastest));
+        returnMe = returnMe.replaceAll("%S", ssxx.format(remoteSessionSlowest));
+        returnMe = returnMe.replaceAll("%C", remoteCubesSolved+"");
+        returnMe = returnMe.replaceAll("%P", remoteNumOfPops+"");
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getRemoteSessionView
@@ -893,19 +893,19 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         }
 
         String returnMe = averageViewFormat;
-        returnMe = findAndReplace(returnMe, "%T", new Date()+"");
-        returnMe = findAndReplace(returnMe, "%U", remoteUsername);
-        returnMe = findAndReplace(returnMe, "%A", ssxx.format(remoteCurrentRollingAverage));
-        returnMe = findAndReplace(returnMe, "%I", timesAndScrambles);
-        returnMe = findAndReplace(returnMe, "%O", timesOnly);
-        returnMe = findAndReplace(returnMe, "%F", ssxx.format(remoteCurrentFastest));
-        returnMe = findAndReplace(returnMe, "%S", ssxx.format(remoteCurrentSlowest));
+        returnMe = returnMe.replaceAll("%T", new Date()+"");
+        returnMe = returnMe.replaceAll("%U", remoteUsername);
+        returnMe = returnMe.replaceAll("%A", ssxx.format(remoteCurrentRollingAverage));
+        returnMe = returnMe.replaceAll("%I", timesAndScrambles);
+        returnMe = returnMe.replaceAll("%O", timesOnly);
+        returnMe = returnMe.replaceAll("%F", ssxx.format(remoteCurrentFastest));
+        returnMe = returnMe.replaceAll("%S", ssxx.format(remoteCurrentSlowest));
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getRemoteAverageView
 
 //**********************************************************************************************************************
-
+/*
     protected static final String findAndReplace(String original, String find, String replace){
         while(true){
             int index = original.indexOf(find);
@@ -916,7 +916,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         }
         return original;
     } // end findAndReplace
-
+*/
 //**********************************************************************************************************************
 
     public final void keyTyped(KeyEvent e){}
