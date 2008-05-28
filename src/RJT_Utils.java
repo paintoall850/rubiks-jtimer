@@ -41,6 +41,23 @@ public abstract class RJT_Utils implements Constants{
     }
 
 //**********************************************************************************************************************
+
+    public static void enterPressesWhenFocused(JButton button){
+
+        button.registerKeyboardAction(
+            button.getActionForKeyStroke(
+                KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
+                JComponent.WHEN_FOCUSED);
+
+        button.registerKeyboardAction(
+            button.getActionForKeyStroke(
+                KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true),
+                JComponent.WHEN_FOCUSED);
+    }
+
+//**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
