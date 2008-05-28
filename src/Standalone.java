@@ -40,15 +40,17 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     private TimerArea timerArea;
     private String newAlg;
 
+    JComboBox puzzleCombo, countdownCombo;
+    JTextArea scrambleText, bestAverageText;
     JButton startButton, discardButton, popButton, plusTwoButton;
     JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
     JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
     JLabel sessionStatsLabel, rollingAverageLabel, bestAverageLabel;
+
+    // JMenu stuff
     JMenuBar jMenuBar;
     JMenu fileMenu, toolsMenu, networkMenu, helpMenu;
     JMenuItem saveBestItem, saveSessionItem, optionsItem, exitItem, importItem, generatorItem, instItem, aboutItem, serverItem, clientItem;
-    JComboBox puzzleCombo, countdownCombo;
-    JTextArea scrambleText, bestAverageText;
 
     JLabel[] averageLabels, timeLabels;
     SmartButton[] smartButton;
@@ -116,45 +118,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "count.mid not found. There will be no countdown audio.");}
 
         // set up JMenuBar
-        saveBestItem = new JMenuItem("Save Best Average As...");
-        saveSessionItem = new JMenuItem("Save Session Average As...");
-        optionsItem = new JMenuItem("Options");
-        optionsItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        exitItem = new JMenuItem("Exit");
-        importItem = new JMenuItem("Import Scrambles"); importItem.setMnemonic('I');
-        importItem.setAccelerator(KeyStroke.getKeyStroke('I', 2));
-        generatorItem = new JMenuItem("Generate Scrambles"); generatorItem.setMnemonic('G');
-        generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
-        instItem = new JMenuItem("Instuctions");
-        instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
-        aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
-        serverItem = new JMenuItem("Start Server");
-        serverItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        clientItem = new JMenuItem("Connect To Server");
-        clientItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
-        fileMenu = new JMenu("File"); fileMenu.setMnemonic('F');
-        fileMenu.add(saveBestItem);
-        fileMenu.add(saveSessionItem);
-        fileMenu.addSeparator();
-        fileMenu.add(optionsItem);
-        fileMenu.addSeparator();
-        fileMenu.add(exitItem);
-        toolsMenu = new JMenu("Tools"); toolsMenu.setMnemonic('T');
-        toolsMenu.add(importItem);
-        toolsMenu.add(generatorItem);
-        networkMenu = new JMenu("Network Timer"); networkMenu.setMnemonic('N');
-        networkMenu.add(serverItem);
-        networkMenu.add(clientItem);
-        helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
-        helpMenu.add(instItem);
-        helpMenu.add(aboutItem);
-        jMenuBar = new JMenuBar();
-        jMenuBar.add(fileMenu);
-        jMenuBar.add(toolsMenu);
-        jMenuBar.add(networkMenu);
-        jMenuBar.add(Box.createHorizontalGlue());
-        jMenuBar.add(helpMenu);
+        makeJMenuBar();
         setJMenuBar(jMenuBar);
 
         // inialize Popup Windows
@@ -269,6 +233,50 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         startButton.requestFocus();
 
     } // end constructor
+
+//**********************************************************************************************************************
+
+    private void makeJMenuBar(){
+        saveBestItem = new JMenuItem("Save Best Average As...");
+        saveSessionItem = new JMenuItem("Save Session Average As...");
+        optionsItem = new JMenuItem("Options");
+        optionsItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        exitItem = new JMenuItem("Exit");
+        importItem = new JMenuItem("Import Scrambles"); importItem.setMnemonic('I');
+        importItem.setAccelerator(KeyStroke.getKeyStroke('I', 2));
+        generatorItem = new JMenuItem("Generate Scrambles"); generatorItem.setMnemonic('G');
+        generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
+        instItem = new JMenuItem("Instuctions");
+        instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
+        aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
+        serverItem = new JMenuItem("Start Server");
+        serverItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
+        clientItem = new JMenuItem("Connect To Server");
+        clientItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
+        fileMenu = new JMenu("File"); fileMenu.setMnemonic('F');
+        fileMenu.add(saveBestItem);
+        fileMenu.add(saveSessionItem);
+        fileMenu.addSeparator();
+        fileMenu.add(optionsItem);
+        fileMenu.addSeparator();
+        fileMenu.add(exitItem);
+        toolsMenu = new JMenu("Tools"); toolsMenu.setMnemonic('T');
+        toolsMenu.add(importItem);
+        toolsMenu.add(generatorItem);
+        networkMenu = new JMenu("Network Timer"); networkMenu.setMnemonic('N');
+        networkMenu.add(serverItem);
+        networkMenu.add(clientItem);
+        helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
+        helpMenu.add(instItem);
+        helpMenu.add(aboutItem);
+        jMenuBar = new JMenuBar();
+        jMenuBar.add(fileMenu);
+        jMenuBar.add(toolsMenu);
+        jMenuBar.add(networkMenu);
+        jMenuBar.add(Box.createHorizontalGlue());
+        jMenuBar.add(helpMenu);
+    }
 
 //**********************************************************************************************************************
 
@@ -437,57 +445,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         } else if(source == averageDetailedViewButton){
             DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
-        } else if(source == saveSessionItem){
-            if(sessionDetailsEnabled){
-                int userChoice = fc.showSaveDialog(Standalone.this);
-                if(userChoice == JFileChooser.APPROVE_OPTION)
-                    saveToFile(getSessionView(), fc.getSelectedFile());
-            } else {
-                JOptionPane.showMessageDialog(this, "No times have been recorded for this session.");
-            }
-        } else if(source == saveBestItem){
-            if(averageDetailsEnabled){
-                int userChoice = fc.showSaveDialog(Standalone.this);
-                if(userChoice == JFileChooser.APPROVE_OPTION)
-                    saveToFile(getAverageView(), fc.getSelectedFile());
-            } else {
-                JOptionPane.showMessageDialog(this, "Not enough solves completed to calculate an average.");
-            }
-        } else if(source == exitItem){
-            System.exit(0);
-        } else if(source == generatorItem){
-            if(!scrambleGenerator.isVisible()){
-                scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
-                scrambleGenerator.setVisible(true);
-            }
-        } else if(source == instItem){
-            if(!instructionScreen.isVisible())
-                instructionScreen.setVisible(true);
-        } else if(source == aboutItem){
-            if(!aboutScreen.isVisible())
-                aboutScreen.setVisible(true);
-        } else if(source == importItem){
-            int userChoice = fc.showOpenDialog(Standalone.this);
-            if(userChoice == JFileChooser.APPROVE_OPTION){
-                String input = "";
-                try{
-                    FileReader fr = new FileReader(fc.getSelectedFile());
-                    BufferedReader in = new BufferedReader(fr);
-                    String read;
-                    while((read = in.readLine()) != null)
-                        input += read + "%";
-                    in.close();
-                } catch(IOException ex){
-                    JOptionPane.showMessageDialog(this, "There was an error opening the file.");
-                }
-                StringTokenizer st = new StringTokenizer(input, "%");
-                importedAlgs = new String[st.countTokens()];
-                for(int i=0; i<importedAlgs.length; i++)
-                    importedAlgs[i] = st.nextToken();
-                hasImported = true;
-                importedIndex = 0;
-                updateScrambleAlgs();
-            }
         } else if(source == insertTimeButton){
             String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:");
             if(input == null) return;
@@ -513,8 +470,53 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //                System.out.println(ex.getMessage());
 //            }
             insertTimeButton.requestFocus();
+        } else if(source == saveBestItem){
+            if(averageDetailsEnabled){
+                int userChoice = fc.showSaveDialog(Standalone.this);
+                if(userChoice == JFileChooser.APPROVE_OPTION)
+                    saveToFile(getAverageView(), fc.getSelectedFile());
+            } else {
+                JOptionPane.showMessageDialog(this, "Not enough solves completed to calculate an average.");
+            }
+        } else if(source == saveSessionItem){
+            if(sessionDetailsEnabled){
+                int userChoice = fc.showSaveDialog(Standalone.this);
+                if(userChoice == JFileChooser.APPROVE_OPTION)
+                    saveToFile(getSessionView(), fc.getSelectedFile());
+            } else {
+                JOptionPane.showMessageDialog(this, "No times have been recorded for this session.");
+            }
         } else if(source == optionsItem){
             optionsBox.setVisible(true);
+        } else if(source == exitItem){
+            System.exit(0);
+        } else if(source == importItem){
+            int userChoice = fc.showOpenDialog(Standalone.this);
+            if(userChoice == JFileChooser.APPROVE_OPTION){
+                String input = "";
+                try{
+                    FileReader fr = new FileReader(fc.getSelectedFile());
+                    BufferedReader in = new BufferedReader(fr);
+                    String read;
+                    while((read = in.readLine()) != null)
+                        input += read + "%";
+                    in.close();
+                } catch(IOException ex){
+                    JOptionPane.showMessageDialog(this, "There was an error opening the file.");
+                }
+                StringTokenizer st = new StringTokenizer(input, "%");
+                importedAlgs = new String[st.countTokens()];
+                for(int i=0; i<importedAlgs.length; i++)
+                    importedAlgs[i] = st.nextToken();
+                hasImported = true;
+                importedIndex = 0;
+                updateScrambleAlgs();
+            }
+        } else if(source == generatorItem){
+            if(!scrambleGenerator.isVisible()){
+                scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
+                scrambleGenerator.setVisible(true);
+            }
         } else if(source == serverItem){
             int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(choice != JOptionPane.YES_OPTION){
@@ -535,6 +537,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             Client client = new Client(optionsBox);
             client.setVisible(true);
             disposeAll();
+        } else if(source == instItem){
+            if(!instructionScreen.isVisible())
+                instructionScreen.setVisible(true);
+        } else if(source == aboutItem){
+            if(!aboutScreen.isVisible())
+                aboutScreen.setVisible(true);
         }
     } // end actionPerformed
 

@@ -71,6 +71,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     int localCubesSolved, remoteCubesSolved, sessionIndex, localCurrentPlaceInAverage, remoteCurrentPlaceInAverage, localNumOfPops, remoteNumOfPops, localScore, remoteScore, acceptsSincePop;
     float localTotalTime, remoteTotalTime, localSessionFastest, remoteSessionFastest, localSessionSlowest, remoteSessionSlowest, localCurrentFastest, remoteCurrentFastest, localCurrentSlowest, remoteCurrentSlowest, localCurrentRollingAverage, remoteCurrentRollingAverage, localCurrentSessionAverage, remoteCurrentSessionAverage;
 
+    // JMenu stuff
+    JMenuBar jMenuBar;
+    JMenu fileMenu;//, toolsMenu, helpMenu;
+    JMenuItem /*saveBestItem, saveSessionItem, optionsItem,*/ exitItem/*, importItem, generatorItem, instItem, aboutItem*/;
+
     // network stuff
     Socket clientSocket;
     BufferedReader in;
@@ -110,13 +115,10 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         this.optionsBox = optionsBox;
         newAlg = ""; // just in case...
-        scramblePanel = new ScramblePanel(310+40, 215+20); // needs to be changed in two places
-        scramblePanel.setLayout(null);
-        scramblePanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
-        scramblePanel.setCubeColors(optionsBox.cubeColorsX);
-        scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
-        scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
-        //updateScramblePanel(); // not here, comboBox might not be stable yet
+
+        // set up JMenuBar
+        makeJMenuBar();
+        //setJMenuBar(jMenuBar);
 
         // GUI Object creation
         usernameLabel = new JLabel("Username:");
@@ -161,6 +163,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
 
+        scramblePanel = new ScramblePanel(310+40, 215+20); // needs to be changed in two places
+        scramblePanel.setLayout(null);
+        scramblePanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
+        scramblePanel.setCubeColors(optionsBox.cubeColorsX);
+        scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
+        scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
+        //updateScramblePanel(); // not here, comboBox might not be stable yet
+
         localTimeUsernameLabel = new JLabel("<html>Rolling Average: <font size=\"5\">N/A</font><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
         remoteTimeUsernameLabel = new JLabel("<html>Rolling Average: <font size=\"5\">N/A</font><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
         localTimeLabel = new JLabel(""); // override in sub-class
@@ -203,6 +213,44 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         // set everything to defaults
         reset();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+//**********************************************************************************************************************
+
+    private void makeJMenuBar(){
+//        saveBestItem = new JMenuItem("Save Best Average As...");
+//        saveSessionItem = new JMenuItem("Save Session Average As...");
+//        optionsItem = new JMenuItem("Options");
+//        optionsItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        exitItem = new JMenuItem("Exit");
+//        importItem = new JMenuItem("Import Scrambles"); importItem.setMnemonic('I');
+//        importItem.setAccelerator(KeyStroke.getKeyStroke('I', 2));
+//        generatorItem = new JMenuItem("Generate Scrambles"); generatorItem.setMnemonic('G');
+//        generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
+//        instItem = new JMenuItem("Instuctions");
+//        instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+//        aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
+//        aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
+        fileMenu = new JMenu("File"); fileMenu.setMnemonic('F');
+//        fileMenu.add(saveBestItem);
+//        fileMenu.add(saveSessionItem);
+//        fileMenu.addSeparator();
+//        fileMenu.add(optionsItem);
+//        fileMenu.addSeparator();
+        fileMenu.add(exitItem);
+//        toolsMenu = new JMenu("Tools"); toolsMenu.setMnemonic('T');
+//        toolsMenu.add(importItem);
+//        toolsMenu.add(generatorItem);
+//        networkMenu = new JMenu("Network Timer"); networkMenu.setMnemonic('N');
+//        helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
+//        helpMenu.add(instItem);
+//        helpMenu.add(aboutItem);
+        jMenuBar = new JMenuBar();
+        jMenuBar.add(fileMenu);
+//        jMenuBar.add(toolsMenu);
+//        jMenuBar.add(networkMenu);
+//        jMenuBar.add(Box.createHorizontalGlue());
+//        jMenuBar.add(helpMenu);
     }
 
 //**********************************************************************************************************************
@@ -306,6 +354,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         localAverageDetailButton.addActionListener(this);
         remoteSessionDetailButton.addActionListener(this);
         remoteAverageDetailButton.addActionListener(this);
+
+        exitItem.addActionListener(this);
     }
 
 //**********************************************************************************************************************
@@ -334,6 +384,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     protected void hideGUI(){
         RJT_Utils.centerJFrame(this, 695, 170);
+        setJMenuBar(null);
 
         usernameLabel.setVisible(true);
         serverIpLabel.setVisible(true);
@@ -377,7 +428,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 
     protected void showGUI(){
-        RJT_Utils.centerJFrame(this, 860+80, 465);
+        RJT_Utils.centerJFrame(this, 860+80, 465+20);
+        setJMenuBar(jMenuBar);
 
         usernameLabel.setVisible(false);
         serverIpLabel.setVisible(false);
@@ -420,6 +472,45 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
 //**********************************************************************************************************************
 
+    protected boolean commonAction(Object source){
+        if(source == sendMessageButton || source == chatText){
+            if(chatText.getText().equals("")) return true;
+            try{
+                chatDoc.insertString(chatDoc.getLength(), (usernameText.getText()+": "), redStyle);
+                chatDoc.insertString(chatDoc.getLength(), (chatText.getText()+"\n"), blackStyle);
+                out.println("C" + chatText.getText());
+                out.flush();
+                chatPane.setCaretPosition(chatDoc.getLength());
+                chatText.setText("");
+                if(isTyping){
+                    isTyping = false;
+                    out.println("I");
+                    out.flush();
+                }
+            } catch(BadLocationException ex){
+                System.out.println(ex.getMessage());
+            }
+        } else if(source == localSessionDetailButton){
+            DetailedView win = new DetailedView("Local Session Times", getLocalSessionView(), optionsBox.textBackgrColorX);
+            win.setVisible(true);
+        } else if(source == localAverageDetailButton){
+            DetailedView win = new DetailedView("Local Rolling Average", getLocalAverageView(), optionsBox.textBackgrColorX);
+            win.setVisible(true);
+        } else if(source == remoteSessionDetailButton){
+            DetailedView win = new DetailedView("Remote Session Times", getRemoteSessionView(), optionsBox.textBackgrColorX);
+            win.setVisible(true);
+        } else if(source == remoteAverageDetailButton){
+            DetailedView win = new DetailedView("Remote Rolling Average", getRemoteAverageView(), optionsBox.textBackgrColorX);
+            win.setVisible(true);
+        } else if(source == exitItem){
+            System.exit(0);
+        } else
+            return false;
+
+        return true;
+    }
+
+//**********************************************************************************************************************
     protected void updateScramblePanel(){
         scramblePanel.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll(ALG_BREAK, " "));
     }

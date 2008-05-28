@@ -79,29 +79,14 @@ public class Client extends NetcubeMode{
     public void actionPerformed(ActionEvent e){
         Object source = e.getSource();
 
-        if(source == connectButton || source == usernameText || source == serverIpText || source == serverPortText){
+        if(super.commonAction(source)){
+            return;
+        } else if(source == connectButton || source == usernameText || source == serverIpText || source == serverPortText){
             if(usernameText.getText().equals("")){
                 JOptionPane.showMessageDialog(this, "Username should not be blank.");
                 return;
             }
             startClientConnection();
-        } else if(source == sendMessageButton || source == chatText){
-            if(chatText.getText().equalsIgnoreCase("")) return;
-            try{
-                chatDoc.insertString(chatDoc.getLength(), (usernameText.getText()+": "), redStyle);
-                chatDoc.insertString(chatDoc.getLength(), (chatText.getText()+"\n"), blackStyle);
-                out.println("C" + chatText.getText());
-                out.flush();
-                chatPane.setCaretPosition(chatDoc.getLength());
-                chatText.setText("");
-                if(isTyping){
-                    isTyping = false;
-                    out.println("I");
-                    out.flush();
-                }
-            } catch(BadLocationException ex){
-                System.out.println(ex.getMessage());
-            }
         } else if(source == localStatusLabel){
             out.println("R" + localStatusLabel.isSelected());
             out.flush();
@@ -171,18 +156,6 @@ public class Client extends NetcubeMode{
                 // move to next solve
                 updateStats();
             }
-        } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Local Session Times", getLocalSessionView(), optionsBox.textBackgrColorX);
-            win.setVisible(true);
-        } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Local Rolling Average", getLocalAverageView(), optionsBox.textBackgrColorX);
-            win.setVisible(true);
-        } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Remote Session Times", getRemoteSessionView(), optionsBox.textBackgrColorX);
-            win.setVisible(true);
-        } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Remote Rolling Average", getRemoteAverageView(), optionsBox.textBackgrColorX);
-            win.setVisible(true);
         }
     } // end actionPerformed
 
