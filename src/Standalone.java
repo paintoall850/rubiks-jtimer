@@ -730,11 +730,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
 
     private void updateScrambleAlgs(){
-        scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
         if(hasImported && (importedIndex < importedAlgs.length)){
-            newAlg = importedAlgs[importedIndex];
-            scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
             importedIndex++;
+            newAlg = importedAlgs[importedIndex];
         }
         else{
             if(hasImported){
@@ -742,8 +740,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 hasImported = false;
             }
             newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
-            scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         }
+        scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
+        scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         updateScramblePanel();
     } // end updateScrambleAlgs
 
