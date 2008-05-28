@@ -320,14 +320,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         remoteAverageDetailButton.setEnabled(false);
         remoteSessionDetailButton.setEnabled(false);
 
-        Standalone.enterPressesWhenFocused(startButton);
-        Standalone.enterPressesWhenFocused(popButton);
-        //Standalone.enterPressesWhenFocused(localStatusLabel);
-        Standalone.enterPressesWhenFocused(sendMessageButton);
-        Standalone.enterPressesWhenFocused(localAverageDetailButton);
-        Standalone.enterPressesWhenFocused(localSessionDetailButton);
-        Standalone.enterPressesWhenFocused(remoteAverageDetailButton);
-        Standalone.enterPressesWhenFocused(remoteSessionDetailButton);
+        RJT_Utils.enterPressesWhenFocused(startButton);
+        RJT_Utils.enterPressesWhenFocused(popButton);
+        //RJT_Utils.enterPressesWhenFocused(localStatusLabel);
+        RJT_Utils.enterPressesWhenFocused(sendMessageButton);
+        RJT_Utils.enterPressesWhenFocused(localAverageDetailButton);
+        RJT_Utils.enterPressesWhenFocused(localSessionDetailButton);
+        RJT_Utils.enterPressesWhenFocused(remoteAverageDetailButton);
+        RJT_Utils.enterPressesWhenFocused(remoteSessionDetailButton);
     }
 
 //**********************************************************************************************************************

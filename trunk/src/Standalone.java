@@ -224,14 +224,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         averageDetailedViewButton = new JButton("Details");
         sessionResetButton = new JButton("Full Session Reset");
 
-        enterPressesWhenFocused(startButton);
-        enterPressesWhenFocused(discardButton);
-        enterPressesWhenFocused(popButton);
-        enterPressesWhenFocused(plusTwoButton);
-        enterPressesWhenFocused(sessionResetButton);
-        enterPressesWhenFocused(sessionDetailedViewButton);
-        enterPressesWhenFocused(averageDetailedViewButton);
-        enterPressesWhenFocused(insertTimeButton);
+        RJT_Utils.enterPressesWhenFocused(startButton);
+        RJT_Utils.enterPressesWhenFocused(discardButton);
+        RJT_Utils.enterPressesWhenFocused(popButton);
+        RJT_Utils.enterPressesWhenFocused(plusTwoButton);
+        RJT_Utils.enterPressesWhenFocused(sessionResetButton);
+        RJT_Utils.enterPressesWhenFocused(sessionDetailedViewButton);
+        RJT_Utils.enterPressesWhenFocused(averageDetailedViewButton);
+        RJT_Utils.enterPressesWhenFocused(insertTimeButton);
 
         timeLabels = new JLabel[12];
         for(int i=0; i<12; i++)
@@ -577,23 +577,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             }
         }
     } // end run
-
-//**********************************************************************************************************************
-
-    public static void enterPressesWhenFocused(JButton button){
-
-        button.registerKeyboardAction(
-            button.getActionForKeyStroke(
-                KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
-                JComponent.WHEN_FOCUSED);
-
-        button.registerKeyboardAction(
-            button.getActionForKeyStroke(
-                KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true)),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true),
-                JComponent.WHEN_FOCUSED);
-    }
 
 //**********************************************************************************************************************
 // Private Methods
