@@ -28,9 +28,9 @@ import java.io.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.border.*;
 
-public class Standalone extends JFrame implements ActionListener, Runnable, OptionsMenu.OptionsListener, Constants{
+public class Standalone extends JFrame implements ActionListener, Runnable, OptionsBox.OptionsListener, Constants{
 
-    private OptionsMenu optionsMenu;
+    private OptionsBox optionsBox;
     private ScrambleGenerator scrambleGenerator;
     private InstructionScreen instructionScreen;
     private AboutScreen aboutScreen;
@@ -158,7 +158,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         setJMenuBar(jMenuBar);
 
         // inialize Popup Windows
-        optionsMenu = new OptionsMenu();
+        optionsBox = new OptionsBox();
         scrambleGenerator = new ScrambleGenerator();
         instructionScreen = new InstructionScreen();
         aboutScreen = new AboutScreen();
@@ -244,15 +244,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         stopTime = 0;
 
 
-        optionsMenu.addOptionsListener(this); // pass it this so that it can update GUI when needed
-        optionsMenu.loadOptions(); // inital load of options
-        solveTable = new SolveTable(optionsMenu.puzzleX);
-        updateLabels(optionsMenu.puzzleX);
+        optionsBox.addOptionsListener(this); // pass it this so that it can update GUI when needed
+        optionsBox.loadOptions(); // inital load of options
+        solveTable = new SolveTable(optionsBox.puzzleX);
+        updateLabels(optionsBox.puzzleX);
 
-        if(!optionsMenu.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
-            puzzleCombo.setSelectedItem(optionsMenu.puzzleX);
-        if(!optionsMenu.countdownX.equals(countdownCombo.getSelectedItem()+"")) // less glitchier
-            countdownCombo.setSelectedItem(optionsMenu.countdownX);
+        if(!optionsBox.puzzleX.equals(puzzleCombo.getSelectedItem()+"")) // less glitchier
+            puzzleCombo.setSelectedItem(optionsBox.puzzleX);
+        if(!optionsBox.countdownX.equals(countdownCombo.getSelectedItem()+"")) // less glitchier
+            countdownCombo.setSelectedItem(optionsBox.countdownX);
 
         updateGUI();
         resetTheSession();
@@ -404,7 +404,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //                System.out.println(ex.getMessage());
 //            }
         } else if(source == sessionResetButton){
-            if(optionsMenu.showResetConfirmX){
+            if(optionsBox.showResetConfirmX){
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if(choice != JOptionPane.YES_OPTION){
                     returnFocus();
@@ -432,10 +432,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         } else if(source == countdownCombo){
             returnFocus();
         } else if(source == sessionDetailedViewButton){
-            DetailedView win = new DetailedView("Session Times for " + solveTable.getPuzzle(), getSessionView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Session Times for " + solveTable.getPuzzle(), getSessionView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == averageDetailedViewButton){
-            DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == saveSessionItem){
             if(sessionDetailsEnabled){
@@ -514,7 +514,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //            }
             insertTimeButton.requestFocus();
         } else if(source == optionsItem){
-            optionsMenu.setVisible(true);
+            optionsBox.setVisible(true);
         } else if(source == serverItem){
             int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(choice != JOptionPane.YES_OPTION){
@@ -522,7 +522,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 return;
             }
             //this.setVisible(false);
-            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsMenu);
+            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsBox);
             server.setVisible(true);
             disposeAll();
         } else if(source == clientItem){
@@ -532,7 +532,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 return;
             }
             //this.setVisible(false);
-            Client client = new Client(optionsMenu);
+            Client client = new Client(optionsBox);
             client.setVisible(true);
             disposeAll();
         }
@@ -548,7 +548,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                     runningCountdown = false;
                     startButton.setEnabled(true);
                     returnFocus();
-                    timerLabel.setForeground(optionsMenu.timerColorX);
+                    timerLabel.setForeground(optionsBox.timerColorX);
                     startTime = System.currentTimeMillis();
                 } else if(countingDown == 3){
                     try{
@@ -623,7 +623,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             else
                 formatedStdDev = "???";
 
-            solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
             timesAndScrambles = ""; timesOnly = "";
             for(int i=0; i<size; i++){
                 String s = solveTable.getString(i);
@@ -631,12 +631,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 timesOnly += s + "\n";
             }
 
-            //solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            //solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
             formatedFastest = solveTable.getString(currentSolve.sessionFastestIndex);
             formatedSlowest = solveTable.getString(currentSolve.sessionSlowestIndex);
         }
 
-        String returnMe = optionsMenu.sessionViewFormatX;
+        String returnMe = optionsBox.sessionViewFormatX;
         returnMe = returnMe.replaceAll("%T", new Date()+"");
         returnMe = returnMe.replaceAll("%C", numberSolved+"");
         returnMe = returnMe.replaceAll("%P", numberPopped+"");
@@ -666,7 +666,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             formatedAverage = timeToString(bestSolve.rollingAverage, false, true);
             formatedStdDev = timeToString(bestSolve.rollingStdDev, false, false);
 
-            solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
             timesAndScrambles = ""; timesOnly = "";
             for(int i=1; i<=12; i++){
                 int index = i+bestIndex-12;
@@ -677,12 +677,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 timesOnly += s + "\n";
             }
 
-            //solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+            //solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
             formatedFastest = solveTable.getString(bestSolve.rollingFastestIndex);
             formatedSlowest = solveTable.getString(bestSolve.rollingSlowestIndex);
         }
 
-        String returnMe = optionsMenu.averageViewFormatX;
+        String returnMe = optionsBox.averageViewFormatX;
         returnMe = returnMe.replaceAll("%T", new Date()+"");
         returnMe = returnMe.replaceAll("%A", formatedAverage);
         returnMe = returnMe.replaceAll("%D", formatedStdDev);
@@ -704,7 +704,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     private final String timeToString(float time, boolean truncate, boolean verbose){
         String s = ssxx.format(time); // consider the case time=59.999D
         time = Float.parseFloat(s);
-        if(time>=60 && optionsMenu.showMinutesX){
+        if(time>=60 && optionsBox.showMinutesX){
             int min = (int)(time/60);
             float sec = time-min*60;
             s = min + ":" + ((time < 600 || !truncate) ? ssxx.format(sec) : ss.format(sec));
@@ -758,7 +758,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         startButton.setText("Stop Timer");
         runningCountdown = true;
         countingDown = Integer.parseInt(countdownCombo.getSelectedItem()+"");
-        timerLabel.setForeground(optionsMenu.countdownColorX);
+        timerLabel.setForeground(optionsBox.countdownColorX);
         //timerLabel.setVisible(true);
 
         puzzleCombo.setEnabled(false);
@@ -817,7 +817,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
 
     private void disposeAll(){
-        optionsMenu.dispose();
+        optionsBox.dispose();
         scrambleGenerator.dispose();
         instructionScreen.dispose();
         aboutScreen.dispose();
@@ -827,12 +827,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
 
     private void updateGUI(){
-        scramblePanel.setCubeColors(optionsMenu.cubeColorsX);
-        scramblePanel.setPyraminxColors(optionsMenu.pyraminxColorsX);
-        scramblePanel.setMegaminxColors(optionsMenu.megaminxColorsX);
+        scramblePanel.setCubeColors(optionsBox.cubeColorsX);
+        scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
+        scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
         updateScramblePanel();
-        scrambleText.setBackground(optionsMenu.textBackgrColorX);
-        bestAverageText.setBackground(optionsMenu.textBackgrColorX);
+        scrambleText.setBackground(optionsBox.textBackgrColorX);
+        bestAverageText.setBackground(optionsBox.textBackgrColorX);
     } // end OptionsToGUI
 
 //**********************************************************************************************************************
@@ -919,7 +919,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         String sSessionAverage = "N/A";
 
 
-        solveTable.setTimeStyle(optionsMenu.showMinutesX, true, false);
+        solveTable.setTimeStyle(optionsBox.showMinutesX, true, false);
         if(size < 12){
             for(int i=0; i<12; i++){
                 String s;
@@ -930,8 +930,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                     float fastestTime = solveTable.getSolve(size-1).sessionFastestTime;
                     float slowestTime = solveTable.getSolve(size-1).sessionSlowestTime;
                     if(fastestTime == slowestTime) timeLabels[i].setForeground(Color.black);
-                    else if(solveTable.getTime(i) == fastestTime) timeLabels[i].setForeground(optionsMenu.fastestColorX);
-                    else if(solveTable.getTime(i) == slowestTime) timeLabels[i].setForeground(optionsMenu.slowestColorX);
+                    else if(solveTable.getTime(i) == fastestTime) timeLabels[i].setForeground(optionsBox.fastestColorX);
+                    else if(solveTable.getTime(i) == slowestTime) timeLabels[i].setForeground(optionsBox.slowestColorX);
                     else timeLabels[i].setForeground(Color.black);
                 }
                 else{
@@ -951,12 +951,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 float fastestTime = solveTable.getSolve(size-1).rollingFastestTime;
                 float slowestTime = solveTable.getSolve(size-1).rollingSlowestTime;
                 if(fastestTime == slowestTime) timeLabels[(size+i)%12].setForeground(Color.black);
-                else if(solveTable.getTime(index) == fastestTime) timeLabels[(size+i)%12].setForeground(optionsMenu.fastestColorX);
-                else if(solveTable.getTime(index) == slowestTime) timeLabels[(size+i)%12].setForeground(optionsMenu.slowestColorX);
+                else if(solveTable.getTime(index) == fastestTime) timeLabels[(size+i)%12].setForeground(optionsBox.fastestColorX);
+                else if(solveTable.getTime(index) == slowestTime) timeLabels[(size+i)%12].setForeground(optionsBox.slowestColorX);
                 else timeLabels[(size+i)%12].setForeground(Color.black);
             }
         }
-        timeLabels[size%12].setForeground(optionsMenu.currentColorX);
+        timeLabels[size%12].setForeground(optionsBox.currentColorX);
 
 
         if(size > 0){
@@ -993,7 +993,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                         sRollingProgressColor = TIE;
                     }
                 }
-                solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+                solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
                 sRollingFastest = solveTable.getString(currentSolve.rollingFastestIndex);
                 sRollingSlowest = solveTable.getString(currentSolve.rollingSlowestIndex);
             }
@@ -1004,7 +1004,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 SolveTable.Solve bestSolve = solveTable.getSolve(bestIndex);
 
                 sBestAverage = timeToString(bestSolve.rollingAverage, false, true);
-                solveTable.setTimeStyle(optionsMenu.showMinutesX, false, false);
+                solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
                 sBestIndvTimes = "";
                 for(int i=1; i<=12; i++){
                     int index = i+bestIndex-12;

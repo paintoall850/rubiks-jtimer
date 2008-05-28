@@ -30,7 +30,7 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public abstract class NetcubeMode extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
-    protected OptionsMenu optionsMenu;
+    protected OptionsBox optionsBox;
     //protected ScrambleGenerator scrambleGenerator;
     //protected InstructionScreen instructionScreen;
     //protected AboutScreen aboutScreen;
@@ -81,7 +81,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
 //**********************************************************************************************************************
 
-    public NetcubeMode(OptionsMenu optionsMenu){
+    public NetcubeMode(OptionsBox optionsBox){
         // configure JFrame
         RJT_Utils.configureJFrame(this);
 
@@ -108,14 +108,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
 
-        this.optionsMenu = optionsMenu;
+        this.optionsBox = optionsBox;
         newAlg = ""; // just in case...
         scramblePanel = new ScramblePanel(310+40, 215+20); // needs to be changed in two places
         scramblePanel.setLayout(null);
         scramblePanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
-        scramblePanel.setCubeColors(optionsMenu.cubeColorsX);
-        scramblePanel.setPyraminxColors(optionsMenu.pyraminxColorsX);
-        scramblePanel.setMegaminxColors(optionsMenu.megaminxColorsX);
+        scramblePanel.setCubeColors(optionsBox.cubeColorsX);
+        scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
+        scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
         //updateScramblePanel(); // not here, comboBox might not be stable yet
 
         // GUI Object creation
@@ -153,7 +153,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         scrambleText.setEditable(false);
         scrambleText.setLineWrap(true);
         scrambleText.setWrapStyleWord(true);
-        scrambleText.setBackground(optionsMenu.textBackgrColorX);
+        scrambleText.setBackground(optionsBox.textBackgrColorX);
         scrambleText.setForeground(Color.black);
         scrambleText.setBorder(blackLine);
 

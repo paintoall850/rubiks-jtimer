@@ -25,7 +25,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.border.Border;
 
-public class OptionsMenu extends JFrame implements ActionListener, MouseListener, ScramblePanel.ColorListener, Constants{
+public class OptionsBox extends JFrame implements ActionListener, MouseListener, ScramblePanel.ColorListener, Constants{
     //private static final String FACE_NAMES[] = {"Front", "Back", "Left", "Right", "Down", "Up"};
     private static final String FILENAME = "rjt.properties";
 
@@ -57,7 +57,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
 //**********************************************************************************************************************
 
-    public OptionsMenu(){
+    public OptionsBox(){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
