@@ -33,8 +33,8 @@ public class Client extends NetcubeMode{
 
 //**********************************************************************************************************************
 
-    public Client(OptionsMenu optionsMenu){
-        super(optionsMenu);
+    public Client(OptionsBox optionsBox){
+        super(optionsBox);
 
         // configure Contentpane
         Container contentPane = getContentPane();
@@ -172,16 +172,16 @@ public class Client extends NetcubeMode{
                 updateStats();
             }
         } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Local Session Times", getLocalSessionView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Local Session Times", getLocalSessionView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Local Rolling Average", getLocalAverageView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Local Rolling Average", getLocalAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Remote Session Times", getRemoteSessionView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Remote Session Times", getRemoteSessionView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Remote Rolling Average", getRemoteAverageView(), optionsMenu.textBackgrColorX);
+            DetailedView win = new DetailedView("Remote Rolling Average", getRemoteAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         }
     } // end actionPerformed
