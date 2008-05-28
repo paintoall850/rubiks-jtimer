@@ -730,18 +730,19 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
 
     private void updateScrambleAlgs(){
+        String puzzle = puzzleCombo.getSelectedItem()+"";
+        scrambleText.setFont(puzzle.equals("Megaminx") ? smAlgFont : lgAlgFont);
         if(hasImported && (importedIndex < importedAlgs.length)){
-            importedIndex++;
             newAlg = importedAlgs[importedIndex];
+            importedIndex++;
         }
         else{
             if(hasImported){
                 JOptionPane.showMessageDialog(this, "All imported scrambles have been used. Random scrambles will now be displayed.");
                 hasImported = false;
             }
-            newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
+            newAlg = scrambleAlg.generateAlg(puzzle);
         }
-        scrambleText.setFont(puzzleCombo.getSelectedItem() == "Megaminx" ? smAlgFont : lgAlgFont);
         scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         updateScramblePanel();
     } // end updateScrambleAlgs

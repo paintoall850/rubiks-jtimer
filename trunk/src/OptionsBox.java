@@ -26,7 +26,6 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public class OptionsBox extends JFrame implements ActionListener, MouseListener, ScramblePanel.ColorListener, Constants{
-    //private static final String FACE_NAMES[] = {"Front", "Back", "Left", "Right", "Down", "Up"};
     private static final String FILENAME = "rjt.properties";
 
     // Complete List of Save-able options
@@ -43,17 +42,13 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
     JButton saveButton, applyButton, resetButton, closeButton;
     JLabel puzzleLabel, countdownLabel, averageSyntaxLabel, sessionSyntaxLabel, startupLabel, colorLabel;
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
-    //JLabel[] faceCLabels = new JLabel[6];
-    //JLabel faceColorLabel, previewLabel;
     ScramblePanel cubePanel, pyraminxPanel, megaminxPanel;
 
     JComboBox puzzleCombo, countdownCombo;
     JCheckBox confirmBox, showMinutesBox;
     JTextArea countdownColorText, timerColorText, textBackgrColorText, fastestColorText, slowestColorText, currentColorText;
-    //JTextArea[] faceColorTexts = new JTextArea[6];
     JTextArea averageText, sessionText;
     JScrollPane averageScrollPane, sessionScrollPane;
-    //JTextArea[][][] ScramblePreview;
 
 //**********************************************************************************************************************
 
@@ -103,29 +98,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         slowestColorText = new JTextArea();
         slowestColorText.setEditable(false);
         slowestColorText.setBorder(blackLine);
-/*
-        faceColorLabel = new JLabel();
-        faceColorLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Color Scheme for Cubes"));
-        previewLabel = new JLabel();
-        previewLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Preview for 3x3"));
 
-        for(int face=0; face<6; face++){
-            faceCLabels[face] = new JLabel(FACE_NAMES[face]);
-            faceColorTexts[face] = new JTextArea();
-            faceColorTexts[face].setEditable(false);
-            faceColorTexts[face].setBorder(blackLine);
-        }
-
-        ScramblePreview = new JTextArea[6][3][3];
-        for(int face=0; face<6; face++)
-            for(int i=0; i<3; i++)
-                for(int j=0; j<3; j++){
-                    ScramblePreview[face][i][j] = new JTextArea();
-                    ScramblePreview[face][i][j].setEditable(false);
-                    ScramblePreview[face][i][j].setFocusable(false);
-                    ScramblePreview[face][i][j].setBorder(blackLine);
-                }
-*/
         cubePanel = new ScramblePanel(269+3,200);//2*(269+3)+10,200);
         cubePanel.setLayout(null);
         cubePanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Cube Preview"));
@@ -194,8 +167,6 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
 
         startupLabel.setBounds(10,5,269+3,200);
         colorLabel.setBounds(289+3,5,269+3,200);
-//        faceColorLabel.setBounds(10,5,269+3,200);
-//        previewLabel.setBounds(289+3,5,269+3,200);
         sessionScrollPane.setBounds(12,10,358+6,193);
         averageScrollPane.setBounds(12,10,358+6,193);
         sessionSyntaxLabel.setBounds(378+6,5,180,200);
@@ -220,28 +191,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         fastestCLabel.setBounds(334+120,60,200,20);
         slowestColorText.setBounds(309+120,90,20,20);
         slowestCLabel.setBounds(334+120,90,200,20);
-/*
-        faceColorTexts[0].setBounds(90,95,20,20);
-        faceCLabels[0].setBounds(90+25,95,60,20);
-        faceColorTexts[1].setBounds(210,95,20,20);
-        faceCLabels[1].setBounds(210+25,95,60,20);
-        faceColorTexts[2].setBounds(30,95,20,20);
-        faceCLabels[2].setBounds(30+25,95,60,20);
-        faceColorTexts[3].setBounds(150,95,20,20);
-        faceCLabels[3].setBounds(150+25,95,60,20);
-        faceColorTexts[4].setBounds(90,120,20,20);
-        faceCLabels[4].setBounds(90+25,120,60,20);
-        faceColorTexts[5].setBounds(90,70,20,20);
-        faceCLabels[5].setBounds(90+25,70,60,20);
 
-        int x = -71, y = 9;
-        setFaceBounds(ScramblePreview[0], 3, 450+x, 75+y, 15);
-        setFaceBounds(ScramblePreview[1], 3, 550+x, 75+y, 15);
-        setFaceBounds(ScramblePreview[2], 3, 400+x, 75+y, 15);
-        setFaceBounds(ScramblePreview[3], 3, 500+x, 75+y, 15);
-        setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
-        setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
-*/
         cubePanel.setBounds(10,5,269+3,200);//2*(269+3)+10,200);
         pyraminxPanel.setBounds(10,5,269+3,200); // was 282,235);
         megaminxPanel.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
@@ -277,16 +227,6 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
 
         cubeSchemeTab = new JPanel();
         cubeSchemeTab.setLayout(null);
-/*        cubeSchemeTab.add(faceColorLabel);
-        cubeSchemeTab.add(previewLabel);
-        for(int face=0; face<6; face++){
-            cubeSchemeTab.add(faceColorTexts[face]);
-            cubeSchemeTab.add(faceCLabels[face]);
-            for(int i=0; i<3; i++)
-                for(int j=0; j<3; j++)
-                    cubeSchemeTab.add(ScramblePreview[face][i][j]);
-        }
-*/
         cubeSchemeTab.add(cubePanel);
 
         minxSchemeTab = new JPanel();
@@ -328,10 +268,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         currentColorText.addMouseListener(this);
         fastestColorText.addMouseListener(this);
         slowestColorText.addMouseListener(this);
-/*
-        for(int face=0; face<6; face++)
-            faceColorTexts[face].addMouseListener(this);
-*/
+
         cubePanel.addColorListener(this);
         pyraminxPanel.addColorListener(this);
         megaminxPanel.addColorListener(this);
@@ -494,8 +431,6 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         currentColorX = currentColorText.getBackground();
         fastestColorX = fastestColorText.getBackground();
         slowestColorX = slowestColorText.getBackground();
-//        for(int face=0; face<6; face++)
-//            cubeColorsX[face] = faceColorTexts[face].getBackground();
         averageViewFormatX = averageText.getText();
         sessionViewFormatX = sessionText.getText();
     } // end captureOptions
@@ -515,9 +450,6 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         currentColorText.setBackground(currentColorX);
         fastestColorText.setBackground(fastestColorX);
         slowestColorText.setBackground(slowestColorX);
-//        for(int face=0; face<6; face++)
-//            faceColorTexts[face].setBackground(cubeColorsX[face]);
-//        updateScramblePreview();
         averageText.setText(averageViewFormatX); averageText.setCaretPosition(0);
         sessionText.setText(sessionViewFormatX); sessionText.setCaretPosition(0);
 
@@ -568,20 +500,6 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         else if(source == currentColorText) makeColorChooser(currentColorText, "Current Place In Average");
         else if(source == fastestColorText) makeColorChooser(fastestColorText, "Fastest Time In Average");
         else if(source == slowestColorText) makeColorChooser(slowestColorText, "Slowest Time In Average");
-/*
-        else if(source == faceColorTexts[0])
-            {if(makeColorChooser(faceColorTexts[0], "Front Face of Cube")) updateScramblePreview();}
-        else if(source == faceColorTexts[1])
-            {if(makeColorChooser(faceColorTexts[1],  "Back Face of Cube")) updateScramblePreview();}
-        else if(source == faceColorTexts[2])
-            {if(makeColorChooser(faceColorTexts[2],  "Left Face of Cube")) updateScramblePreview();}
-        else if(source == faceColorTexts[3])
-            {if(makeColorChooser(faceColorTexts[3], "Right Face of Cube")) updateScramblePreview();}
-        else if(source == faceColorTexts[4])
-            {if(makeColorChooser(faceColorTexts[4],  "Down Face of Cube")) updateScramblePreview();}
-        else if(source == faceColorTexts[5])
-            {if(makeColorChooser(faceColorTexts[5],    "Up Face of Cube")) updateScramblePreview();}
-*/
     }
 
 //**********************************************************************************************************************
@@ -614,15 +532,6 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
     public void mouseExited(MouseEvent e){}
     public void mouseEntered(MouseEvent e){}
 
-//**********************************************************************************************************************
-/*
-    private void updateScramblePreview(){
-        for(int face=0; face<6; face++)
-            for(int i=0; i<3; i++)
-                for(int j=0; j<3; j++)
-                    ScramblePreview[face][i][j].setBackground(faceColorTexts[face].getBackground());
-    }
-*/
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
