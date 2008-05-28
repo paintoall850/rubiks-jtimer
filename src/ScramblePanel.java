@@ -25,10 +25,8 @@ import java.util.*;
 import java.awt.image.BufferedImage;
 
 public class ScramblePanel extends JPanel implements MouseListener, Constants{
-
     private String myPuzzle = "nothing";
     private String myScramble = "";
-    private BufferedImage myImage;
 
     private CubeImage cubeImage;
     private PyraminxImage pyraminxImage;
@@ -38,16 +36,9 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
 
     // would prefer to get (width, height) with function calls, but they don't work
     public ScramblePanel(int width, int height){
-//System.err.print("width:" + width + "\n");
-//System.err.print("height:" + height + "\n");
-//System.err.print("getWidth():" + this.getWidth() + "\n");
-//System.err.print("getHeight():" + this.getHeight() + "\n");
-
         cubeImage = new CubeImage(width, height);
         pyraminxImage = new PyraminxImage(width, height);
         megaminxImage = new MegaminxImage(width, height);
-
-        myImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
 
 //**********************************************************************************************************************
@@ -60,38 +51,18 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    // somewhat awkwardly implemented, please fix if possible,
-    // changing return type of "_Image.scramble(...)" and/or of "_Image.getImage()" might help
     public final void updateScreen(){
         boolean failed = true;
         String s = "null";
 
-        if(myPuzzle.equals("2x2x2")){
-            s = cubeImage.scramble(2, myScramble);
-            if(s.equals("success")){myImage = cubeImage.getImage(); failed = false;}
-        }
-        else if(myPuzzle.equals("3x3x3")){
-            s = cubeImage.scramble(3, myScramble);
-            if(s.equals("success")){myImage = cubeImage.getImage(); failed = false;}
-        }
-        else if(myPuzzle.equals("4x4x4")){
-            s = cubeImage.scramble(4, myScramble);
-            if(s.equals("success")){myImage = cubeImage.getImage(); failed = false;}
-        }
-        else if(myPuzzle.equals("5x5x5")){
-            s = cubeImage.scramble(5, myScramble);
-            if(s.equals("success")){myImage = cubeImage.getImage(); failed = false;}
-        }
-        else if(myPuzzle.equals("Pyraminx")){
-            s = pyraminxImage.scramble(myScramble);
-            if(s.equals("success")){myImage = pyraminxImage.getImage(); failed = false;}
-        }
-        else if(myPuzzle.equals("Megaminx")){
-            s = megaminxImage.scramble(myScramble);
-            if(s.equals("success")){myImage = megaminxImage.getImage(); failed = false;}
-        }
+             if(myPuzzle.equals("2x2x2")) s = cubeImage.scramble(2, myScramble);
+        else if(myPuzzle.equals("3x3x3")) s = cubeImage.scramble(3, myScramble);
+        else if(myPuzzle.equals("4x4x4")) s = cubeImage.scramble(4, myScramble);
+        else if(myPuzzle.equals("5x5x5")) s = cubeImage.scramble(5, myScramble);
+        else if(myPuzzle.equals("Pyraminx")) s = pyraminxImage.scramble(myScramble);
+        else if(myPuzzle.equals("Megaminx")) s = megaminxImage.scramble(myScramble);
 
-        if(!failed)
+        if(s.equals("success"))
             repaint();
         else
             JOptionPane.showMessageDialog(this, "Scramble View encountered bad token for " + myPuzzle + ": <" + s + ">.");
@@ -172,6 +143,17 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
 
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
+
+        BufferedImage myImage;
+        if(myPuzzle.equals("2x2x2") || myPuzzle.equals("3x3x3") || myPuzzle.equals("4x4x4") || myPuzzle.equals("5x5x5"))
+            myImage = cubeImage.getImage();
+        else if(myPuzzle.equals("Pyraminx"))
+            myImage = pyraminxImage.getImage();
+        else if(myPuzzle.equals("Megaminx"))
+            myImage = megaminxImage.getImage();
+        else
+            return;
+
         g.drawImage(myImage, 0, 0, null);
     }
 }
