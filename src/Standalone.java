@@ -900,11 +900,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         final String BLACK = "#000000", RED = "#FF0000", BLUE = "#0000FF", TIE = "FF8000";
 
         String sRollingAverage = "N/A";
+        String sRollingAverageColor = BLACK;
         String sRollingProgress = "N/A";
         String sRollingProgressColor = BLACK;
         String sRollingFastest = "N/A";
         String sRollingSlowest = "N/A";
         String sRollingStdDev = "N/A";
+        String sRollingStdDevColor = BLACK;
 
         String sBestAverage = "N/A";
         String sBestIndvTimes = "N/A";
@@ -966,8 +968,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                     sRollingStdDev = timeToString(currentSolve.rollingStdDev, false, false);
                 }
                 else{
-                    sRollingAverage = "DNF";
-                    sRollingStdDev = "???";
+                    sRollingAverage = "DNF"; sRollingAverageColor = RED;
+                    sRollingStdDev = "???"; sRollingStdDevColor = RED;
                 }
 
                 if(size > 12){
@@ -1046,7 +1048,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         }
 
 
-        rollingAverageLabel.setText("<html>Current Average: <font size=\"5\">" + sRollingAverage + "</font><br>Progress: <font color=\"" + sRollingProgressColor + "\">" + sRollingProgress +"</font><br><br>Fastest Time: " + sRollingFastest + "<br>Slowest Time: " + sRollingSlowest + "<br>Standard Deviation: " + sRollingStdDev + "</html>");
+        rollingAverageLabel.setText("<html>Current Average: <font size=\"5\" color=\"" + sRollingAverageColor + "\">" + sRollingAverage + "</font><br>Progress: <font color=\"" + sRollingProgressColor + "\">" + sRollingProgress +"</font><br><br>Fastest Time: " + sRollingFastest + "<br>Slowest Time: " + sRollingSlowest + "<br>Standard Deviation: <font color=\"" + sRollingStdDevColor + "\">" + sRollingStdDev + "</font></html>");
 
         bestAverageText.setText("Average: " + sBestAverage + "\nIndividual Times: " + sBestIndvTimes);
 
