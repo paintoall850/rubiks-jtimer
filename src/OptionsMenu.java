@@ -337,15 +337,16 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         if(source == saveButton){
             saveOptions();
             optionsListener.optionsCallback();
+            this.setVisible(false);
         } else if(source == applyButton){
             captureOptions();
             optionsListener.optionsCallback();
-        } else if(source == closeButton){
-            this.setVisible(false);
         } else if(source == resetButton){
             resetOptions();
             averageText.setCaretPosition(0);
             sessionText.setCaretPosition(0);
+        } else if(source == closeButton){
+            this.setVisible(false);
         }
     } // end actionPerformed
 
