@@ -25,7 +25,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.border.Border;
 
-public class OptionsMenu extends JFrame implements ActionListener, MouseListener, ScramblePane.ColorListener, Constants{
+public class OptionsMenu extends JFrame implements ActionListener, MouseListener, ScramblePanel.ColorListener, Constants{
     private static final String FACE_NAMES[] = {"Front", "Back", "Left", "Right", "Down", "Up"};
     private static final String FILENAME = "rjt.properties";
 
@@ -45,7 +45,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
     JLabel[] faceCLabels = new JLabel[6];
     JLabel faceColorLabel, previewLabel;
-    ScramblePane pyraminxViewer, megaminxViewer;
+    ScramblePanel pyraminxPanel, megaminxPanel;
 
     JComboBox puzzleCombo, countdownCombo;
     JCheckBox confirmBox, showMinutesBox;
@@ -126,13 +126,13 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
                     ScramblePreview[face][i][j].setBorder(blackLine);
                 }
 
-        pyraminxViewer = new ScramblePane(269+3,200);// was 282,235);
-        pyraminxViewer.setLayout(null);
-        pyraminxViewer.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
+        pyraminxPanel = new ScramblePanel(269+3,200);// was 282,235);
+        pyraminxPanel.setLayout(null);
+        pyraminxPanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
 
-        megaminxViewer = new ScramblePane(269+3,200);// was 282,235);
-        megaminxViewer.setLayout(null);
-        megaminxViewer.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
+        megaminxPanel = new ScramblePanel(269+3,200);// was 282,235);
+        megaminxPanel.setLayout(null);
+        megaminxPanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
 
         sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
@@ -238,8 +238,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         setFaceBounds(ScramblePreview[4], 3, 450+x, 125+y, 15);
         setFaceBounds(ScramblePreview[5], 3, 450+x, 25+y, 15);
 
-        pyraminxViewer.setBounds(10,5,269+3,200); // was 282,235);
-        megaminxViewer.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
+        pyraminxPanel.setBounds(10,5,269+3,200); // was 282,235);
+        megaminxPanel.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
 
 }
 
@@ -284,8 +284,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         minxSchemeTab = new JPanel();
         minxSchemeTab.setLayout(null);
-        minxSchemeTab.add(pyraminxViewer);
-        minxSchemeTab.add(megaminxViewer);
+        minxSchemeTab.add(pyraminxPanel);
+        minxSchemeTab.add(megaminxPanel);
 
         bestTab = new JPanel();
         bestTab.setLayout(null);
@@ -325,8 +325,8 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         for(int face=0; face<6; face++)
             faceColorTexts[face].addMouseListener(this);
 
-        pyraminxViewer.addColorListener(this);
-        megaminxViewer.addColorListener(this);
+        pyraminxPanel.addColorListener(this);
+        megaminxPanel.addColorListener(this);
     }
 
 //**********************************************************************************************************************
@@ -505,10 +505,10 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
         averageText.setText(averageViewFormatX); averageText.setCaretPosition(0);
         sessionText.setText(sessionViewFormatX); sessionText.setCaretPosition(0);
 
-        pyraminxViewer.setPyraminxColors(pyraminxColorsX);
-        pyraminxViewer.newScramble("Pyraminx", "");
-        megaminxViewer.setMegaminxColors(megaminxColorsX);
-        megaminxViewer.newScramble("Megaminx", "");
+        pyraminxPanel.setPyraminxColors(pyraminxColorsX);
+        pyraminxPanel.newScramble("Pyraminx", "");
+        megaminxPanel.setMegaminxColors(megaminxColorsX);
+        megaminxPanel.newScramble("Megaminx", "");
     } // end OptionsToGUI
 
 //**********************************************************************************************************************
@@ -579,11 +579,11 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 //**********************************************************************************************************************
 
     // this is for the ColorListener interface
-    public void faceClicked(ScramblePane scramblePane, int face, Color[] puzzleColors, String s){
+    public void faceClicked(ScramblePanel scramblePanel, int face, Color[] puzzleColors, String s){
         Color newColor = JColorChooser.showDialog(this, s, puzzleColors[face]);
         if(newColor != null){
             puzzleColors[face] = newColor;
-            scramblePane.updateScreen();
+            scramblePanel.updateScreen();
         }
     }
 

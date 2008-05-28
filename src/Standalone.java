@@ -36,7 +36,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     private AboutScreen aboutScreen;
 
     private ScrambleAlg scrambleAlg;
-    private ScramblePane scramblePane;
+    private ScramblePanel scramblePanel;
     private TimerArea timerArea;
     private String newAlg;
 
@@ -202,9 +202,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
-        scramblePane = new ScramblePane(282, 215+20); // needs to be changed in two places
-        scramblePane.setLayout(null);
-        //scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
+        scramblePanel = new ScramblePanel(282, 215+20); // needs to be changed in two places
+        scramblePanel.setLayout(null);
+        //scramblePanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
 
 
         sessionStatsLabel = new JLabel();
@@ -288,8 +288,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         timerLabel.setBounds(215,145+12,333,75);
         timerArea.setBounds(215,145,333,75+21);
 
-        //scramblePaneLabel.setBounds(563,5,282,235); // copy below
-        scramblePane.setBounds(563,5,282,235); // needs to be changed in two places
+        scramblePanel.setBounds(563,5,282,235); // needs to be changed in two places
 
         // total width is 834 if there is a 10 margin on each side
         // so use formula: margin = (834-12*width-11*separation)/2 + 10
@@ -358,7 +357,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         contentPane.add(scrambleText);
         contentPane.add(timerLabel);
         //contentPane.add(timerArea);
-        contentPane.add(scramblePane);
+        contentPane.add(scramblePanel);
         contentPane.add(sessionStatsLabel);
         contentPane.add(rollingAverageLabel);
         contentPane.add(bestAverageLabel);
@@ -745,13 +744,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
             scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         }
-        updateScramblePane();
+        updateScramblePanel();
     } // end updateScrambleAlgs
 
 //**********************************************************************************************************************
 
-    private void updateScramblePane(){
-        scramblePane.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll(ALG_BREAK, " "));
+    private void updateScramblePanel(){
+        scramblePanel.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll(ALG_BREAK, " "));
     }
 
 //**********************************************************************************************************************
@@ -824,18 +823,18 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         instructionScreen.dispose();
         aboutScreen.dispose();
         this.dispose();
-    }
+    } // end disposeAll
 
 //**********************************************************************************************************************
 
     private void updateGUI(){
-        scramblePane.setCubeColors(optionsMenu.cubeColorsX);
-        scramblePane.setPyraminxColors(optionsMenu.pyraminxColorsX);
-        scramblePane.setMegaminxColors(optionsMenu.megaminxColorsX);
-        updateScramblePane();
+        scramblePanel.setCubeColors(optionsMenu.cubeColorsX);
+        scramblePanel.setPyraminxColors(optionsMenu.pyraminxColorsX);
+        scramblePanel.setMegaminxColors(optionsMenu.megaminxColorsX);
+        updateScramblePanel();
         scrambleText.setBackground(optionsMenu.textBackgrColorX);
         bestAverageText.setBackground(optionsMenu.textBackgrColorX);
-    } //OptionsToGUI
+    } // end OptionsToGUI
 
 //**********************************************************************************************************************
 
@@ -851,7 +850,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
     private void acceptTime(long time){
         acceptTime(time, false, false);
-    }
+    } // end acceptTime
 
     private void acceptTime(long time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
         int time100 = Math.round(time/10F);
@@ -1063,7 +1062,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
     private void updateLabels(String puzzle){
         useThisAlgLabel.setText("Use this " + puzzle + " Scramble Algorithm:");
-        scramblePane.setBorder(BorderFactory.createTitledBorder(theBorder, puzzle + " Scramble View"));
+        scramblePanel.setBorder(BorderFactory.createTitledBorder(theBorder, puzzle + " Scramble View"));
         sessionStatsLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Session Statistics for " + puzzle));
         rollingAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Rolling Average for " + puzzle));
         bestAverageLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Best Average for " + puzzle));

@@ -25,14 +25,14 @@ import java.util.*;
 import javax.swing.border.Border;
 import java.awt.image.BufferedImage;
 
-public class ScramblePane extends JPanel implements MouseListener, Constants{
+public class ScramblePanel extends JPanel implements MouseListener, Constants{
 
     private Color[] cubeColors = new Color[6];
     private Color[] pyraminxColors = new Color[4];
     private Color[] megaminxColors = new Color[12];
 
     private BufferedImage myImage;
-    private Polygon[] cubeFacesX = new Polygon[6];
+    private Polygon[] cubeFaces = new Polygon[6];
     private Polygon[] pyraminxFaces = new Polygon[4];
     private Polygon[] megaminxFaces = new Polygon[12];
 
@@ -42,7 +42,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    public ScramblePane(int width, int height){
+    public ScramblePanel(int width, int height){
         myWidth = width; // needs gettin' rid of
         myHeight = height; // needs gettin' rid of
 //System.err.print("width:" + width + "\n");
@@ -54,7 +54,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         for(int face=0; face<4; face++) pyraminxColors[face] = Color.black; // just incase...
         for(int face=0; face<12; face++) megaminxColors[face] = Color.black; // just incase...
 
-        for(int face=0; face<6; face++) cubeFacesX[face] = new Polygon(); // just incase...
+        for(int face=0; face<6; face++) cubeFaces[face] = new Polygon(); // just incase...
         for(int face=0; face<4; face++) pyraminxFaces[face] = new Polygon(); // just incase...
         for(int face=0; face<12; face++) megaminxFaces[face] = new Polygon(); // just incase...
 
@@ -99,7 +99,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
     private ColorListener colorListener;
 
     public static interface ColorListener{
-        public abstract void faceClicked(ScramblePane scramblePane, int face, Color[] puzzleColors, String s);
+        public abstract void faceClicked(ScramblePanel scramblePanel, int face, Color[] puzzleColors, String s);
     }
 
     public void addColorListener(ColorListener colorListener){
@@ -120,12 +120,12 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
         int x = e.getX(), y = e.getY();
 
         if(myPuzzle.equals("2x2x2") || myPuzzle.equals("3x3x3") || myPuzzle.equals("4x4x4") || myPuzzle.equals("5x5x5")){
-                 if(cubeFacesX[0].contains(x,y))  colorListener.faceClicked(this, 0, cubeColors, "Front Face of Cube");
-            else if(cubeFacesX[1].contains(x,y))  colorListener.faceClicked(this, 1, cubeColors, "Back Face of Cube");
-            else if(cubeFacesX[2].contains(x,y))  colorListener.faceClicked(this, 2, cubeColors, "Left Face of Cube");
-            else if(cubeFacesX[3].contains(x,y))  colorListener.faceClicked(this, 3, cubeColors, "Right Face of Cube");
-            else if(cubeFacesX[4].contains(x,y))  colorListener.faceClicked(this, 4, cubeColors, "Down Face of Cube");
-            else if(cubeFacesX[5].contains(x,y))  colorListener.faceClicked(this, 5, cubeColors, "Up Face of Cube");
+                 if(cubeFaces[0].contains(x,y))  colorListener.faceClicked(this, 0, cubeColors, "Front Face of Cube");
+            else if(cubeFaces[1].contains(x,y))  colorListener.faceClicked(this, 1, cubeColors, "Back Face of Cube");
+            else if(cubeFaces[2].contains(x,y))  colorListener.faceClicked(this, 2, cubeColors, "Left Face of Cube");
+            else if(cubeFaces[3].contains(x,y))  colorListener.faceClicked(this, 3, cubeColors, "Right Face of Cube");
+            else if(cubeFaces[4].contains(x,y))  colorListener.faceClicked(this, 4, cubeColors, "Down Face of Cube");
+            else if(cubeFaces[5].contains(x,y))  colorListener.faceClicked(this, 5, cubeColors, "Up Face of Cube");
         }
         else if(myPuzzle.equals("Pyraminx")){
                  if(pyraminxFaces[0].contains(x,y)) colorListener.faceClicked(this, 0, pyraminxColors, "Front Face of Pyraminx");
@@ -172,12 +172,12 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //System.err.print("x:" + x + "\n");
 //System.err.print("y:" + y + "\n");
 
-        cubeFacesX[0] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 1*n + y, state[0]);
-        cubeFacesX[1] = drawCubeFace(g2d, size, face_pixels, 3*n + x, 1*n + y, state[1]);
-        cubeFacesX[2] = drawCubeFace(g2d, size, face_pixels, 0*n + x, 1*n + y, state[2]);
-        cubeFacesX[3] = drawCubeFace(g2d, size, face_pixels, 2*n + x, 1*n + y, state[3]);
-        cubeFacesX[4] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 2*n + y, state[4]);
-        cubeFacesX[5] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
+        cubeFaces[0] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 1*n + y, state[0]);
+        cubeFaces[1] = drawCubeFace(g2d, size, face_pixels, 3*n + x, 1*n + y, state[1]);
+        cubeFaces[2] = drawCubeFace(g2d, size, face_pixels, 0*n + x, 1*n + y, state[2]);
+        cubeFaces[3] = drawCubeFace(g2d, size, face_pixels, 2*n + x, 1*n + y, state[3]);
+        cubeFaces[4] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 2*n + y, state[4]);
+        cubeFaces[5] = drawCubeFace(g2d, size, face_pixels, 1*n + x, 0*n + y, state[5]);
 
         repaint();
     } // end drawCube
@@ -297,7 +297,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     // dir = 1 for 90 deg, 2 for 180 deg, 3 for 270 deg
-    private void doCubeTurn(int size, int[][][][] state, int face, int slice, int dir){
+    private static void doCubeTurn(int size, int[][][][] state, int face, int slice, int dir){
         dir %= 4;
         if(slice > size-1) return;
         if(slice == size-1){ //far slice, mostly to help handle whole cube rotation
@@ -500,7 +500,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     // dir = number of turns 1/5 turns clockwise
-    private void doMinxFaceTurn(int[][][] state, int face, int dir){
+    private static void doMinxFaceTurn(int[][][] state, int face, int dir){
         int plus6 = (face < 6 ? 0 : 6);
         dir %= 5;
         for(int d=0; d<dir; d++){
@@ -539,7 +539,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    private void helperMinxFaceTurn(int[][][] state, int plus6,
+    private static void helperMinxFaceTurn(int[][][] state, int plus6,
                                         int f0, int f1, int f2, int f3, int f4,
                                         int x0, int x1, int x2, int x3, int x4){
         for(int i=0; i<3; i++) // the three stickers on the edge, so like c/e/c
@@ -552,7 +552,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    private void doMinxSliceAssist(int[][][] state, int face, int dir){
+    private static void doMinxSliceAssist(int[][][] state, int face, int dir){
         int plus6 = (face < 6 ? 0 : 6);
         dir %= 5;
         for(int d=0; d<dir; d++){
@@ -587,7 +587,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    private void helperMinxSliceAssist(int[][][] state, int plus6,
+    private static void helperMinxSliceAssist(int[][][] state, int plus6,
                                         int f0, int f1, int f2, int f3, int f4,
                                         int x0, int x1, int x2, int x3, int x4){
         RJT_Utils.cycle(state[(f0+plus6)%12][10],
@@ -718,7 +718,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     // dir = number of turns 1/3 turns clockwise
-    private void doPyraCoreTurn(int[][][] state, int face, int dir){
+    private static void doPyraCoreTurn(int[][][] state, int face, int dir){
         dir %= 3;
         for(int d=0; d<dir; d++)
             switch(face){
@@ -746,7 +746,7 @@ public class ScramblePane extends JPanel implements MouseListener, Constants{
 //**********************************************************************************************************************
 
     // dir = number of turns 1/3 turns clockwise
-    private void doPyraTipsTurn(int[][][] state, int face, int dir){
+    private static void doPyraTipsTurn(int[][][] state, int face, int dir){
         dir %= 3;
         for(int d=0; d<dir; d++)
             switch(face){
