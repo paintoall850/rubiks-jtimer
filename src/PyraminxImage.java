@@ -156,10 +156,15 @@ public class PyraminxImage{
         Polygon big_tri = RJT_Utils.regular_poly(3, big_radius, false); // auxiliary: for drawing the outer 3 faces
         big_tri.translate(xCenter, yCenter);
 
-        myFaces[0] = makeFace(radius, xCenter, yCenter, true);
-        myFaces[1] = makeFace(radius, big_tri.xpoints[2], big_tri.ypoints[2], false);
-        myFaces[2] = makeFace(radius, big_tri.xpoints[0], big_tri.ypoints[0], false);
-        myFaces[3] = makeFace(radius, big_tri.xpoints[1], big_tri.ypoints[1], false);
+        myFaces[0] = makeFace(radius, xCenter, yCenter, true); // F face
+        myFaces[1] = makeFace(radius, big_tri.xpoints[2], big_tri.ypoints[2], false); // R face
+        myFaces[2] = makeFace(radius, big_tri.xpoints[0], big_tri.ypoints[0], false); // D face
+        myFaces[3] = makeFace(radius, big_tri.xpoints[1], big_tri.ypoints[1], false); // L face
+
+        // example of the adjustments that can be made, really shows off the power of the drawFace code
+        //myFaces[1].xpoints[2] -= radius * 0.4F;
+        //myFaces[2].ypoints[0] -= radius * 0.9F;
+        //myFaces[3].xpoints[1] += radius * 0.4F;
 
         for(int i=0; i<NUM_FACES; i++)
             drawFace(g2d, myFaces[i], state[i]);
@@ -211,9 +216,9 @@ public class PyraminxImage{
             g2d.fillPolygon(stickers[i]); // fill each sticker
         }
         g2d.setColor(Color.black);
-        g2d.setStroke(new BasicStroke(3F));
+        g2d.setStroke(new BasicStroke(3F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         g2d.drawPolygon(tri); // draw the outer triangle
-        g2d.setStroke(new BasicStroke(1.5F));
+        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         for(int i=0; i<3; i++) // draw 3 long lines inside
             g2d.drawLine(xs[i][0], ys[i][0], xs[(i+1)%3][1], ys[(i+1)%3][1]);
         for(int i=0; i<3; i++) // draw 3 short lines inside
