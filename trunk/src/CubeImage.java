@@ -165,18 +165,39 @@ public class CubeImage{
         int face_gap = 7;
         //int face_pixels = 60;
         int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, ((myHeight-19) - 2*face_gap - 2*margin)/3);
+//        int face_pixels = Math.min((myWidth - 2*face_gap - 2*margin)/4, ((myHeight-19) - 1*face_gap - 2*margin)/3);
         int n = face_pixels + face_gap;
+//        int n = face_pixels;
         //int x = 15, y = 19; // nudge factors
         int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = ((myHeight-19) - 3*face_pixels - 2*face_gap)/2;
+//        int x = (myWidth - 7*face_pixels/2 - 2*face_gap)/2, y = ((myHeight-19) - 7*face_pixels/2 - 1*face_gap)/2;
         y += 14; // nudge away from title
 
-        myFaces[0] = makeFace(face_pixels, 1*n + x, 1*n + y);
-        myFaces[1] = makeFace(face_pixels, 3*n + x, 1*n + y);
-        myFaces[2] = makeFace(face_pixels, 0*n + x, 1*n + y);
-        myFaces[3] = makeFace(face_pixels, 2*n + x, 1*n + y);
-        myFaces[4] = makeFace(face_pixels, 1*n + x, 2*n + y);
-        myFaces[5] = makeFace(face_pixels, 1*n + x, 0*n + y);
+        myFaces[0] = makeFace(face_pixels, 1*n + x, 1*n + y); // F face
+        myFaces[1] = makeFace(face_pixels, 3*n + x, 1*n + y); // B face
+        myFaces[2] = makeFace(face_pixels, 0*n + x, 1*n + y); // L face
+        myFaces[3] = makeFace(face_pixels, 2*n + x, 1*n + y); // R face
+        myFaces[4] = makeFace(face_pixels, 1*n + x, 2*n + y); // D face
+        myFaces[5] = makeFace(face_pixels, 1*n + x, 0*n + y); // U face
+/*
+        myFaces[5].xpoints[0] += face_pixels/2;
+        myFaces[5].ypoints[0] += face_pixels/2;
+        myFaces[5].xpoints[1] += face_pixels/2;
+        myFaces[5].ypoints[1] += face_pixels/2;
 
+        myFaces[3].xpoints[1] -= face_pixels/2;
+        myFaces[3].ypoints[1] -= face_pixels/2;
+        myFaces[3].xpoints[2] -= face_pixels/2;
+        myFaces[3].ypoints[2] -= face_pixels/2;
+        myFaces[1].translate(-face_pixels/2, -face_pixels/2);
+
+        myFaces[0].translate(7,0);
+        myFaces[1].translate(14,0);
+        myFaces[2].translate(0,0);
+        myFaces[3].translate(7,0);
+        myFaces[4].translate(7,7);
+        myFaces[5].translate(7,0);
+*/
         for(int i=0; i<NUM_FACES; i++)
             drawFace(g2d, size, myFaces[i], state[i]);
     } // end drawPuzzle
@@ -226,13 +247,15 @@ public class CubeImage{
             }
 
         g2d.setColor(Color.black);
-        g2d.setStroke(new BasicStroke(3F));
+        g2d.setStroke(new BasicStroke(3F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         g2d.drawPolygon(square); // draw the outer square
-        g2d.setStroke(new BasicStroke(1.5F));
+        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         for(int i=1; i<size; i++) // draw horizontal inside lines
             g2d.drawLine(xs[1][i], ys[1][i], xs[3][i], ys[3][i]);
         for(int j=1; j<size; j++) // draw vertical inside lines
             g2d.drawLine(xs[0][j], ys[0][j], xs[2][j], ys[2][j]);
+
+        
 
     } // end drawFace
 
