@@ -338,6 +338,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
             saveOptions();
             optionsListener.optionsCallback();
         } else if(source == applyButton){
+            captureOptions();
             optionsListener.optionsCallback();
         } else if(source == closeButton){
             this.setVisible(false);
@@ -359,20 +360,7 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 //**********************************************************************************************************************
 
     private void saveOptions(){
-        puzzleX = puzzleCombo.getSelectedItem()+"";
-        countdownX = countdownCombo.getSelectedItem()+"";
-        showResetConfirmX = confirmBox.isSelected();
-        showMinutesX = showMinutesBox.isSelected();
-        countdownColorX = countdownColorText.getBackground();
-        timerColorX = timerColorText.getBackground();
-        textBackgrColorX = textBackgrColorText.getBackground();
-        currentColorX = currentColorText.getBackground();
-        fastestColorX = fastestColorText.getBackground();
-        slowestColorX = slowestColorText.getBackground();
-        for(int face=0; face<6; face++)
-            cubeColorsX[face] = faceColorTexts[face].getBackground();
-        averageViewFormatX = averageText.getText();
-        sessionViewFormatX = sessionText.getText();
+        captureOptions();
 
         SortedProperties props = new SortedProperties();
         props.setProperty("01.puzzle", puzzleX);
@@ -483,6 +471,25 @@ public class OptionsMenu extends JFrame implements ActionListener, MouseListener
 
         OptionsToGUI();
     } // end resetOptions
+
+//**********************************************************************************************************************
+
+    private void captureOptions(){
+        puzzleX = puzzleCombo.getSelectedItem()+"";
+        countdownX = countdownCombo.getSelectedItem()+"";
+        showResetConfirmX = confirmBox.isSelected();
+        showMinutesX = showMinutesBox.isSelected();
+        countdownColorX = countdownColorText.getBackground();
+        timerColorX = timerColorText.getBackground();
+        textBackgrColorX = textBackgrColorText.getBackground();
+        currentColorX = currentColorText.getBackground();
+        fastestColorX = fastestColorText.getBackground();
+        slowestColorX = slowestColorText.getBackground();
+        for(int face=0; face<6; face++)
+            cubeColorsX[face] = faceColorTexts[face].getBackground();
+        averageViewFormatX = averageText.getText();
+        sessionViewFormatX = sessionText.getText();
+    } // end captureOptions
 
 //**********************************************************************************************************************
 
