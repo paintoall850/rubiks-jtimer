@@ -70,9 +70,13 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
 
 //**********************************************************************************************************************
 
-    public void setCubeColors(Color[] newColors){cubeImage.myColors = newColors;}
-    public void setPyraminxColors(Color[] newColors){pyraminxImage.myColors = newColors;}
-    public void setMegaminxColors(Color[] newColors){megaminxImage.myColors = newColors;}
+    public Color[] getCubeColors(){return cubeImage.myColors;}
+    public Color[] getPyraminxColors(){return pyraminxImage.myColors;}
+    public Color[] getMegaminxColors(){return megaminxImage.myColors;}
+
+    public void setCubeColors(Color[] newColors){cubeImage.setColors(newColors);}
+    public void setPyraminxColors(Color[] newColors){pyraminxImage.setColors(newColors);}
+    public void setMegaminxColors(Color[] newColors){megaminxImage.setColors(newColors);}
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************

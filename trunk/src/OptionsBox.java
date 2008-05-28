@@ -421,6 +421,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
 //**********************************************************************************************************************
 
     private void captureOptions(){
+
         puzzleX = puzzleCombo.getSelectedItem()+"";
         countdownX = countdownCombo.getSelectedItem()+"";
         showResetConfirmX = confirmBox.isSelected();
@@ -433,11 +434,17 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         slowestColorX = slowestColorText.getBackground();
         averageViewFormatX = averageText.getText();
         sessionViewFormatX = sessionText.getText();
+
+        cubeColorsX = cubePanel.getCubeColors();
+        pyraminxColorsX = pyraminxPanel.getPyraminxColors();
+        megaminxColorsX = megaminxPanel.getMegaminxColors();
+
     } // end captureOptions
 
 //**********************************************************************************************************************
 
     private void OptionsToGUI(){
+
         puzzleCombo.setSelectedItem(puzzleX);
         countdownCombo.setSelectedItem(countdownX);
         confirmBox.setSelected(showResetConfirmX);
@@ -459,6 +466,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         pyraminxPanel.newScramble("Pyraminx", "");
         megaminxPanel.setMegaminxColors(megaminxColorsX);
         megaminxPanel.newScramble("Megaminx", "");
+
     } // end OptionsToGUI
 
 //**********************************************************************************************************************
