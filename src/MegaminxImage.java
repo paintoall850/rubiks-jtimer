@@ -332,7 +332,7 @@ public class MegaminxImage{
         g2d.setColor(Color.black);
         g2d.setStroke(new BasicStroke(3F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         g2d.drawPolygon(pent); // draw the outer pentagon
-        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
         for(int i=0; i<5; i++) // now draw the 5 lines inside
             g2d.drawLine(xs[i][0], ys[i][0], xs[(i+3)%5][1], ys[(i+3)%5][1]);
 
