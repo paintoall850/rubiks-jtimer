@@ -22,7 +22,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.border.Border;
 import java.awt.image.BufferedImage;
 
 public class ScramblePanel extends JPanel implements MouseListener, Constants{
@@ -72,12 +71,7 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
     public void newScramble(String puzzle, String scrambleAlg){
         myPuzzle = puzzle;
         myScramble = scrambleAlg;
-        updateScreen();
-    }
 
-//**********************************************************************************************************************
-
-    public void updateScreen(){
              if(myPuzzle.equals("2x2x2")) scrambleCube(2);
         else if(myPuzzle.equals("3x3x3")) scrambleCube(3);
         else if(myPuzzle.equals("4x4x4")) scrambleCube(4);
