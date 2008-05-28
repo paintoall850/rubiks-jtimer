@@ -159,7 +159,7 @@ public class CubeImage{
     private final void drawPuzzle(int size, int[][][][] state){
         myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = myImage.createGraphics();
-        //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
 
         int margin = 15;
         int face_gap = 7;
