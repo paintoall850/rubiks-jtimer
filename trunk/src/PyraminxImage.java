@@ -218,7 +218,7 @@ public class PyraminxImage{
         g2d.setColor(Color.black);
         g2d.setStroke(new BasicStroke(3F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         g2d.drawPolygon(tri); // draw the outer triangle
-        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
         for(int i=0; i<3; i++) // draw 3 long lines inside
             g2d.drawLine(xs[i][0], ys[i][0], xs[(i+1)%3][1], ys[(i+1)%3][1]);
         for(int i=0; i<3; i++) // draw 3 short lines inside

@@ -164,14 +164,15 @@ public class CubeImage{
         int margin = 15;
         int face_gap = 7;
         //int face_pixels = 60;
-        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, ((myHeight-19) - 2*face_gap - 2*margin)/3);
-//        int face_pixels = Math.min((myWidth - 2*face_gap - 2*margin)/4, ((myHeight-19) - 1*face_gap - 2*margin)/3);
-        int n = face_pixels + face_gap;
-//        int n = face_pixels;
+//        int face_pixels = Math.min((myWidth - 3*face_gap - 2*margin)/4, ((myHeight-19) - 2*face_gap - 2*margin)/3);
+int face_pixels = Math.min(2*(myWidth - 2*face_gap - 2*margin)/7, 2*((myHeight-19) - 1*face_gap - 2*margin)/5);
+//        int n = face_pixels + face_gap;
+int n = face_pixels;
         //int x = 15, y = 19; // nudge factors
-        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = ((myHeight-19) - 3*face_pixels - 2*face_gap)/2;
-//        int x = (myWidth - 7*face_pixels/2 - 2*face_gap)/2, y = ((myHeight-19) - 7*face_pixels/2 - 1*face_gap)/2;
-        y += 14; // nudge away from title
+//        int x = (myWidth - 4*face_pixels - 3*face_gap)/2, y = ((myHeight-19) - 3*face_pixels - 2*face_gap)/2;
+int x = (myWidth - 7*face_pixels/2 - 2*face_gap)/2, y = ((myHeight-19) - 5*face_pixels/2 - 1*face_gap)/2;
+//        y += 14; // nudge away from title
+y += 14 - face_pixels/2;
 
         myFaces[0] = makeFace(face_pixels, 1*n + x, 1*n + y); // F face
         myFaces[1] = makeFace(face_pixels, 3*n + x, 1*n + y); // B face
@@ -179,25 +180,26 @@ public class CubeImage{
         myFaces[3] = makeFace(face_pixels, 2*n + x, 1*n + y); // R face
         myFaces[4] = makeFace(face_pixels, 1*n + x, 2*n + y); // D face
         myFaces[5] = makeFace(face_pixels, 1*n + x, 0*n + y); // U face
-/*
-        myFaces[5].xpoints[0] += face_pixels/2;
-        myFaces[5].ypoints[0] += face_pixels/2;
-        myFaces[5].xpoints[1] += face_pixels/2;
-        myFaces[5].ypoints[1] += face_pixels/2;
 
-        myFaces[3].xpoints[1] -= face_pixels/2;
-        myFaces[3].ypoints[1] -= face_pixels/2;
-        myFaces[3].xpoints[2] -= face_pixels/2;
-        myFaces[3].ypoints[2] -= face_pixels/2;
-        myFaces[1].translate(-face_pixels/2, -face_pixels/2);
+        int x_shift = face_pixels/2, y_shift = face_pixels/2; // amount to translate top 2 points of U
+        myFaces[5].xpoints[0] += x_shift;
+        myFaces[5].ypoints[0] += y_shift;
+        myFaces[5].xpoints[1] += x_shift;
+        myFaces[5].ypoints[1] += y_shift;
 
-        myFaces[0].translate(7,0);
-        myFaces[1].translate(14,0);
-        myFaces[2].translate(0,0);
-        myFaces[3].translate(7,0);
-        myFaces[4].translate(7,7);
-        myFaces[5].translate(7,0);
-*/
+        myFaces[3].xpoints[1] -= face_pixels - x_shift;
+        myFaces[3].ypoints[1] -= face_pixels - y_shift;
+        myFaces[3].xpoints[2] -= face_pixels - x_shift;
+        myFaces[3].ypoints[2] -= face_pixels - y_shift;
+        myFaces[1].translate(-(face_pixels - x_shift), -(face_pixels - y_shift));
+
+        myFaces[0].translate(face_gap,0);
+        myFaces[1].translate(2*face_gap,0);
+        //myFaces[2].translate(0,0);
+        myFaces[3].translate(face_gap,0);
+        myFaces[4].translate(face_gap,face_gap);
+        myFaces[5].translate(face_gap,0);
+
         for(int i=0; i<NUM_FACES; i++)
             drawFace(g2d, size, myFaces[i], state[i]);
     } // end drawPuzzle
@@ -249,13 +251,11 @@ public class CubeImage{
         g2d.setColor(Color.black);
         g2d.setStroke(new BasicStroke(3F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         g2d.drawPolygon(square); // draw the outer square
-        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g2d.setStroke(new BasicStroke(1.5F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
         for(int i=1; i<size; i++) // draw horizontal inside lines
             g2d.drawLine(xs[1][i], ys[1][i], xs[3][i], ys[3][i]);
         for(int j=1; j<size; j++) // draw vertical inside lines
             g2d.drawLine(xs[0][j], ys[0][j], xs[2][j], ys[2][j]);
-
-        
 
     } // end drawFace
 
@@ -273,7 +273,7 @@ public class CubeImage{
     }
 
 //**********************************************************************************************************************
-
+/*
     private static final Polygon square_polyX(int n){
         Polygon square = new Polygon();
         float r = n*(float)Math.sqrt(0.5);
@@ -284,7 +284,7 @@ public class CubeImage{
         square.translate(n/2, n/2);
         return square;
     }
-
+*/
 //**********************************************************************************************************************
 
     private static final void cycle(int n0[], int n1[], int n2[], int n3[]){
