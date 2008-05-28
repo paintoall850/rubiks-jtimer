@@ -254,17 +254,30 @@ public class MegaminxImage{
         Graphics2D g2d = myImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
 
-        int xShift = 125, yShift = 48; // for the second/back cluster of 6 faces (was 141, 0)
-        //int xCenter = 76, yCenter = 100; // 141, 120 worked for just 1 cluster
-        int xCenter = (myWidth-xShift)/2, yCenter = (myHeight-yShift-20)/2 + 20;
-        float radius = Math.min(myWidth, myHeight-20) * 0.112F;//24; // hard code for now
-        float face_gap = 7;
-        float big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
+        float radius, face_gap = 7, big_radius;
+        int xCenter, yCenter, xShift, yShift;
+        if(myWidth < 2*(myHeight-20)){
+            radius = (float)Math.sqrt(myWidth*myWidth + (myHeight-18)*(myHeight-18)) * 0.067F;
+            big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
+            xCenter = Math.round(big_radius*1.75F);
+            yCenter = Math.round(big_radius*1.75F);
+            xShift = myWidth - 2*xCenter;
+            yShift = (myHeight-18) - 2*yCenter;
+        } else{
+            radius = (myHeight-18) * 0.16F;
+            big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
+            xCenter = Math.round((myWidth - 6*big_radius)/3 + 3*big_radius/2);
+            yCenter = Math.round(big_radius*1.75F);
+            xShift = myWidth - 2*xCenter;
+            yShift = 0;
+        }
+        yCenter += 18;
 //System.err.print("xShift:" + xShift + "\n");
 //System.err.print("yShift:" + yShift + "\n");
 //System.err.print("xCenter:" + xCenter + "\n");
 //System.err.print("yCenter:" + yCenter + "\n");
 //System.err.print("radius:" + radius + "\n");
+//System.err.print("big_radius:" + big_radius + "\n");
 
         Polygon big_pent = RJT_Utils.regular_poly(5, big_radius, true); // auxiliary: for drawing outer 5 faces of cluster
         big_pent.translate(xCenter, yCenter);
