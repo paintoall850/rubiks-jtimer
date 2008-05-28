@@ -38,7 +38,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
     public String averageViewFormatX, sessionViewFormatX;
 
     JTabbedPane tabs;
-    JPanel generalTab, cubeSchemeTab, minxSchemeTab, sessionTab, bestTab;
+    JPanel generalTab, colorScheme1Tab, colorScheme2Tab, sessionTab, bestTab;
     JButton saveButton, applyButton, resetButton, closeButton;
     JLabel puzzleLabel, countdownLabel, averageSyntaxLabel, sessionSyntaxLabel, startupLabel, colorLabel;
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
@@ -107,7 +107,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         pyraminxPanel.setLayout(null);
         pyraminxPanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Pyraminx Preview"));
 
-        megaminxPanel = new ScramblePanel(269+3,200);// was 282,235);
+        megaminxPanel = new ScramblePanel(2*(269+3)+10,200);// was 282,235);
         megaminxPanel.setLayout(null);
         megaminxPanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
 
@@ -193,10 +193,10 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         slowestCLabel.setBounds(334+120,90,200,20);
 
         cubePanel.setBounds(10,5,269+3,200);//2*(269+3)+10,200);
-        pyraminxPanel.setBounds(10,5,269+3,200); // was 282,235);
-        megaminxPanel.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
+        pyraminxPanel.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
+        megaminxPanel.setBounds(10,5,2*(269+3)+10,200); // was 282,235);
 
-}
+    }
 
 //**********************************************************************************************************************
 
@@ -225,14 +225,14 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         generalTab.add(slowestColorText);
         generalTab.add(slowestCLabel);
 
-        cubeSchemeTab = new JPanel();
-        cubeSchemeTab.setLayout(null);
-        cubeSchemeTab.add(cubePanel);
+        colorScheme1Tab = new JPanel();
+        colorScheme1Tab.setLayout(null);
+        colorScheme1Tab.add(cubePanel);
+        colorScheme1Tab.add(pyraminxPanel);
 
-        minxSchemeTab = new JPanel();
-        minxSchemeTab.setLayout(null);
-        minxSchemeTab.add(pyraminxPanel);
-        minxSchemeTab.add(megaminxPanel);
+        colorScheme2Tab = new JPanel();
+        colorScheme2Tab.setLayout(null);
+        colorScheme2Tab.add(megaminxPanel);
 
         bestTab = new JPanel();
         bestTab.setLayout(null);
@@ -247,8 +247,8 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         tabs = new JTabbedPane();
         tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabs.add(generalTab, "General");
-        tabs.add(cubeSchemeTab, "Cube Colors");
-        tabs.add(minxSchemeTab, "Pyraminx & Megaminx Colors");
+        tabs.add(colorScheme1Tab, "Cube & Pyraminx Colors");
+        tabs.add(colorScheme2Tab, "Megaminx Colors");
         tabs.add(sessionTab, "Session Times");
         tabs.add(bestTab, "Best Average");
     }
