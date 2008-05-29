@@ -28,7 +28,7 @@ import java.io.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.border.*;
 
-public class Standalone extends JFrame implements ActionListener, Runnable, OptionsBox.OptionsListener, Constants{
+public class Standalone extends JFrame implements ActionListener, Runnable, OptionsBox.OptionsListener, NetcubeMode.VisiblityListener, Constants{
 
     private OptionsBox optionsBox;
     private ScrambleGenerator scrambleGenerator;
@@ -454,6 +454,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //                } catch(NumberFormatException ex){
 //                    JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
 //                }
+                insertTimeButton.requestFocus();
                 return;
             }
             float inputTime = 0;
@@ -523,20 +524,22 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 returnFocus();
                 return;
             }
-            //this.setVisible(false);
+            hideEverything();
             Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsBox);
+            server.addVisiblityListener(this);
             server.setVisible(true);
-            disposeAll();
+            //disposeAll();
         } else if(source == clientItem){
             int choice = JOptionPane.showConfirmDialog(this, "Switching to Client Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(choice != JOptionPane.YES_OPTION){
                 returnFocus();
                 return;
             }
-            //this.setVisible(false);
+            hideEverything();
             Client client = new Client(optionsBox);
+            client.addVisiblityListener(this);
             client.setVisible(true);
-            disposeAll();
+            //disposeAll();
         } else if(source == instItem){
             if(!instructionScreen.isVisible())
                 instructionScreen.setVisible(true);
@@ -818,6 +821,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
 //**********************************************************************************************************************
 
+    private void hideEverything(){
+        optionsBox.setVisible(false);
+        scrambleGenerator.setVisible(false);
+        instructionScreen.setVisible(false);
+        aboutScreen.setVisible(false);
+        this.setVisible(false);
+    } // end hideEverything
+
+//**********************************************************************************************************************
+
     private void updateGUI(){
         scramblePanel.setCubeColors(optionsBox.cubeColorsX);
         scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
@@ -833,6 +846,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     public void optionsCallback(){
         updateGUI();
         updateStats();
+    }
+
+//**********************************************************************************************************************
+
+    // for VisiblityListener interface
+    public void netmodeCallback(){
+        this.setVisible(true);
     }
 
 //**********************************************************************************************************************
