@@ -38,7 +38,7 @@ public class Server extends NetcubeMode{
 
 //**********************************************************************************************************************
 
-    public Server(String puzzle, String countdown, OptionsBox optionsBox){
+    public Server(/*String puzzle, String countdown, */OptionsBox optionsBox){
         super(optionsBox);
 
         // configure Contentpane
@@ -56,8 +56,8 @@ public class Server extends NetcubeMode{
         serverIpText.setText("N/A");
         connectButton.setText("Start Server");
 
-        puzzleCombo.setSelectedItem(puzzle);
-        countdownCombo.setSelectedItem(countdown);
+        //puzzleCombo.setSelectedItem(puzzle);
+        //countdownCombo.setSelectedItem(countdown);
         startButton.setText("Start Timer");
 
         scrambleAlg = new ScrambleAlg();
@@ -99,13 +99,11 @@ public class Server extends NetcubeMode{
             }
             startServerConnection();
         } else if(source == puzzleCombo){
-            out.println("P" + puzzleCombo.getSelectedItem());
-            out.flush();
+            safePrint("P" + puzzleCombo.getSelectedItem());
             generateNewScramble();
         } else if(source == countdownCombo){
-            out.println("T" + countdownCombo.getSelectedItem());
-            out.flush();
-        } else if(source == startButton){
+            safePrint("T" + countdownCombo.getSelectedItem());
+       } else if(source == startButton){
             if(startButton.getText().equals("Start Timer")){
                 //change buttons and clear times
                 remoteTime = "none";
@@ -126,8 +124,7 @@ public class Server extends NetcubeMode{
                 countdown = Integer.parseInt(countdownCombo.getSelectedItem()+"");
                 timerLabel.setForeground(Color.red);
                 timerThread = new java.util.Timer();
-                out.println("X" + "GO!");
-                out.flush();
+                safePrint("X" + "GO!");
                 timerThread.schedule(new RunCountdown(), 0, 1000);
             } else if(startButton.getText().equals("Stop Timer")){
                 //show on localTime and send time to client
@@ -137,8 +134,7 @@ public class Server extends NetcubeMode{
                 localTimeLabel.setForeground(Color.blue);
                 timerLabel.setForeground(Color.black);
                 localTimeLabel.setText(ssxx.format((stopTime-startTime)/1000F));
-                out.println("N" + ssxx.format((stopTime-startTime)/1000F));
-                out.flush();
+                safePrint("N" + ssxx.format((stopTime-startTime)/1000F));
 
                 //increment stuff
                 acceptsSincePop++;
@@ -177,8 +173,7 @@ public class Server extends NetcubeMode{
             localTimeLabel.setForeground(Color.blue);
             timerLabel.setForeground(Color.black);
             localTimeLabel.setText("POP");
-            out.println("N" + "POP");
-            out.flush();
+            safePrint("N" + "POP");
 
             //if everyone is done, then stop the timer update stats
             if(!remoteTime.equals("none")){
@@ -224,7 +219,6 @@ public class Server extends NetcubeMode{
             connectButton.setEnabled(true);
             usernameText.setEnabled(true);
             serverPortText.setEnabled(true);
-            //handicapText.setEnabled(true);
             sendMessageButton.setEnabled(false);
             chatText.setEnabled(false);
         } finally {
@@ -327,9 +321,7 @@ public class Server extends NetcubeMode{
         newAlg = scrambleAlg.generateAlg(puzzleCombo.getSelectedItem()+"");
         scrambleText.setText(newAlg.replaceAll(ALG_BREAK, "\n"));
         updateScramblePanel();
-
-        out.println("S" + newAlg);
-        out.flush();
+        safePrint("S" + newAlg);
     } // end generateNewScramble
 
 //**********************************************************************************************************************
@@ -340,7 +332,6 @@ public class Server extends NetcubeMode{
             connectButton.setEnabled(false);
             usernameText.setEnabled(false);
             serverPortText.setEnabled(false);
-            //handicapText.setEnabled(false);
 
             serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
             connectionListener = new ConnectionListener(serverSocket, this);
@@ -354,7 +345,6 @@ public class Server extends NetcubeMode{
             // client only: serverIpText.setEnabled(true);
             usernameText.setEnabled(true);
             serverPortText.setEnabled(true);
-            //handicapText.setEnabled(true);
             sendMessageButton.setEnabled(false);
             chatText.setEnabled(false);
         }
@@ -369,10 +359,9 @@ public class Server extends NetcubeMode{
             out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
             localTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, usernameText.getText() + "'s Statistics"));
-            out.println("U" + usernameText.getText());
-            out.println("P" + puzzleCombo.getSelectedItem());
-            out.println("T" + countdownCombo.getSelectedItem());
-            out.flush();
+            safePrint("U" + usernameText.getText());
+            safePrint("P" + puzzleCombo.getSelectedItem());
+            safePrint("T" + countdownCombo.getSelectedItem());
             generateNewScramble();
 
             showGUI();
@@ -384,7 +373,6 @@ public class Server extends NetcubeMode{
             //client only: serverIpText.setEnabled(false);
             usernameText.setEnabled(false);
             serverPortText.setEnabled(false);
-            //handicapText.setEnabled(false);
             sendMessageButton.setEnabled(true);
             chatText.setEnabled(true);
         } catch(Exception ex){

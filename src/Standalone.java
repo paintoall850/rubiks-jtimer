@@ -34,6 +34,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     private ScrambleGenerator scrambleGenerator;
     private InstructionScreen instructionScreen;
     private AboutScreen aboutScreen;
+    //private Server server;
+    //private Client client;
 
     private ScrambleAlg scrambleAlg;
     private ScramblePanel scramblePanel;
@@ -126,6 +128,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         scrambleGenerator = new ScrambleGenerator();
         instructionScreen = new InstructionScreen();
         aboutScreen = new AboutScreen();
+
+//        server = new Server(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+//        server.setVisible(false);
+//        server.addVisiblityListener(this);
+
+//        client = new Client(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+//        client.setVisible(false);
+//        client.addVisiblityListener(this);
 
         // initialize GUI objects
         puzzleLabel = new JLabel("Puzzle:");
@@ -446,7 +456,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == insertTimeButton){
-            String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:");
+            String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:", "Insert Own Time", JOptionPane.PLAIN_MESSAGE);
             if(input == null) return;
             if(input.equalsIgnoreCase("POP")){
 //                try{
@@ -514,10 +524,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 updateScrambleAlgs();
             }
         } else if(source == generatorItem){
-            if(!scrambleGenerator.isVisible()){
+//            if(!scrambleGenerator.isVisible()){
                 scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
                 scrambleGenerator.setVisible(true);
-            }
+//            }
         } else if(source == serverItem){
             int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(choice != JOptionPane.YES_OPTION){
@@ -525,7 +535,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 return;
             }
             hideEverything();
-            Server server = new Server(puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"", optionsBox);
+            Server server = new Server(/*puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"",*/ optionsBox);
+            server.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
+            server.countdownCombo.setSelectedItem(countdownCombo.getSelectedItem()+"");
             server.addVisiblityListener(this);
             server.setVisible(true);
             //disposeAll();
@@ -541,10 +553,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             client.setVisible(true);
             //disposeAll();
         } else if(source == instItem){
-            if(!instructionScreen.isVisible())
+//            if(!instructionScreen.isVisible())
                 instructionScreen.setVisible(true);
         } else if(source == aboutItem){
-            if(!aboutScreen.isVisible())
+//            if(!aboutScreen.isVisible())
                 aboutScreen.setVisible(true);
         }
     } // end actionPerformed

@@ -478,14 +478,12 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             try{
                 chatDoc.insertString(chatDoc.getLength(), (usernameText.getText()+": "), redStyle);
                 chatDoc.insertString(chatDoc.getLength(), (chatText.getText()+"\n"), blackStyle);
-                out.println("C" + chatText.getText());
-                out.flush();
+                safePrint("C" + chatText.getText());
                 chatPane.setCaretPosition(chatDoc.getLength());
                 chatText.setText("");
                 if(isTyping){
                     isTyping = false;
-                    out.println("I");
-                    out.flush();
+                    safePrint("I");
                 }
             } catch(BadLocationException ex){
                 System.out.println(ex.getMessage());
@@ -932,18 +930,25 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             if(chatText.getText().equals("")){
                 if(isTyping){
                     isTyping = false;
-                    out.println("I");
-                    out.flush();
+                    safePrint("I");
                 }
             } else {
                 if(!isTyping){
                     isTyping = true;
-                    out.println("I");
-                    out.flush();
+                    safePrint("I");
                 }
             }
         }
     } // end keyReleased
+
+//**********************************************************************************************************************
+
+    protected void safePrint(String s){
+        if(out != null){
+            out.println(s);
+            out.flush();
+        }
+    }
 
 //**********************************************************************************************************************
 //**********************************************************************************************************************
