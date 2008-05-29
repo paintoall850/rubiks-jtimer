@@ -88,8 +88,7 @@ public class Client extends NetcubeMode{
             }
             startClientConnection();
         } else if(source == localStatusLabel){
-            out.println("R" + localStatusLabel.isSelected());
-            out.flush();
+            safePrint("R" + localStatusLabel.isSelected());
         } else if(source == startButton){
             //show on localTime and send the time to server
             stopTime = System.currentTimeMillis();
@@ -98,8 +97,7 @@ public class Client extends NetcubeMode{
             localTimeLabel.setForeground(Color.blue);
             timerLabel.setForeground(Color.black);
             localTimeLabel.setText(ssxx.format((stopTime-startTime)/1000F));
-            out.println("N" + ssxx.format((stopTime-startTime)/1000F));
-            out.flush();
+            safePrint("N" + ssxx.format((stopTime-startTime)/1000F));
 
             //increment acceptsSincePOp
             acceptsSincePop++;
@@ -134,8 +132,7 @@ public class Client extends NetcubeMode{
             localTimeLabel.setForeground(Color.blue);
             timerLabel.setForeground(Color.black);
             localTimeLabel.setText("POP");
-            out.println("N" + "POP");
-            out.flush();
+            safePrint("N" + "POP");
 
             //if everyone is done, then stop the timer update stats
             if(!remoteTime.equals("none")){
@@ -178,7 +175,6 @@ public class Client extends NetcubeMode{
             connectButton.setEnabled(true);
             usernameText.setEnabled(true);
             serverPortText.setEnabled(true);
-            //handicapText.setEnabled(true);
             sendMessageButton.setEnabled(false);
             chatText.setEnabled(false);
         } finally {
@@ -290,8 +286,7 @@ public class Client extends NetcubeMode{
             out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
             localTimeUsernameLabel.setBorder(BorderFactory.createTitledBorder(theBorder, usernameText.getText() + "'s Statistics"));
-            out.println("U" + usernameText.getText());
-            out.flush();
+            safePrint("U" + usernameText.getText());
             // server only: generateNewScramble();
 
             showGUI();
@@ -303,7 +298,6 @@ public class Client extends NetcubeMode{
             serverIpText.setEnabled(false);
             usernameText.setEnabled(false);
             serverPortText.setEnabled(false);
-            //handicapText.setEnabled(false);
             sendMessageButton.setEnabled(true);
             chatText.setEnabled(true);
         } catch(Exception ex){
@@ -314,7 +308,6 @@ public class Client extends NetcubeMode{
             serverIpText.setEnabled(true);
             usernameText.setEnabled(true);
             serverPortText.setEnabled(true);
-            //handicapText.setEnabled(true);
             sendMessageButton.setEnabled(false);
             chatText.setEnabled(false);
         }
