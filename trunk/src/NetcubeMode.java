@@ -511,6 +511,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     }
 
 //**********************************************************************************************************************
+
     protected void updateScramblePanel(){
         scramblePanel.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll(ALG_BREAK, " "));
     }
@@ -943,5 +944,19 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             }
         }
     } // end keyReleased
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    private VisiblityListener visiblityListener;
+
+    public static interface VisiblityListener{
+        public abstract void netmodeCallback();
+    }
+
+    public void addVisiblityListener(VisiblityListener visiblityListener){
+        this.visiblityListener = visiblityListener;
+    }
 
 }
