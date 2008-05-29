@@ -38,8 +38,8 @@ public class Server extends NetcubeMode{
 
 //**********************************************************************************************************************
 
-    public Server(/*String puzzle, String countdown, */OptionsBox optionsBox){
-        super(optionsBox);
+    public Server(OptionsBox optionsBox, ScrambleGenerator scrambleGenerator, InstructionScreen instructionScreen, AboutScreen aboutScreen){
+        super(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
 
         // configure Contentpane
         Container contentPane = getContentPane();

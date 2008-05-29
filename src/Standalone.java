@@ -34,8 +34,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     private ScrambleGenerator scrambleGenerator;
     private InstructionScreen instructionScreen;
     private AboutScreen aboutScreen;
-    //private Server server;
-    //private Client client;
+    private Server server;
+    private Client client;
 
     private ScrambleAlg scrambleAlg;
     private ScramblePanel scramblePanel;
@@ -129,13 +129,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         instructionScreen = new InstructionScreen();
         aboutScreen = new AboutScreen();
 
-//        server = new Server(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
-//        server.setVisible(false);
-//        server.addVisiblityListener(this);
+        server = new Server(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+        server.setVisible(false);
+        server.addVisiblityListener(this);
 
-//        client = new Client(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
-//        client.setVisible(false);
-//        client.addVisiblityListener(this);
+        client = new Client(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+        client.setVisible(false);
+        client.addVisiblityListener(this);
 
         // initialize GUI objects
         puzzleLabel = new JLabel("Puzzle:");
@@ -260,9 +260,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
         aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
-        serverItem = new JMenuItem("Start Server");
+        serverItem = new JMenuItem("Server Mode");
         serverItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        clientItem = new JMenuItem("Connect To Server");
+        clientItem = new JMenuItem("Client Mode");
         clientItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
         fileMenu = new JMenu("File"); fileMenu.setMnemonic('F');
         fileMenu.add(saveBestItem);
@@ -278,7 +278,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         networkMenu.add(serverItem);
         networkMenu.add(clientItem);
         helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
-        helpMenu.add(instItem);
+//        helpMenu.add(instItem);
         helpMenu.add(aboutItem);
         jMenuBar = new JMenuBar();
         jMenuBar.add(fileMenu);
@@ -524,10 +524,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 updateScrambleAlgs();
             }
         } else if(source == generatorItem){
-//            if(!scrambleGenerator.isVisible()){
+            //if(!scrambleGenerator.isVisible()){
                 scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
                 scrambleGenerator.setVisible(true);
-//            }
+            //}
         } else if(source == serverItem){
             int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(choice != JOptionPane.YES_OPTION){
@@ -535,10 +535,11 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 return;
             }
             hideEverything();
-            Server server = new Server(/*puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"",*/ optionsBox);
+            //Server server = new Server(/*puzzleCombo.getSelectedItem()+"", countdownCombo.getSelectedItem()+"",*/ optionsBox);
             server.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
             server.countdownCombo.setSelectedItem(countdownCombo.getSelectedItem()+"");
-            server.addVisiblityListener(this);
+            //server.addVisiblityListener(this);
+            optionsBox.addOptionsListener(server);
             server.setVisible(true);
             //disposeAll();
         } else if(source == clientItem){
@@ -548,15 +549,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 return;
             }
             hideEverything();
-            Client client = new Client(optionsBox);
-            client.addVisiblityListener(this);
+            //Client client = new Client(optionsBox);
+            //client.addVisiblityListener(this);
+            optionsBox.addOptionsListener(client);
             client.setVisible(true);
             //disposeAll();
-        } else if(source == instItem){
-//            if(!instructionScreen.isVisible())
-                instructionScreen.setVisible(true);
+//        } else if(source == instItem){
+            //if(!instructionScreen.isVisible())
+//                instructionScreen.setVisible(true);
         } else if(source == aboutItem){
-//            if(!aboutScreen.isVisible())
+            //if(!aboutScreen.isVisible())
                 aboutScreen.setVisible(true);
         }
     } // end actionPerformed
@@ -864,6 +866,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
     // for VisiblityListener interface
     public void netmodeCallback(){
+        optionsBox.addOptionsListener(this); // pass it this so that it can update GUI when needed
         this.setVisible(true);
     }
 

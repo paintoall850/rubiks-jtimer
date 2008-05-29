@@ -29,11 +29,11 @@ import java.text.*;
 import java.util.*;
 import javax.swing.border.Border;
 
-public abstract class NetcubeMode extends JFrame implements ActionListener, KeyListener, Runnable, Constants{
+public abstract class NetcubeMode extends JFrame implements ActionListener, KeyListener, Runnable, OptionsBox.OptionsListener, Constants{
     protected OptionsBox optionsBox;
-    //protected ScrambleGenerator scrambleGenerator;
-    //protected InstructionScreen instructionScreen;
-    //protected AboutScreen aboutScreen;
+    protected ScrambleGenerator scrambleGenerator;
+    protected InstructionScreen instructionScreen;
+    protected AboutScreen aboutScreen;
 
     protected ScramblePanel scramblePanel;
     protected String newAlg;
@@ -73,8 +73,10 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     // JMenu stuff
     JMenuBar jMenuBar;
-    JMenu fileMenu;//, toolsMenu, helpMenu;
-    JMenuItem /*saveBestItem, saveSessionItem, optionsItem,*/ exitItem/*, importItem, generatorItem, instItem, aboutItem*/;
+    //JMenu fileMenu, toolsMenu, helpMenu;
+    JMenu fileMenu, toolsMenu, standaloneMenu, helpMenu;
+    //JMenuItem saveBestItem, saveSessionItem, optionsItem, exitItem, importItem, generatorItem, instItem, aboutItem;
+    JMenuItem optionsItem, exitItem, generatorItem, standaloneItem, instItem, aboutItem;
 
     // network stuff
     Socket clientSocket;
@@ -86,8 +88,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
 //**********************************************************************************************************************
 
-    public NetcubeMode(OptionsBox optionsBox){
-        // configure JFrame
+    public NetcubeMode(OptionsBox optionsBox, ScrambleGenerator scrambleGenerator, InstructionScreen instructionScreen, AboutScreen aboutScreen){
         RJT_Utils.configureJFrame(this);
 
         try { //configure chatSound
@@ -114,6 +115,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
 
         this.optionsBox = optionsBox;
+        this.scrambleGenerator = scrambleGenerator;
+        this.instructionScreen = instructionScreen;
+        this.aboutScreen = aboutScreen;
         newAlg = ""; // just in case...
 
         // set up JMenuBar
@@ -155,7 +159,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         scrambleText.setEditable(false);
         scrambleText.setLineWrap(true);
         scrambleText.setWrapStyleWord(true);
-        scrambleText.setBackground(optionsBox.textBackgrColorX);
+        //scrambleText.setBackground(optionsBox.textBackgrColorX);
         scrambleText.setForeground(Color.black);
         scrambleText.setBorder(blackLine);
 
@@ -166,9 +170,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         scramblePanel = new ScramblePanel(310+40, 215+20); // needs to be changed in two places
         scramblePanel.setLayout(null);
         scramblePanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Scramble View"));
-        scramblePanel.setCubeColors(optionsBox.cubeColorsX);
-        scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
-        scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
+        //scramblePanel.setCubeColors(optionsBox.cubeColorsX);
+        //scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
+        //scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
         //updateScramblePanel(); // not here, comboBox might not be stable yet
 
         localTimeUsernameLabel = new JLabel("<html>Rolling Average: <font size=\"5\">N/A</font><br>Session Average: N/A<br><br>Score: 0<br>Session Fastest Time: N/A<br>Session Slowest Time: N/A</html>");
@@ -210,8 +214,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         bigPicture.setBorder(blackLine);
         smallPicture.setBorder(blackLine);
 
-        // set everything to defaults
-        reset();
+        reset(); // set everything to defaults
+        updateGUI();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -220,37 +224,41 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     private void makeJMenuBar(){
 //        saveBestItem = new JMenuItem("Save Best Average As...");
 //        saveSessionItem = new JMenuItem("Save Session Average As...");
-//        optionsItem = new JMenuItem("Options");
-//        optionsItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        optionsItem = new JMenuItem("Options");
+        optionsItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         exitItem = new JMenuItem("Exit");
 //        importItem = new JMenuItem("Import Scrambles"); importItem.setMnemonic('I');
 //        importItem.setAccelerator(KeyStroke.getKeyStroke('I', 2));
-//        generatorItem = new JMenuItem("Generate Scrambles"); generatorItem.setMnemonic('G');
-//        generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
-//        instItem = new JMenuItem("Instuctions");
-//        instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-//        aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
-//        aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
+        generatorItem = new JMenuItem("Generate Scrambles"); generatorItem.setMnemonic('G');
+        generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
+        standaloneItem = new JMenuItem("Go Back to Standalone Mode");
+        instItem = new JMenuItem("Instuctions");
+        instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
+        aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', 2));
         fileMenu = new JMenu("File"); fileMenu.setMnemonic('F');
 //        fileMenu.add(saveBestItem);
 //        fileMenu.add(saveSessionItem);
 //        fileMenu.addSeparator();
-//        fileMenu.add(optionsItem);
-//        fileMenu.addSeparator();
+        fileMenu.add(optionsItem);
+        fileMenu.addSeparator();
         fileMenu.add(exitItem);
-//        toolsMenu = new JMenu("Tools"); toolsMenu.setMnemonic('T');
+        toolsMenu = new JMenu("Tools"); toolsMenu.setMnemonic('T');
 //        toolsMenu.add(importItem);
-//        toolsMenu.add(generatorItem);
+        toolsMenu.add(generatorItem);
 //        networkMenu = new JMenu("Network Timer"); networkMenu.setMnemonic('N');
-//        helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
+        standaloneMenu = new JMenu("Standalone Timer"); standaloneMenu.setMnemonic('S');
+        standaloneMenu.add(standaloneItem);
+        helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
 //        helpMenu.add(instItem);
-//        helpMenu.add(aboutItem);
+        helpMenu.add(aboutItem);
         jMenuBar = new JMenuBar();
         jMenuBar.add(fileMenu);
-//        jMenuBar.add(toolsMenu);
+        jMenuBar.add(toolsMenu);
 //        jMenuBar.add(networkMenu);
-//        jMenuBar.add(Box.createHorizontalGlue());
-//        jMenuBar.add(helpMenu);
+//        jMenuBar.add(standaloneMenu);
+        jMenuBar.add(Box.createHorizontalGlue());
+        jMenuBar.add(helpMenu);
     }
 
 //**********************************************************************************************************************
@@ -355,7 +363,12 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         remoteSessionDetailButton.addActionListener(this);
         remoteAverageDetailButton.addActionListener(this);
 
+        optionsItem.addActionListener(this);
         exitItem.addActionListener(this);
+        generatorItem.addActionListener(this);
+        standaloneItem.addActionListener(this);
+        instItem.addActionListener(this);
+        aboutItem.addActionListener(this);
     }
 
 //**********************************************************************************************************************
@@ -500,8 +513,21 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         } else if(source == remoteAverageDetailButton){
             DetailedView win = new DetailedView("Remote Rolling Average", getRemoteAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
+        } else if(source == optionsItem){
+            optionsBox.setVisible(true);
         } else if(source == exitItem){
             System.exit(0);
+        } else if(source == generatorItem){
+            scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
+            scrambleGenerator.setVisible(true);
+//        } else if(source == standaloneItem){
+//            terminateConnection();
+//            this.setVisible(false);
+//            visiblityListener.netmodeCallback();
+//        } else if(source == instItem){
+//            instructionScreen.setVisible(true);
+        } else if(source == aboutItem){
+            aboutScreen.setVisible(true);
         } else
             return false;
 
@@ -904,19 +930,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     } // end getRemoteAverageView
 
 //**********************************************************************************************************************
-/*
-    protected static final String findAndReplace(String original, String find, String replace){
-        while(true){
-            int index = original.indexOf(find);
-            if(index >= 0)
-                original = original.substring(0, index) + replace + original.substring(index+find.length(), original.length());
-            else
-                break;
-        }
-        return original;
-    } // end findAndReplace
-*/
-//**********************************************************************************************************************
 
     public final void keyTyped(KeyEvent e){}
     public final void keyPressed(KeyEvent e){}
@@ -948,6 +961,22 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             out.println(s);
             out.flush();
         }
+    }
+
+//**********************************************************************************************************************
+    private void updateGUI(){
+        scrambleText.setBackground(optionsBox.textBackgrColorX);
+        scramblePanel.setCubeColors(optionsBox.cubeColorsX);
+        scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
+        scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
+        scramblePanel.updateScreen();
+    }
+
+//**********************************************************************************************************************
+
+    // for OptionsListener interface
+    public void optionsCallback(){
+        updateGUI();
     }
 
 //**********************************************************************************************************************

@@ -61,6 +61,7 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
         else if(myPuzzle.equals("5x5x5")) s = cubeImage.scramble(5, myScramble);
         else if(myPuzzle.equals("Pyraminx")) s = pyraminxImage.scramble(myScramble);
         else if(myPuzzle.equals("Megaminx")) s = megaminxImage.scramble(myScramble);
+        else return;
 
         if(s.equals("success"))
             repaint();
