@@ -25,15 +25,12 @@ public class SolveTable implements Constants{
 
     private Hashtable<String, Vector<Solve>> myTable = new Hashtable<String, Vector<Solve>>(10);
     private String currentPuzzle;
-    private DecimalFormat ssxx, ss;
     private boolean showMinutes, truncate, verbose;
 
 //**********************************************************************************************************************
 
     public SolveTable(String puzzle){
         setPuzzle(puzzle);
-        ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
-        ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
         setTimeStyle(true, false, false);
     }
 
@@ -54,8 +51,8 @@ public class SolveTable implements Constants{
 
 //**********************************************************************************************************************
 
-    public void addSolve(int time100, String scramble, boolean isPop, boolean isPlus2){
-        Solve solve = new Solve(time100, scramble, isPop, isPlus2);
+    public void addSolve(float time, String scramble, boolean isPop, boolean isPlus2){
+        Solve solve = new Solve(RJT_Utils.roundTime(time), scramble, isPop, isPlus2);
         myTable.get(currentPuzzle).add(solve);
         computeStats(getSize()-1);
     }
@@ -79,8 +76,8 @@ public class SolveTable implements Constants{
         if(solve.isPop)
             return INF;
         if(solve.isPlus2)
-            return (solve.time100 + 200)/100F;
-        return solve.time100/100F;
+            return solve.time + 2;
+        return solve.time;
     }
 
 //**********************************************************************************************************************
@@ -107,7 +104,7 @@ public class SolveTable implements Constants{
 //**********************************************************************************************************************
 
     public class Solve{
-        int time100;
+        float time;
         String scramble;
         boolean isPop, isPlus2;
 
@@ -120,8 +117,8 @@ public class SolveTable implements Constants{
         int sessionFastestIndex = 0, sessionSlowestIndex = 0;
         int numberSolves = 0, numberPops = 0;
 
-        public Solve(int time100, String scramble, boolean isPop, boolean isPlus2){
-            this.time100 = time100;
+        public Solve(float time, String scramble, boolean isPop, boolean isPlus2){
+            this.time = time;
             this.scramble = scramble;
             this.isPop = isPop;
             this.isPlus2 = isPlus2;
@@ -140,15 +137,15 @@ public class SolveTable implements Constants{
 
     private final String formatTime(Solve solve){
         String s;
-        float time = solve.time100/100F;
+        float time = solve.time;
         if(solve.isPlus2) time += 2;
         if(time>=60 && showMinutes){
             int min = (int)(time/60);
             float sec = time-min*60;
-            s = min + ":" + ((time < 600 || !truncate) ? ssxx.format(sec) : ss.format(sec))
+            s = min + ":" + ((time < 600 || !truncate) ? RJT_Utils.ssxx_format(sec) : RJT_Utils.ss_format(sec))
                     + (solve.isPlus2 ? "+" : "");
         } else
-            s = ssxx.format(time) + (solve.isPlus2 ? "+" : "") + (verbose ? " sec." : "");
+            s = RJT_Utils.ssxx_format(time) + (solve.isPlus2 ? "+" : "") + (verbose ? " sec." : "");
         return s;
     }
 
