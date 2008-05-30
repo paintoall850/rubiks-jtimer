@@ -254,20 +254,20 @@ public class MegaminxImage{
         Graphics2D g2d = myImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // turn on if angled lines
 
-        float radius, face_gap = 7, big_radius;
+        double radius, face_gap = 7, big_radius;
         int xCenter, yCenter, xShift, yShift;
         if(myWidth < 2*(myHeight-20)){
-            radius = (float)Math.sqrt(myWidth*myWidth + (myHeight-18)*(myHeight-18)) * 0.067F;
-            big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
-            xCenter = Math.round(big_radius*1.75F);
-            yCenter = Math.round(big_radius*1.75F);
+            radius = Math.sqrt(myWidth*myWidth + (myHeight-18)*(myHeight-18)) * 0.067D;
+            big_radius = 2 * radius * Math.cos(0.2D*Math.PI) + face_gap;
+            xCenter = (int)Math.round(big_radius*1.75D);
+            yCenter = (int)Math.round(big_radius*1.75D);
             xShift = myWidth - 2*xCenter;
             yShift = (myHeight-18) - 2*yCenter;
         } else{
-            radius = (myHeight-18) * 0.16F;
-            big_radius = 2 * radius * (float)Math.cos(0.2D*Math.PI) + face_gap;
-            xCenter = Math.round((myWidth - 6*big_radius)/3 + 3*big_radius/2);
-            yCenter = Math.round(big_radius*1.75F);
+            radius = (myHeight-18) * 0.16D;
+            big_radius = 2 * radius * Math.cos(0.2D*Math.PI) + face_gap;
+            xCenter = (int)Math.round((myWidth - 6*big_radius)/3 + 3*big_radius/2);
+            yCenter = (int)Math.round(big_radius*1.75D);
             xShift = myWidth - 2*xCenter;
             yShift = 0;
         }
@@ -302,7 +302,7 @@ public class MegaminxImage{
 
 //**********************************************************************************************************************
 
-    private static final Polygon makeFace(float r, int x_offset, int y_offset, boolean pointup){
+    private static final Polygon makeFace(double r, int x_offset, int y_offset, boolean pointup){
         Polygon pent = RJT_Utils.regular_poly(5, r, pointup);
         pent.translate(x_offset, y_offset);
         return pent;
@@ -314,10 +314,10 @@ public class MegaminxImage{
 
         int xs[][] = new int[5][2], ys[][] = new int[5][2]; // the 10 points that are on the edges
         for(int i=0; i<5; i++){
-            xs[i][0] = (int)Math.round(0.45F*pent.xpoints[(i+1)%5] + 0.55F*pent.xpoints[i]);
-            ys[i][0] = (int)Math.round(0.45F*pent.ypoints[(i+1)%5] + 0.55F*pent.ypoints[i]);
-            xs[i][1] = (int)Math.round(0.55F*pent.xpoints[(i+1)%5] + 0.45F*pent.xpoints[i]);
-            ys[i][1] = (int)Math.round(0.55F*pent.ypoints[(i+1)%5] + 0.45F*pent.ypoints[i]);
+            xs[i][0] = (int)Math.round(0.45D*pent.xpoints[(i+1)%5] + 0.55D*pent.xpoints[i]);
+            ys[i][0] = (int)Math.round(0.45D*pent.ypoints[(i+1)%5] + 0.55D*pent.ypoints[i]);
+            xs[i][1] = (int)Math.round(0.55D*pent.xpoints[(i+1)%5] + 0.45D*pent.xpoints[i]);
+            ys[i][1] = (int)Math.round(0.55D*pent.ypoints[(i+1)%5] + 0.45D*pent.ypoints[i]);
         }
 
         Point inside_pent[] = new Point[5]; // for internal pentagon, i.e. center

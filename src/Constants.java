@@ -27,7 +27,7 @@ import javax.swing.border.Border;
 
 //area for all Program Constants
 public interface Constants{
-    static final Float INF = Float.POSITIVE_INFINITY;
+    static final Double INF = Double.POSITIVE_INFINITY;
 
     static final Font lgAlgFont = new Font("SansSerif", Font.BOLD, 18);
     static final Font smAlgFont = new Font("Courier", Font.BOLD, 11);

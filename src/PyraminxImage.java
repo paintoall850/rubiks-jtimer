@@ -153,9 +153,9 @@ public class PyraminxImage{
 
         int xCenter = myWidth/2;//141;
         int yCenter = myHeight/2-19;//98;
-        float radius = Math.min(myWidth, myHeight-20) * 0.24F;//52;
-        float face_gap = 7;
-        float big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
+        double radius = Math.min(myWidth, myHeight-20) * 0.24D;//52;
+        double face_gap = 7;
+        double big_radius = radius + face_gap;//2 * radius * Math.cos(Math.PI/3) + face_gap;
 //System.err.print("xCenter:" + xCenter + "\n");
 //System.err.print("yCenter:" + yCenter + "\n");
 //System.err.print("radius:" + radius + "\n");
@@ -169,9 +169,9 @@ public class PyraminxImage{
         myFaces[3] = makeFace(radius, big_tri.xpoints[1], big_tri.ypoints[1], false); // L face
 
         // example of the adjustments that can be made, really shows off the power of the drawFace code
-        //myFaces[1].xpoints[2] -= radius * 0.4F;
-        //myFaces[2].ypoints[0] -= radius * 0.9F;
-        //myFaces[3].xpoints[1] += radius * 0.4F;
+        //myFaces[1].xpoints[2] -= radius * 0.4D;
+        //myFaces[2].ypoints[0] -= radius * 0.9D;
+        //myFaces[3].xpoints[1] += radius * 0.4D;
 
         for(int i=0; i<NUM_FACES; i++)
             drawFace(g2d, myFaces[i], state[i]);
@@ -179,7 +179,7 @@ public class PyraminxImage{
 
 //**********************************************************************************************************************
 
-    private static final Polygon makeFace(float r, int x_offset, int y_offset, boolean pointup){
+    private static final Polygon makeFace(double r, int x_offset, int y_offset, boolean pointup){
         Polygon tri = RJT_Utils.regular_poly(3, r, pointup);
         tri.translate(x_offset, y_offset);
         return tri;
@@ -191,10 +191,10 @@ public class PyraminxImage{
 
         int xs[][] = new int[3][2], ys[][] = new int[3][2]; // the 6 points that are on the edges
         for(int i=0; i<3; i++){
-            xs[i][0] = (int)Math.round(1F*tri.xpoints[(i+1)%3]/3F + 2F*tri.xpoints[i]/3F);
-            ys[i][0] = (int)Math.round(1F*tri.ypoints[(i+1)%3]/3F + 2F*tri.ypoints[i]/3F);
-            xs[i][1] = (int)Math.round(2F*tri.xpoints[(i+1)%3]/3F + 1F*tri.xpoints[i]/3F);
-            ys[i][1] = (int)Math.round(2F*tri.ypoints[(i+1)%3]/3F + 1F*tri.ypoints[i]/3F);
+            xs[i][0] = (int)Math.round(1D*tri.xpoints[(i+1)%3]/3D + 2D*tri.xpoints[i]/3D);
+            ys[i][0] = (int)Math.round(1D*tri.ypoints[(i+1)%3]/3D + 2D*tri.ypoints[i]/3D);
+            xs[i][1] = (int)Math.round(2D*tri.xpoints[(i+1)%3]/3D + 1D*tri.xpoints[i]/3D);
+            ys[i][1] = (int)Math.round(2D*tri.ypoints[(i+1)%3]/3D + 1D*tri.ypoints[i]/3D);
         }
 
         Point mid_point = RJT_Utils.intersectionPoint(
