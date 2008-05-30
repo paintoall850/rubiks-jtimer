@@ -133,8 +133,8 @@ public class Server extends NetcubeMode{
                 popButton.setEnabled(false);
                 localTimeLabel.setForeground(Color.blue);
                 timerLabel.setForeground(Color.black);
-                localTimeLabel.setText(ssxx.format((stopTime-startTime)/1000F));
-                safePrint("N" + ssxx.format((stopTime-startTime)/1000F));
+                localTimeLabel.setText(RJT_Utils.ssxx_format((stopTime-startTime)/1000F));
+                safePrint("N" + RJT_Utils.ssxx_format((stopTime-startTime)/1000F));
 
                 //increment stuff
                 acceptsSincePop++;

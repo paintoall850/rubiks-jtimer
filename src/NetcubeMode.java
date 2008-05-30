@@ -57,7 +57,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     java.util.Timer timerThread;
     int countdown;
     long startTime, stopTime;
-    DecimalFormat ssxx, ss;
     boolean isTyping, remoteIsTyping;
     ImageIcon typeOn, typeOff;
 
@@ -110,9 +109,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         try { //configure startupClip
             startupClip = Applet.newAudioClip(getClass().getResource("startup.wav"));
         } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "startup.wav not found. There will be no startup sound.");}
-
-        ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
-        ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
 
         this.optionsBox = optionsBox;
         this.scrambleGenerator = scrambleGenerator;
@@ -591,7 +587,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     protected final class RunTimer extends java.util.TimerTask{
         public void run(){
             float time = (System.currentTimeMillis()-startTime)/1000F;
-            timerLabel.setText(ssxx.format(time));
+            timerLabel.setText(RJT_Utils.ssxx_format(time));
         }
     } // end RunTimer class
 
@@ -748,19 +744,19 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         String localRollingAverage, remoteRollingAverage, localSessionAverage, remoteSessionAverage, localSessionFastestTime, remoteSessionFastestTime, localSessionSlowestTime, remoteSessionSlowestTime;
 
         if(localCubesSolved >= 12)
-            localRollingAverage = ssxx.format(localCurrentRollingAverage);
+            localRollingAverage = RJT_Utils.ssxx_format(localCurrentRollingAverage);
         else
             localRollingAverage = "N/A";
 
         if(remoteCubesSolved >= 12)
-            remoteRollingAverage = ssxx.format(remoteCurrentRollingAverage);
+            remoteRollingAverage = RJT_Utils.ssxx_format(remoteCurrentRollingAverage);
         else
             remoteRollingAverage = "N/A";
 
         if(localCubesSolved >= 1){
-            localSessionAverage = ssxx.format(localCurrentSessionAverage);
-            localSessionFastestTime = ssxx.format(localSessionFastest);
-            localSessionSlowestTime = ssxx.format(localSessionSlowest);
+            localSessionAverage = RJT_Utils.ssxx_format(localCurrentSessionAverage);
+            localSessionFastestTime = RJT_Utils.ssxx_format(localSessionFastest);
+            localSessionSlowestTime = RJT_Utils.ssxx_format(localSessionSlowest);
         } else {
             localSessionAverage = "N/A";
             localSessionFastestTime = "N/A";
@@ -768,9 +764,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         }
 
         if(remoteCubesSolved >= 1){
-            remoteSessionAverage = ssxx.format(remoteCurrentSessionAverage);
-            remoteSessionFastestTime = ssxx.format(remoteSessionFastest);
-            remoteSessionSlowestTime = ssxx.format(remoteSessionSlowest);
+            remoteSessionAverage = RJT_Utils.ssxx_format(remoteCurrentSessionAverage);
+            remoteSessionFastestTime = RJT_Utils.ssxx_format(remoteSessionFastest);
+            remoteSessionSlowestTime = RJT_Utils.ssxx_format(remoteSessionSlowest);
         } else {
             remoteSessionAverage = "N/A";
             remoteSessionFastestTime = "N/A";
@@ -844,11 +840,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         String returnMe = sessionViewFormat;
         returnMe = returnMe.replaceAll("%T", new Date()+"");
         returnMe = returnMe.replaceAll("%U", usernameText.getText());
-        returnMe = returnMe.replaceAll("%A", ssxx.format(localCurrentSessionAverage));
+        returnMe = returnMe.replaceAll("%A", RJT_Utils.ssxx_format(localCurrentSessionAverage));
         returnMe = returnMe.replaceAll("%I", timesAndScrambles);
         returnMe = returnMe.replaceAll("%O", timesOnly);
-        returnMe = returnMe.replaceAll("%F", ssxx.format(localSessionFastest));
-        returnMe = returnMe.replaceAll("%S", ssxx.format(localSessionSlowest));
+        returnMe = returnMe.replaceAll("%F", RJT_Utils.ssxx_format(localSessionFastest));
+        returnMe = returnMe.replaceAll("%S", RJT_Utils.ssxx_format(localSessionSlowest));
         returnMe = returnMe.replaceAll("%C", localCubesSolved+"");
         returnMe = returnMe.replaceAll("%P", localNumOfPops+"");
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
@@ -871,11 +867,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         String returnMe = averageViewFormat;
         returnMe = returnMe.replaceAll("%T", new Date()+"");
         returnMe = returnMe.replaceAll("%U", usernameText.getText());
-        returnMe = returnMe.replaceAll("%A", ssxx.format(localCurrentRollingAverage));
+        returnMe = returnMe.replaceAll("%A", RJT_Utils.ssxx_format(localCurrentRollingAverage));
         returnMe = returnMe.replaceAll("%I", timesAndScrambles);
         returnMe = returnMe.replaceAll("%O", timesOnly);
-        returnMe = returnMe.replaceAll("%F", ssxx.format(localCurrentFastest));
-        returnMe = returnMe.replaceAll("%S", ssxx.format(localCurrentSlowest));
+        returnMe = returnMe.replaceAll("%F", RJT_Utils.ssxx_format(localCurrentFastest));
+        returnMe = returnMe.replaceAll("%S", RJT_Utils.ssxx_format(localCurrentSlowest));
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getLocalAverageView
@@ -893,11 +889,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         String returnMe = sessionViewFormat;
         returnMe = returnMe.replaceAll("%T", new Date()+"");
         returnMe = returnMe.replaceAll("%U", remoteUsername);
-        returnMe = returnMe.replaceAll("%A", ssxx.format(remoteCurrentSessionAverage));
+        returnMe = returnMe.replaceAll("%A", RJT_Utils.ssxx_format(remoteCurrentSessionAverage));
         returnMe = returnMe.replaceAll("%I", timesAndScrambles);
         returnMe = returnMe.replaceAll("%O", timesOnly);
-        returnMe = returnMe.replaceAll("%F", ssxx.format(remoteSessionFastest));
-        returnMe = returnMe.replaceAll("%S", ssxx.format(remoteSessionSlowest));
+        returnMe = returnMe.replaceAll("%F", RJT_Utils.ssxx_format(remoteSessionFastest));
+        returnMe = returnMe.replaceAll("%S", RJT_Utils.ssxx_format(remoteSessionSlowest));
         returnMe = returnMe.replaceAll("%C", remoteCubesSolved+"");
         returnMe = returnMe.replaceAll("%P", remoteNumOfPops+"");
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
@@ -920,11 +916,11 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         String returnMe = averageViewFormat;
         returnMe = returnMe.replaceAll("%T", new Date()+"");
         returnMe = returnMe.replaceAll("%U", remoteUsername);
-        returnMe = returnMe.replaceAll("%A", ssxx.format(remoteCurrentRollingAverage));
+        returnMe = returnMe.replaceAll("%A", RJT_Utils.ssxx_format(remoteCurrentRollingAverage));
         returnMe = returnMe.replaceAll("%I", timesAndScrambles);
         returnMe = returnMe.replaceAll("%O", timesOnly);
-        returnMe = returnMe.replaceAll("%F", ssxx.format(remoteCurrentFastest));
-        returnMe = returnMe.replaceAll("%S", ssxx.format(remoteCurrentSlowest));
+        returnMe = returnMe.replaceAll("%F", RJT_Utils.ssxx_format(remoteCurrentFastest));
+        returnMe = returnMe.replaceAll("%S", RJT_Utils.ssxx_format(remoteCurrentSlowest));
         returnMe = returnMe.replaceAll("\n", System.getProperty("line.separator"));
         return returnMe;
     } // end getRemoteAverageView

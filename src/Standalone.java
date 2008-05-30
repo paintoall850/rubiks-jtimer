@@ -66,7 +66,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     private int countingDown;
     private long startTime, stopTime;
 
-    DecimalFormat ssxx, ss;
     JFileChooser fc = new JFileChooser();
 
     private String[] importedAlgs;
@@ -105,9 +104,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         setTitle(APP_TITLE);
         RJT_Utils.centerJFrame(this, 860, 570);
         RJT_Utils.configureJFrame(this);
-
-        ssxx = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ssxx.applyPattern("00.00");
-        ss = (DecimalFormat)NumberFormat.getNumberInstance(new Locale("en", "US")); ss.applyPattern("00");
 
         fc.setFileFilter(new TextFileFilter());
         fc.setAcceptAllFileFilterUsed(false);
@@ -408,14 +404,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         } else if(source == popButton){
             popButton.setText("Popped!");
 //            try{
-                acceptTime(stopTime-startTime, true, false);
+                acceptTime((stopTime-startTime)/1000F, true, false);
 //            } catch(NumberFormatException ex){
 //                JOptionPane.showMessageDialog(this, ERROR_MESS);
 //                System.out.println(ex.getMessage());
 //            }
         } else if(source == plusTwoButton){
 //            try{
-                acceptTime(stopTime-startTime, false, true);
+                acceptTime((stopTime-startTime)/1000F, false, true);
 //            } catch(NumberFormatException ex){
 //                JOptionPane.showMessageDialog(this, ERROR_MESS);
 //                System.out.println(ex.getMessage());
@@ -458,23 +454,19 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:", "Insert Own Time", JOptionPane.PLAIN_MESSAGE);
             if(input == null) return;
             if(input.equalsIgnoreCase("POP")){
-//                try{
-                    acceptTime(0, true, false);
-//                } catch(NumberFormatException ex){
-//                    JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
-//                }
+                acceptTime(0, true, false);
                 insertTimeButton.requestFocus();
                 return;
             }
             float inputTime = 0;
             try{
-                inputTime = Float.parseFloat(ssxx.format(Float.parseFloat(input)));
+                inputTime = Float.parseFloat(input);
             } catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
                 return;
             }
 //            try{
-                acceptTime(Math.round(inputTime * 1000));
+                acceptTime(inputTime);
 //            } catch(NumberFormatException ex){
 //                JOptionPane.showMessageDialog(this, ERROR_MESS);
 //                System.out.println(ex.getMessage());
@@ -709,14 +701,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     }
 
     private final String timeToString(float time, boolean truncate, boolean verbose){
-        String s = ssxx.format(time); // consider the case time=59.999D
-        time = Float.parseFloat(s);
+        String s;
+        time = RJT_Utils.roundTime(time);
         if(time>=60 && optionsBox.showMinutesX){
             int min = (int)(time/60);
             float sec = time-min*60;
-            s = min + ":" + ((time < 600 || !truncate) ? ssxx.format(sec) : ss.format(sec));
+            s = min + ":" + ((time < 600 || !truncate) ? RJT_Utils.ssxx_format(sec) : RJT_Utils.ss_format(sec));
         } else
-            s = ssxx.format(time) + (verbose ? " sec." : "");
+            s = RJT_Utils.ssxx_format(time) + (verbose ? " sec." : "");
         return s;
     }
 
@@ -808,7 +800,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
     public void timerAccept(){
 //        try{
-            acceptTime(stopTime-startTime);
+            acceptTime((stopTime-startTime)/1000F);
 //        } catch(NumberFormatException ex){
 //            JOptionPane.showMessageDialog(this, ERROR_MESS);
 //            System.out.println(ex.getMessage());
@@ -873,13 +865,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    private void acceptTime(long time){
+    private void acceptTime(float time){
         acceptTime(time, false, false);
     } // end acceptTime
 
-    private void acceptTime(long time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
-        int time100 = Math.round(time/10F);
-        solveTable.addSolve(time100, newAlg, isPop, isPlus2);
+    private void acceptTime(float time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
+        solveTable.addSolve(time, newAlg, isPop, isPlus2);
         updateStats();
         buttonsOn();
         updateScrambleAlgs();
@@ -1042,7 +1033,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 sBestIndvTimes = sBestIndvTimes.substring(0, sBestIndvTimes.length()-2);
             }
 
-
+            solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
             sRecentTime = solveTable.getString(size-1);
             if(size > 1){
                 sPrevTime = solveTable.getString(size-2);
