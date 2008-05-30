@@ -38,17 +38,19 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
     public String averageViewFormatX, sessionViewFormatX;
 
     JTabbedPane tabs;
-    JPanel generalTab, colorScheme1Tab, colorScheme2Tab, sessionTab, bestTab;
-    JButton saveButton, applyButton, resetButton, closeButton;
-    JLabel puzzleLabel, countdownLabel, averageSyntaxLabel, sessionSyntaxLabel, startupLabel, colorLabel;
+    JPanel generalTab, colorScheme1Tab, colorScheme2Tab, sessionTab, averageTab;
+    JLayeredPane layeredPane1, layeredPane2;
+    JButton saveButton, applyButton, resetButton, rejectButton;//, closeButton;
+    JButton colorResetButton, cubeResetButton, pyraminxResetButton, megaminxResetButton, sessionResetButton, averageResetButton;
+    JLabel puzzleLabel, countdownLabel, sessionSyntaxLabel, averageSyntaxLabel, startupLabel, colorLabel;
     JLabel countdownCLabel, timerCLabel, textBackgrCLabel, currentCLabel, fastestCLabel, slowestCLabel;
     ScramblePanel cubePanel, pyraminxPanel, megaminxPanel;
 
     JComboBox puzzleCombo, countdownCombo;
     JCheckBox confirmBox, showMinutesBox;
     JTextArea countdownColorText, timerColorText, textBackgrColorText, fastestColorText, slowestColorText, currentColorText;
-    JTextArea averageText, sessionText;
-    JScrollPane averageScrollPane, sessionScrollPane;
+    JTextArea sessionText, averageText;
+    JScrollPane sessionScrollPane, averageScrollPane;
 
 //**********************************************************************************************************************
 
@@ -127,10 +129,18 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         averageScrollPane = new JScrollPane(averageText);
         averageScrollPane.setBorder(blackLine);
 
+        colorResetButton = new JButton("Reset");
+        cubeResetButton = new JButton("Reset");
+        pyraminxResetButton = new JButton("Reset");
+        megaminxResetButton = new JButton("Reset");
+        sessionResetButton = new JButton("Reset");
+        averageResetButton = new JButton("Reset");
+
         saveButton = new JButton("Save and Apply");
         applyButton = new JButton("Apply Only");
-        resetButton = new JButton("Reset All");
-        closeButton = new JButton("Close");
+        resetButton = new JButton(RJT_Utils.makeRed("Reset All"));
+        rejectButton = new JButton("Undo Changes");
+        //closeButton = new JButton("Close");
 
         // call big add tabs and content function
         addStuffToTabs();
@@ -143,7 +153,8 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         contentPane.add(saveButton);
         contentPane.add(applyButton);
         contentPane.add(resetButton);
-        contentPane.add(closeButton);
+        contentPane.add(rejectButton);
+        //contentPane.add(closeButton);
 
         // add ActionListeners
         addTheActionListeners();
@@ -156,6 +167,8 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
     private void setTheBounds(){
 
         tabs.setBounds(10,5,579,240);
+        layeredPane1.setBounds(0,0,579,240);
+        layeredPane2.setBounds(0,0,579,240);
         //saveButton.setBounds(10,255,186,30);
         //resetButton.setBounds(186+20,255,186,30);
         //cancelButton.setBounds(2*186+30,255,186,30);
@@ -163,14 +176,15 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         saveButton.setBounds(10,255,137,30);
         applyButton.setBounds(137+20,255,137,30);
         resetButton.setBounds(2*137+30,255,137,30);
-        closeButton.setBounds(3*137+40,255,137,30);
+        rejectButton.setBounds(3*137+40,255,137,30);
+        //closeButton.setBounds(3*137+40,255,137,30);
 
         startupLabel.setBounds(10,5,269+3,200);
         colorLabel.setBounds(289+3,5,269+3,200);
-        sessionScrollPane.setBounds(12,10,358+6,193);
-        averageScrollPane.setBounds(12,10,358+6,193);
-        sessionSyntaxLabel.setBounds(378+6,5,180,200);
-        averageSyntaxLabel.setBounds(378+6,5,180,200);
+        sessionScrollPane.setBounds(12,10,358+6-30,193);
+        averageScrollPane.setBounds(12,10,358+6-30,193);
+        sessionSyntaxLabel.setBounds(378+6-30,5,180+30,200);
+        averageSyntaxLabel.setBounds(378+6-30,5,180+30,200);
 
         puzzleLabel.setBounds(30,25,90,20);
         puzzleCombo.setBounds(30,45,90,20);
@@ -196,6 +210,12 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         pyraminxPanel.setBounds((579-15)-(269+3),5,269+3,200); // was 282,235);
         megaminxPanel.setBounds(10,5,2*(269+3)+10,200); // was 282,235);
 
+        colorResetButton.setBounds(564-85,200-30,70,20);
+        cubeResetButton.setBounds(282-85,200-30,70,20);
+        pyraminxResetButton.setBounds(564-85,200-30,70,20);
+        megaminxResetButton.setBounds(564-85,200-30,70,20);
+        sessionResetButton.setBounds(564-85,200-30,70,20);
+        averageResetButton.setBounds(564-85,200-30,70,20);
     }
 
 //**********************************************************************************************************************
@@ -224,33 +244,45 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         generalTab.add(fastestCLabel);
         generalTab.add(slowestColorText);
         generalTab.add(slowestCLabel);
+        generalTab.add(colorResetButton);
 
+        layeredPane1 = new JLayeredPane();
+        layeredPane1.setLayout(null);
+        layeredPane1.add(cubePanel, JLayeredPane.DEFAULT_LAYER);
+        layeredPane1.add(pyraminxPanel, JLayeredPane.DEFAULT_LAYER);
+        layeredPane1.add(cubeResetButton, JLayeredPane.MODAL_LAYER);
+        layeredPane1.add(pyraminxResetButton, JLayeredPane.MODAL_LAYER);
         colorScheme1Tab = new JPanel();
         colorScheme1Tab.setLayout(null);
-        colorScheme1Tab.add(cubePanel);
-        colorScheme1Tab.add(pyraminxPanel);
+        colorScheme1Tab.add(layeredPane1);
 
+        layeredPane2 = new JLayeredPane();
+        layeredPane2.setLayout(null);
+        layeredPane2.add(megaminxPanel, JLayeredPane.DEFAULT_LAYER);
+        layeredPane2.add(megaminxResetButton, JLayeredPane.MODAL_LAYER);
         colorScheme2Tab = new JPanel();
         colorScheme2Tab.setLayout(null);
-        colorScheme2Tab.add(megaminxPanel);
-
-        bestTab = new JPanel();
-        bestTab.setLayout(null);
-        bestTab.add(averageSyntaxLabel);
-        bestTab.add(averageScrollPane);
+        colorScheme2Tab.add(layeredPane2);
 
         sessionTab = new JPanel();
         sessionTab.setLayout(null);
         sessionTab.add(sessionSyntaxLabel);
         sessionTab.add(sessionScrollPane);
+        sessionTab.add(sessionResetButton);
+
+        averageTab = new JPanel();
+        averageTab.setLayout(null);
+        averageTab.add(averageSyntaxLabel);
+        averageTab.add(averageScrollPane);
+        averageTab.add(averageResetButton);
 
         tabs = new JTabbedPane();
         tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabs.add(generalTab, "General");
-        tabs.add(colorScheme1Tab, "Cube & Pyraminx Colors");
-        tabs.add(colorScheme2Tab, "Megaminx Colors");
+        tabs.add(colorScheme1Tab, "Cube & Pyraminx Scheme");
+        tabs.add(colorScheme2Tab, "Megaminx Scheme");
         tabs.add(sessionTab, "Session Times");
-        tabs.add(bestTab, "Best Average");
+        tabs.add(averageTab, "Best Average");
     }
 
 //**********************************************************************************************************************
@@ -260,7 +292,8 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         saveButton.addActionListener(this);
         applyButton.addActionListener(this);
         resetButton.addActionListener(this);
-        closeButton.addActionListener(this);
+        rejectButton.addActionListener(this);
+        //closeButton.addActionListener(this);
 
         countdownColorText.addMouseListener(this);
         timerColorText.addMouseListener(this);
@@ -272,6 +305,13 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         cubePanel.addColorListener(this);
         pyraminxPanel.addColorListener(this);
         megaminxPanel.addColorListener(this);
+
+        colorResetButton.addActionListener(this);
+        cubeResetButton.addActionListener(this);
+        pyraminxResetButton.addActionListener(this);
+        megaminxResetButton.addActionListener(this);
+        sessionResetButton.addActionListener(this);
+        averageResetButton.addActionListener(this);
     }
 
 //**********************************************************************************************************************
@@ -288,10 +328,28 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
             optionsListener.optionsCallback();
         } else if(source == resetButton){
             resetOptions();
-            averageText.setCaretPosition(0);
-            sessionText.setCaretPosition(0);
-        } else if(source == closeButton){
-            this.setVisible(false);
+        } else if(source == rejectButton){
+            loadOptions();
+//        } else if(source == closeButton){
+//            this.setVisible(false);
+        } else if(source == colorResetButton){
+            colorReset();
+            OptionsToGUI();
+        } else if(source == cubeResetButton){
+            cubeReset();
+            OptionsToGUI();
+        } else if(source == pyraminxResetButton){
+            pyraminxReset();
+            OptionsToGUI();
+        } else if(source == megaminxResetButton){
+            megaminxReset();
+            OptionsToGUI();
+        } else if(source == sessionResetButton){
+            sessionReset();
+            OptionsToGUI();
+        } else if(source == averageResetButton){
+            averageReset();
+            OptionsToGUI();
         }
     } // end actionPerformed
 
@@ -379,6 +437,20 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         countdownX = "15";
         showResetConfirmX = true;
         showMinutesX = true;
+
+        colorReset();
+        cubeReset();
+        pyraminxReset();
+        megaminxReset();
+        sessionReset();
+        averageReset();
+
+        OptionsToGUI();
+    } // end resetOptions
+
+//**********************************************************************************************************************
+
+    private void colorReset(){
         countdownColorX = Color.red;
         timerColorX = Color.blue;
         // yellow = (255,222,140), purple = (255,220,220), cyan = (140,255,222), Ocean = (200,221,242)
@@ -386,19 +458,25 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         currentColorX = new Color(0,180,0);
         fastestColorX = Color.blue;
         slowestColorX = Color.red;
+    }
 
+    private void cubeReset(){
         cubeColorsX[0] = new Color(0,196,0); // green
         cubeColorsX[1] = new Color(0,0,255); // blue
         cubeColorsX[2] = new Color(255,128,0); // orange
         cubeColorsX[3] = new Color(255,0,0); // red
         cubeColorsX[4] = new Color(255,255,0); // yellow
         cubeColorsX[5] = new Color(255,255,255); // white
+    }
 
+    private void pyraminxReset(){
         pyraminxColorsX[0] = new Color(0,180,255); // powder blue
         pyraminxColorsX[1] = new Color(255,0,0); // red
         pyraminxColorsX[2] = new Color(255,255,0); // yellow
         pyraminxColorsX[3] = new Color(0,255,0); // bright green
+    }
 
+    private void megaminxReset(){
         megaminxColorsX[0] = new Color(255,255,255); // white
         megaminxColorsX[1] = new Color(0,180,255); // powder blue
         megaminxColorsX[2] = new Color(200,128,0); // brown
@@ -411,12 +489,15 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         megaminxColorsX[9] = new Color(255,80,80); // pink
         megaminxColorsX[10] = new Color(255,180,180); // light pink
         megaminxColorsX[11] = new Color(255,128,0); // orange
+    }
 
-        averageViewFormatX = "----- " + APP_TITLE + " Best Average for %T -----\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+    private void sessionReset(){
         sessionViewFormatX = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+    }
 
-        OptionsToGUI();
-    } // end resetOptions
+    private void averageReset(){
+        averageViewFormatX = "----- " + APP_TITLE + " Best Average for %T -----\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+    }
 
 //**********************************************************************************************************************
 
