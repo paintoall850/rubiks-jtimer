@@ -225,15 +225,15 @@ y += 14 - face_pixels/2;
 
         int xs[][] = new int[4][size+1], ys[][] = new int[4][size+1]; // the points that are on the edges, including outer
         for(int i=0; i<size+1; i++){
-            float w = i/(float)size;
-            xs[0][i] = (int)Math.round(w*square.xpoints[1] + (1F-w)*square.xpoints[0]);
-            ys[0][i] = (int)Math.round(w*square.ypoints[1] + (1F-w)*square.ypoints[0]);
-            xs[1][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[1]);
-            ys[1][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[1]);
-            xs[2][i] = (int)Math.round(w*square.xpoints[2] + (1F-w)*square.xpoints[3]);
-            ys[2][i] = (int)Math.round(w*square.ypoints[2] + (1F-w)*square.ypoints[3]);
-            xs[3][i] = (int)Math.round(w*square.xpoints[3] + (1F-w)*square.xpoints[0]);
-            ys[3][i] = (int)Math.round(w*square.ypoints[3] + (1F-w)*square.ypoints[0]);
+            double w = i/(double)size;
+            xs[0][i] = (int)Math.round(w*square.xpoints[1] + (1D-w)*square.xpoints[0]);
+            ys[0][i] = (int)Math.round(w*square.ypoints[1] + (1D-w)*square.ypoints[0]);
+            xs[1][i] = (int)Math.round(w*square.xpoints[2] + (1D-w)*square.xpoints[1]);
+            ys[1][i] = (int)Math.round(w*square.ypoints[2] + (1D-w)*square.ypoints[1]);
+            xs[2][i] = (int)Math.round(w*square.xpoints[2] + (1D-w)*square.xpoints[3]);
+            ys[2][i] = (int)Math.round(w*square.ypoints[2] + (1D-w)*square.ypoints[3]);
+            xs[3][i] = (int)Math.round(w*square.xpoints[3] + (1D-w)*square.xpoints[0]);
+            ys[3][i] = (int)Math.round(w*square.ypoints[3] + (1D-w)*square.ypoints[0]);
         }
 
         Point lattice_points[][] = new Point[size+1][size+1]; // for the internal points
@@ -283,8 +283,8 @@ y += 14 - face_pixels/2;
 /*
     private static final Polygon square_polyX(int n){
         Polygon square = new Polygon();
-        float r = n*(float)Math.sqrt(0.5);
-        float offset = (float)(-13*Math.PI/16);
+        double r = n*Math.sqrt(0.5);
+        double offset = (-13*Math.PI/16);
         for(int i=0; i<4; i++)
             square.addPoint((int)Math.round(r*Math.cos(i*2*Math.PI/4 + offset)),
                           (int)Math.round(r*Math.sin(i*2*Math.PI/4 + offset)));

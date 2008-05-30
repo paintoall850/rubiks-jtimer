@@ -61,9 +61,9 @@ public abstract class RJT_Utils implements Constants{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    public static final Polygon regular_poly(int n, float r, boolean pointup){
+    public static final Polygon regular_poly(int n, double r, boolean pointup){
         Polygon poly = new Polygon();
-        float offset = (float)(pointup ? -Math.PI/2 : Math.PI/2);
+        double offset = (pointup ? -Math.PI/2 : Math.PI/2);
         for(int i=0; i<n; i++)
             poly.addPoint((int)Math.round(r*Math.cos(i*2*Math.PI/n + offset)),
                           (int)Math.round(r*Math.sin(i*2*Math.PI/n + offset)));
@@ -73,14 +73,14 @@ public abstract class RJT_Utils implements Constants{
 //**********************************************************************************************************************
 
     public static final Point intersectionPoint(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
-        float norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
-        float x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
-        float y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
+        double norm = DET(x1-x2, y1-y2, x3-x4, y3-y4);
+        double x_inter = DET(DET(x1,y1,x2,y2), x1-x2, DET(x3,y3,x4,y4), x3-x4)/norm;
+        double y_inter = DET(DET(x1,y1,x2,y2), y1-y2, DET(x3,y3,x4,y4), y3-y4)/norm;
 
         return new Point((int)Math.round(x_inter), (int)Math.round(y_inter));
     }
 
-    private static final float DET(float a, float b, float c, float d){
+    private static final double DET(double a, double b, double c, double d){
         return (a*d - b*c);
     }
 
@@ -88,17 +88,17 @@ public abstract class RJT_Utils implements Constants{
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    public static final float roundTime(float x){
-        return Math.round(100*x)/100F;
+    public static final double roundTime(double x){
+        return Math.round(100D*x)/100D;
     }
 
-    public static final String ssxx_format(float x){
+    public static final String ssxx_format(double x){
         x = roundTime(x);
         return String.format("%05.2f", x);
     }
 
-    public static final String ss_format(float x){
-        x = (float)Math.round(x);
+    public static final String ss_format(double x){
+        x = (double)Math.round(x);
         return String.format("%02.0f", x);
     }
 

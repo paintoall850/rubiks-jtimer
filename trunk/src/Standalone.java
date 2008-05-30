@@ -398,20 +398,22 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             if(startButton.getText().equals("Start Timer")) timerStart();
             else if(startButton.getText().equals("Stop Timer")) timerStop();
             else if(startButton.getText().equals("Accept Time")) timerAccept();
+            returnFocus();
         } else if(source == discardButton){
             buttonsOn();
             updateScrambleAlgs();
+            returnFocus();
         } else if(source == popButton){
             popButton.setText("Popped!");
 //            try{
-                acceptTime((stopTime-startTime)/1000F, true, false);
+                acceptTime((stopTime-startTime)/1000D, true, false);
 //            } catch(NumberFormatException ex){
 //                JOptionPane.showMessageDialog(this, ERROR_MESS);
 //                System.out.println(ex.getMessage());
 //            }
         } else if(source == plusTwoButton){
 //            try{
-                acceptTime((stopTime-startTime)/1000F, false, true);
+                acceptTime((stopTime-startTime)/1000D, false, true);
 //            } catch(NumberFormatException ex){
 //                JOptionPane.showMessageDialog(this, ERROR_MESS);
 //                System.out.println(ex.getMessage());
@@ -442,6 +444,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             updateStats();
             buttonsOn();
             updateScrambleAlgs();
+            returnFocus();
         } else if(source == countdownCombo){
             returnFocus();
         } else if(source == sessionDetailedViewButton){
@@ -458,9 +461,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 insertTimeButton.requestFocus();
                 return;
             }
-            float inputTime = 0;
+            double inputTime = 0;
             try{
-                inputTime = Float.parseFloat(input);
+                inputTime = Double.parseDouble(input);
             } catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
                 return;
@@ -583,7 +586,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                     } catch(InterruptedException ex){}
                 }
             } else {
-                float time = (System.currentTimeMillis() - startTime)/1000F;
+                double time = (System.currentTimeMillis() - startTime)/1000D;
                 timerLabel.setText(timeToString(time, true));
                 try{
                     timerThread.sleep(120);
@@ -696,16 +699,16 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
 //**********************************************************************************************************************
 
-    private final String timeToString(float time, boolean truncate){
+    private final String timeToString(double time, boolean truncate){
         return timeToString(time, truncate, false);
     }
 
-    private final String timeToString(float time, boolean truncate, boolean verbose){
+    private final String timeToString(double time, boolean truncate, boolean verbose){
         String s;
         time = RJT_Utils.roundTime(time);
         if(time>=60 && optionsBox.showMinutesX){
             int min = (int)(time/60);
-            float sec = time-min*60;
+            double sec = time-min*60;
             s = min + ":" + ((time < 600 || !truncate) ? RJT_Utils.ssxx_format(sec) : RJT_Utils.ss_format(sec));
         } else
             s = RJT_Utils.ssxx_format(time) + (verbose ? " sec." : "");
@@ -782,7 +785,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         } else {
             stopTime = System.currentTimeMillis();
             timerThread = null;
-            float time = (stopTime-startTime)/1000F;
+            double time = (stopTime-startTime)/1000D;
             timerLabel.setText(timeToString(time, true));
             startButton.setText("Accept Time");
             if(solveTable.okayToPop()){
@@ -800,7 +803,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
     public void timerAccept(){
 //        try{
-            acceptTime((stopTime-startTime)/1000F);
+            acceptTime((stopTime-startTime)/1000D);
 //        } catch(NumberFormatException ex){
 //            JOptionPane.showMessageDialog(this, ERROR_MESS);
 //            System.out.println(ex.getMessage());
@@ -865,11 +868,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    private void acceptTime(float time){
+    private void acceptTime(double time){
         acceptTime(time, false, false);
     } // end acceptTime
 
-    private void acceptTime(float time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
+    private void acceptTime(double time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
+        if(time < 0){
+            JOptionPane.showMessageDialog(this, "Negative time entered. No time was added to the session.");
+            return;
+        }
         solveTable.addSolve(time, newAlg, isPop, isPlus2);
         updateStats();
         buttonsOn();
@@ -894,7 +901,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         timerLabel.setText("");
         //timerLabel.setVisible(false);
 
-        returnFocus();
     } // end buttonsOn
 
 //**********************************************************************************************************************
@@ -908,6 +914,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         updateStats();
         buttonsOn();
         updateScrambleAlgs();
+        returnFocus();
     } // end resetTheSession
 
 //**********************************************************************************************************************
@@ -944,8 +951,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 if(i<size){
                     s = solveTable.getString(i);
 
-                    float fastestTime = solveTable.getSolve(size-1).sessionFastestTime;
-                    float slowestTime = solveTable.getSolve(size-1).sessionSlowestTime;
+                    double fastestTime = solveTable.getSolve(size-1).sessionFastestTime;
+                    double slowestTime = solveTable.getSolve(size-1).sessionSlowestTime;
                     if(fastestTime == slowestTime) timeLabels[i].setForeground(Color.black);
                     else if(solveTable.getTime(i) == fastestTime) timeLabels[i].setForeground(optionsBox.fastestColorX);
                     else if(solveTable.getTime(i) == slowestTime) timeLabels[i].setForeground(optionsBox.slowestColorX);
@@ -965,8 +972,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 String s = solveTable.getString(index);
                 timeLabels[(size+i)%12].setText("<html><font size=\"5\">" + s + "</font></html>");
 
-                float fastestTime = solveTable.getSolve(size-1).rollingFastestTime;
-                float slowestTime = solveTable.getSolve(size-1).rollingSlowestTime;
+                double fastestTime = solveTable.getSolve(size-1).rollingFastestTime;
+                double slowestTime = solveTable.getSolve(size-1).rollingSlowestTime;
                 if(fastestTime == slowestTime) timeLabels[(size+i)%12].setForeground(Color.black);
                 else if(solveTable.getTime(index) == fastestTime) timeLabels[(size+i)%12].setForeground(optionsBox.fastestColorX);
                 else if(solveTable.getTime(index) == slowestTime) timeLabels[(size+i)%12].setForeground(optionsBox.slowestColorX);
@@ -1037,7 +1044,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             sRecentTime = solveTable.getString(size-1);
             if(size > 1){
                 sPrevTime = solveTable.getString(size-2);
-                float recentTime = solveTable.getTime(size-1), prevTime = solveTable.getTime(size-2);
+                double recentTime = solveTable.getTime(size-1), prevTime = solveTable.getTime(size-2);
                 if(recentTime != INF && prevTime != INF){
                     sProgress = timeToString(recentTime-prevTime, false, true);
                     if(recentTime > prevTime) sProgressColor = RED;
