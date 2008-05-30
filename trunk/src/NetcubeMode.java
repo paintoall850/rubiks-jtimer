@@ -161,7 +161,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         timerLabel = new JLabel("");
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
+        timerLabel.setFont(timerFont);
 
         scramblePanel = new ScramblePanel(310+40, 215+20); // needs to be changed in two places
         scramblePanel.setLayout(null);
@@ -550,7 +550,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
                 timerLabel.setText("Get Ready!...1");
                 readyTime--;
             } else {
-                timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
+                timerLabel.setFont(timerFont);
                 if(readyTime == 0){
                     bing1.play();
                     readyTime--;

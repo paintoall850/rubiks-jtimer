@@ -59,7 +59,7 @@ public class Scramble2x2{
         }
 
         return scramble;
-    } // end Generate Scramble
+    } // end generateScramble
 
     private boolean isSameFace(int thisArray, int thisFace, int thatArray, int thatFace){
         if(thisArray == thatArray){

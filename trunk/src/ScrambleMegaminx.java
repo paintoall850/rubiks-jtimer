@@ -75,5 +75,5 @@ public class ScrambleMegaminx{
             scramble += "U" + (rand==1 ? "" : "'"); // force the U to be tied with last ++/--
         }
         return scramble;
-    }
+    } // end generateScramble
 }

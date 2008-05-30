@@ -190,7 +190,7 @@ public class Scramble4x4{
         }
 
         return scramble;
-    } // end Generate Scramble
+    } // end generateScramble
 
 //**********************************************************************************************************************
 
