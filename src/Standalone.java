@@ -147,7 +147,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         discardButton = new JButton("Discard Time");
         popButton = new JButton();
         plusTwoButton = new JButton("+2");
-        //averageModeButton = new JButton("Average of 5 Mode");
 
         averageLabels = new JLabel[12];
         for(int i=0; i<12; i++)
@@ -849,7 +848,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         scramblePanel.setCubeColors(optionsBox.cubeColorsX);
         scramblePanel.setPyraminxColors(optionsBox.pyraminxColorsX);
         scramblePanel.setMegaminxColors(optionsBox.megaminxColorsX);
-        updateScramblePanel();
+        scramblePanel.updateScreen();
         scrambleText.setBackground(optionsBox.textBackgrColorX);
         bestAverageText.setBackground(optionsBox.textBackgrColorX);
     } // end OptionsToGUI

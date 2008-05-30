@@ -85,5 +85,19 @@ public abstract class RJT_Utils implements Constants{
     }
 
 //**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+
+    public static final String makeRed(String s){
+        return "<html><font color=\"#FF0000\">" + s + "</font></html>";
+    }
+
+    public static final String makeGreen(String s){
+        return "<html><font color=\"#00FF00\">" + s + "</font></html>";
+    }
+
+    public static final String makeBlue(String s){
+        return "<html><font color=\"#0000FF\">" + s + "</font></html>";
+    }
 
 }
