@@ -27,18 +27,22 @@ import java.awt.image.BufferedImage;
 public class ScramblePanel extends JPanel implements MouseListener, Constants{
     private String myPuzzle = "nothing";
     private String myScramble = "";
+    private int myWidth, myHeight;
 
     private CubeImage cubeImage;
     private PyraminxImage pyraminxImage;
     private MegaminxImage megaminxImage;
+//    private SquareOneImage squareOneImage;
 
 //**********************************************************************************************************************
 
     // would prefer to get (width, height) with function calls, but they don't work
     public ScramblePanel(int width, int height){
+        myWidth = width; myHeight = height;
         cubeImage = new CubeImage(width, height);
         pyraminxImage = new PyraminxImage(width, height);
         megaminxImage = new MegaminxImage(width, height);
+//        squareOneImage = new SquareOneImage(width, height);
     }
 
 //**********************************************************************************************************************
@@ -61,6 +65,7 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
         else if(myPuzzle.equals("5x5x5")) s = cubeImage.scramble(5, myScramble);
         else if(myPuzzle.equals("Pyraminx")) s = pyraminxImage.scramble(myScramble);
         else if(myPuzzle.equals("Megaminx")) s = megaminxImage.scramble(myScramble);
+//        else if(myPuzzle.equals("Square-1")) s = squareOneImage.scramble(myScramble);
         else return;
 
         if(s.equals("success"))
@@ -157,7 +162,7 @@ public class ScramblePanel extends JPanel implements MouseListener, Constants{
         else if(myPuzzle.equals("Megaminx"))
             myImage = megaminxImage.getImage();
         else
-            return;
+            myImage = new BufferedImage(myWidth, myHeight, BufferedImage.TYPE_INT_ARGB);
 
         g.drawImage(myImage, 0, 0, null);
     }

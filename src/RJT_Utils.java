@@ -20,6 +20,7 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Locale;
 import java.awt.event.*;
 
 public abstract class RJT_Utils implements Constants{
@@ -94,12 +95,12 @@ public abstract class RJT_Utils implements Constants{
 
     public static final String ssxx_format(double x){
         x = roundTime(x);
-        return String.format("%05.2f", x);
+        return String.format(Locale.US, "%05.2f", x); // new Locale("en", "US")
     }
 
     public static final String ss_format(double x){
         x = (double)Math.round(x);
-        return String.format("%02.0f", x);
+        return String.format(Locale.US, "%02.0f", x); // new Locale("en", "US")
     }
 
 //**********************************************************************************************************************

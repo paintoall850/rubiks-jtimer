@@ -167,7 +167,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         //timerLabel.setText("");
         //timerLabel.setVisible(false);
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        timerLabel.setFont(new Font("Serif", Font.PLAIN, 94));
+        timerLabel.setFont(timerFont);
 
         timerArea = new TimerArea(this); // kinda dangerous but this is going to be how we invoke the timerStart() and stuff
 
@@ -454,27 +454,11 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == insertTimeButton){
-            String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:", "Insert Own Time", JOptionPane.PLAIN_MESSAGE);
+            String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:", "Insert New Time", JOptionPane.PLAIN_MESSAGE);
             if(input == null) return;
-            if(input.equalsIgnoreCase("POP")){
-                acceptTime(0, true, false);
-                insertTimeButton.requestFocus();
-                return;
-            }
-            double inputTime = 0;
-            try{
-                inputTime = Double.parseDouble(input);
-            } catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this, "Invalid number entered. No time was added to the session.");
-                return;
-            }
-//            try{
-                acceptTime(inputTime);
-//            } catch(NumberFormatException ex){
-//                JOptionPane.showMessageDialog(this, ERROR_MESS);
-//                System.out.println(ex.getMessage());
-//            }
+            acceptTime(input);
             insertTimeButton.requestFocus();
+            return;
         } else if(source == saveBestItem){
             if(averageDetailsEnabled){
                 int userChoice = fc.showSaveDialog(Standalone.this);
@@ -874,13 +858,60 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
     private void acceptTime(double time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
         if(time < 0){
-            JOptionPane.showMessageDialog(this, "Negative time entered. No time was added to the session.");
+            JOptionPane.showMessageDialog(this, "Negative time entered." + NOT_ADDED);
             return;
         }
         solveTable.addSolve(time, newAlg, isPop, isPlus2);
         updateStats();
         buttonsOn();
         updateScrambleAlgs();
+    } // end acceptTime
+
+    private void acceptTime(String input){
+        input = input.trim();
+        if(input.equals("")){
+            JOptionPane.showMessageDialog(this, "Nothing entered." + NOT_ADDED);
+            return;
+        }
+
+        int min = 0;
+        double sec = 0;
+        boolean isPop = false;
+        boolean isPlus2 = false;
+
+        if(input.equalsIgnoreCase("POP")){
+            isPop = true;
+        }
+        else{
+            if(input.endsWith("+")){
+                input = input.substring(0, input.length()-1);
+                isPlus2 = true;
+            }
+            String parts[] = input.split(":");
+            if(parts.length > 2){
+                JOptionPane.showMessageDialog(this, "Too many colons." + NOT_ADDED);
+                return;
+            }
+            else{
+                try{
+                    if(parts.length == 1){
+                        sec = Double.parseDouble(parts[0]);
+                    }
+                    else if(parts.length == 2){
+                        min = Integer.valueOf(parts[0]);
+                        sec = Double.parseDouble(parts[1]);
+                    }
+                } catch(NumberFormatException ex){
+                    JOptionPane.showMessageDialog(this, "Invalid number entered." + NOT_ADDED);
+                    return;
+                }
+            }
+        }
+        if(isPlus2)
+            acceptTime(60*min + sec - 2, isPop, isPlus2);
+        else
+            acceptTime(60*min + sec, isPop, isPlus2);
+
     } // end acceptTime
 
 //**********************************************************************************************************************

@@ -193,7 +193,7 @@ public class Scramble5x5{
         }
 
         return scramble;
-    } // end Generate Scramble
+    } // end generateScramble
 
 //**********************************************************************************************************************
 

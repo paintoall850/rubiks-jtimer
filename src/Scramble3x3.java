@@ -83,7 +83,7 @@ public class Scramble3x3{
         }
 
         return scramble;
-    } // end Generate Scramble
+    } // end generateScramble
 
 //**********************************************************************************************************************
 

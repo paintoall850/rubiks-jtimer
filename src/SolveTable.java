@@ -142,7 +142,7 @@ public class SolveTable implements Constants{
         if(time>=60 && showMinutes){
             int min = (int)(time/60);
             double sec = time-min*60;
-            s = min + ":" + ((time < 600 || !truncate) ? RJT_Utils.ssxx_format(sec) : RJT_Utils.ss_format(sec))
+            s = min + ":" + (((time < 600 && !solve.isPlus2) || !truncate) ? RJT_Utils.ssxx_format(sec) : RJT_Utils.ss_format(sec))
                     + (solve.isPlus2 ? "+" : "");
         } else
             s = RJT_Utils.ssxx_format(time) + (solve.isPlus2 ? "+" : "") + (verbose ? " sec." : "");

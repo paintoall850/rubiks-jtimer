@@ -92,5 +92,5 @@ public class ScramblePyraminx{
 //        if(scramble.startsWith(" ")) // truncate leading space (if there is one, but there should be)
 //            scramble = scramble.substring(1, scramble.length());
         return scramble.trim();
-    } // end Generate Scramble
+    } // end generateScramble
 }
