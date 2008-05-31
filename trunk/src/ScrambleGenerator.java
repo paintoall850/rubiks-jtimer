@@ -125,7 +125,7 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
             if(userChoice == JFileChooser.APPROVE_OPTION)
                 RJT_Utils.saveToFile(this, printToFile, fc.getSelectedFile());
 
-            this.setVisible(false);
+            //this.setVisible(false);
         }
     } // end actionPerformed
 }

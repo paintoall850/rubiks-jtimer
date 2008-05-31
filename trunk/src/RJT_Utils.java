@@ -45,10 +45,24 @@ public abstract class RJT_Utils implements Constants{
 //**********************************************************************************************************************
 
     public static final void saveToFile(Component component, String text, File file){
-        File outputFile = new File(file+".txt");
+        File outputFile;
+        if(file.getName().toLowerCase().endsWith(".txt"))
+            outputFile = new File(file+"");
+        else
+            outputFile = new File(file+".txt");
+
+        if(outputFile.exists()){
+            int choice = JOptionPane.showConfirmDialog(component,
+                                            "Overwrite existing file?",
+                                            "Warning!",
+                                            JOptionPane.YES_NO_OPTION,
+                                            JOptionPane.QUESTION_MESSAGE);
+             if(choice != JOptionPane.YES_OPTION)
+                 return;
+        }
         try{
-            FileWriter fr = new FileWriter(outputFile);
-            BufferedWriter out = new BufferedWriter(fr);
+            FileWriter fw = new FileWriter(outputFile);
+            BufferedWriter out = new BufferedWriter(fw);
             out.write(text);
             out.close();
         } catch(IOException ex){
