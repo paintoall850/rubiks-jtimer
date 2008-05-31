@@ -32,17 +32,24 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
     ButtonGroup radioGroup;
     ScrambleAlg algGenerator;
 
+    JFileChooser fc = new JFileChooser();
+
+//**********************************************************************************************************************
+
     public ScrambleGenerator(){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
-        algGenerator = new ScrambleAlg();
-
         // configure JFrame
         setTitle("Scramble Generator");
         RJT_Utils.centerJFrame(this, 225, 155);
         RJT_Utils.configureJFrame(this);
+
+        fc.setFileFilter(new TextFileFilter());
+        fc.setAcceptAllFileFilterUsed(false);
+
+        algGenerator = new ScrambleAlg();
 
         puzzleLabel = new JLabel("Puzzle:");
         puzzleCombo = new JComboBox(puzzleChoices);
@@ -73,8 +80,8 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
 
         radioGroup.add(formatPrint);
         radioGroup.add(formatImport);
-
         formatPrint.setSelected(true);
+
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end contructor
 
@@ -91,7 +98,6 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
                 JOptionPane.showMessageDialog(this, "Number of scrambles is invalid. Please enter a positive integer to continue.");
                 return;
             }
-
             if(numberOfScrambles < 1){
                 JOptionPane.showMessageDialog(this, "Number of scrambles is invalid. Please enter a positive integer to continue.");
                 return;
@@ -114,20 +120,9 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
             }
             printToFile = printToFile.replaceAll("\n", System.getProperty("line.separator"));
 
-            JFileChooser fc = new JFileChooser();
-            fc.setFileFilter(new TextFileFilter());
-            fc.setAcceptAllFileFilterUsed(false);
-
             int userChoice = fc.showSaveDialog(ScrambleGenerator.this);
             if(userChoice == JFileChooser.APPROVE_OPTION){
-                try{
-                    FileWriter fr = new FileWriter(new File((fc.getSelectedFile())+".txt"));
-                    BufferedWriter out = new BufferedWriter(fr);
-                    out.write(printToFile);
-                    out.close();
-                } catch(IOException ex){
-                    JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
-                }
+                RJT_Utils.saveToFile(this, printToFile, fc.getSelectedFile());
             }
 
             this.setVisible(false);
