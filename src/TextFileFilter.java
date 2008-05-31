@@ -28,11 +28,12 @@ public class TextFileFilter extends javax.swing.filechooser.FileFilter{
     public boolean accept(File f){
         if(f.isDirectory())
             return true;
-        String extension = getExtension(f);
-        return extension.equals("txt");
+        return f.getName().toLowerCase().endsWith(".txt");
+        //String extension = getExtension(f);
+        //return extension.equals("txt");
     }
-
-    private String getExtension(File f) {
+/*
+    private String getExtension(File f){
         String ext = "none";
         String s = f.getName();
         int i = s.lastIndexOf('.');
@@ -41,4 +42,5 @@ public class TextFileFilter extends javax.swing.filechooser.FileFilter{
             ext = s.substring(i+1).toLowerCase();
         return ext;
     } // end getExtension
+*/
 }

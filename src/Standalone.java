@@ -412,7 +412,11 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             acceptTime((stopTime-startTime)/1000D, false, true);
         } else if(source == sessionResetButton){
             if(optionsBox.showResetConfirmX){
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int choice = JOptionPane.showConfirmDialog(this,
+                                                "Are you sure you want to reset this session and lose all times?",
+                                                "Warning!",
+                                                JOptionPane.YES_NO_OPTION,
+                                                JOptionPane.QUESTION_MESSAGE);
                 if(choice != JOptionPane.YES_OPTION){
                     returnFocus();
                     return;
@@ -471,7 +475,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             optionsBox.setVisible(true);
         } else if(source == exitItem){
             System.exit(0);
-        } else if(source == importItem){
+        } else if(source == importItem){ // This section needs to be re-written, perhaps into RJT_Utils.java
             int userChoice = fc.showOpenDialog(Standalone.this);
             if(userChoice == JFileChooser.APPROVE_OPTION){
                 String input = "";
