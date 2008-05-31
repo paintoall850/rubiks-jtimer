@@ -153,6 +153,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         RJT_Utils.enterPressesWhenFocused(applyButton);
         RJT_Utils.enterPressesWhenFocused(resetButton);
         RJT_Utils.enterPressesWhenFocused(rejectButton);
+        //RJT_Utils.enterPressesWhenFocused(closeButton);
 
         // call big add tabs and content function
         addStuffToTabs();
@@ -172,6 +173,9 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         addTheActionListeners();
 
         loadOptions();
+
+        RJT_Utils.hideOnEsc(this, rootPane);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end constructor
 
 //**********************************************************************************************************************
@@ -189,7 +193,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         applyButton.setBounds(137+20,255,137,30);
         resetButton.setBounds(2*137+30,255,137,30);
         rejectButton.setBounds(3*137+40,255,137,30);
-        //closeButton.setBounds(3*137+40,255,137,30);
+        //closeButton.setBounds(5*137+60,255,137,30); // way off screen
 
         startupLabel.setBounds(10,5,269+3,200);
         colorLabel.setBounds(289+3,5,269+3,200);

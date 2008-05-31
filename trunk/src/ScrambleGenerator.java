@@ -57,11 +57,12 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
         //puzzleCombo.setSelectedItem("3x3x3");
         numLabel = new JLabel("# of Scrambles:");
         numText = new JTextField("13");
-        generateButton = new JButton("Generate Scrambles");
-        generateButton.addActionListener(this);
         formatPrint = new JRadioButton("Format Output for Printing");
         formatImport = new JRadioButton("Format Output for Importing");
         radioGroup = new ButtonGroup();
+        generateButton = new JButton("Generate Scrambles");
+        generateButton.addActionListener(this);
+
 
         puzzleLabel.setBounds(10,5,90,20);
         puzzleCombo.setBounds(10,25,90,20);
@@ -75,14 +76,15 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
         contentPane.add(numLabel);
         contentPane.add(puzzleCombo);
         contentPane.add(numText);
-        contentPane.add(generateButton);
         contentPane.add(formatPrint);
         contentPane.add(formatImport);
+        contentPane.add(generateButton);
 
         radioGroup.add(formatPrint);
         radioGroup.add(formatImport);
         formatPrint.setSelected(true);
 
+        RJT_Utils.hideOnEsc(this, rootPane);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end contructor
 
@@ -124,8 +126,6 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
             int userChoice = fc.showSaveDialog(ScrambleGenerator.this);
             if(userChoice == JFileChooser.APPROVE_OPTION)
                 RJT_Utils.saveToFile(this, printToFile, fc.getSelectedFile());
-
-            //this.setVisible(false);
         }
     } // end actionPerformed
 }

@@ -41,6 +41,7 @@ public class InstructionScreen extends JFrame implements Constants{
 
         contentPane.add(instLabel);
 
+        RJT_Utils.hideOnEsc(this, rootPane);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     } // end InstructionScreen
 
