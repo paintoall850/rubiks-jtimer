@@ -33,8 +33,12 @@ public class Client extends NetcubeMode{
 
 //**********************************************************************************************************************
 
-    public Client(OptionsBox optionsBox, ScrambleGenerator scrambleGenerator, InstructionScreen instructionScreen, AboutScreen aboutScreen){
-        super(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+    public Client(JFileChooser fc,  OptionsBox optionsBox,
+                                    ScrambleGenerator scrambleGenerator,
+                                    InstructionScreen instructionScreen,
+                                    AboutScreen aboutScreen){
+
+        super(fc, optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
 
         // configure Contentpane
         Container contentPane = getContentPane();

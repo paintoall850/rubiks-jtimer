@@ -90,6 +90,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             MetalLookAndFeel.setCurrentTheme(new OceanTheme()); UIManager.setLookAndFeel(new MetalLookAndFeel());
         } catch(Exception ex){}
 
+
         Standalone standalone = new Standalone();
     } // end main
 
@@ -122,15 +123,15 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         // inialize Popup Windows
         optionsBox = new OptionsBox();
-        scrambleGenerator = new ScrambleGenerator();
+        scrambleGenerator = new ScrambleGenerator(fc);
         instructionScreen = new InstructionScreen();
         aboutScreen = new AboutScreen();
 
-        server = new Server(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+        server = new Server(fc, optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
         server.setVisible(false);
         server.addVisiblityListener(this);
 
-        client = new Client(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+        client = new Client(fc, optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
         client.setVisible(false);
         client.addVisiblityListener(this);
 
@@ -439,10 +440,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         } else if(source == countdownCombo){
             returnFocus();
         } else if(source == sessionDetailedViewButton){
-            DetailedView win = new DetailedView("Session Times for " + solveTable.getPuzzle(), getSessionView(), optionsBox.textBackgrColorX);
+            DetailedView win = new DetailedView(fc, "Session Times for " + solveTable.getPuzzle(), getSessionView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == averageDetailedViewButton){
-            DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsBox.textBackgrColorX);
+            DetailedView win = new DetailedView(fc, "Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == insertTimeButton){
             String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or DNF:", "Insert New Time", JOptionPane.PLAIN_MESSAGE);
