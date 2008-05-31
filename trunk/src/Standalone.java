@@ -107,6 +107,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         fc.setFileFilter(new TextFileFilter());
         fc.setAcceptAllFileFilterUsed(false);
+
         scrambleAlg = new ScrambleAlg();
         newAlg = "";
 
@@ -141,7 +142,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         startButton = new JButton("Start Timer");
         discardButton = new JButton("Discard Time");
-        dnfButton = new JButton("DNF");
+        dnfButton = new JButton();
         plusTwoButton = new JButton("+2");
 
         averageLabels = new JLabel[12];
@@ -405,19 +406,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             returnFocus();
         } else if(source == dnfButton){
             dnfButton.setText(RJT_Utils.makeRed("DNF"));
-//            try{
-                acceptTime((stopTime-startTime)/1000D, true, false);
-//            } catch(NumberFormatException ex){
-//                JOptionPane.showMessageDialog(this, ERROR_MESS);
-//                System.out.println(ex.getMessage());
-//            }
+            acceptTime((stopTime-startTime)/1000D, true, false);
         } else if(source == plusTwoButton){
-//            try{
-                acceptTime((stopTime-startTime)/1000D, false, true);
-//            } catch(NumberFormatException ex){
-//                JOptionPane.showMessageDialog(this, ERROR_MESS);
-//                System.out.println(ex.getMessage());
-//            }
+            acceptTime((stopTime-startTime)/1000D, false, true);
         } else if(source == sessionResetButton){
             if(optionsBox.showResetConfirmX){
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset this session and lose all times?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -463,7 +454,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             if(averageDetailsEnabled){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
-                    saveToFile(getAverageView(), fc.getSelectedFile());
+                    RJT_Utils.saveToFile(this, getAverageView(), fc.getSelectedFile());
             } else {
                 JOptionPane.showMessageDialog(this, "Not enough solves completed to calculate an average.");
             }
@@ -471,7 +462,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             if(sessionDetailsEnabled){
                 int userChoice = fc.showSaveDialog(Standalone.this);
                 if(userChoice == JFileChooser.APPROVE_OPTION)
-                    saveToFile(getSessionView(), fc.getSelectedFile());
+                    RJT_Utils.saveToFile(this, getSessionView(), fc.getSelectedFile());
             } else {
                 JOptionPane.showMessageDialog(this, "No times have been recorded for this session.");
             }
@@ -502,10 +493,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 updateScrambleAlgs();
             }
         } else if(source == generatorItem){
-            //if(!scrambleGenerator.isVisible()){
-                scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
-                scrambleGenerator.setVisible(true);
-            //}
+            scrambleGenerator.puzzleCombo.setSelectedItem(puzzleCombo.getSelectedItem()+"");
+            scrambleGenerator.setVisible(true);
         } else if(source == serverItem){
             int choice = JOptionPane.showConfirmDialog(this, "Switching to Server Mode destroys main window session. Are you sure?", "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(choice != JOptionPane.YES_OPTION){
@@ -533,11 +522,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             client.setVisible(true);
             //disposeAll();
 //        } else if(source == instItem){
-            //if(!instructionScreen.isVisible())
-//                instructionScreen.setVisible(true);
+//            instructionScreen.setVisible(true);
         } else if(source == aboutItem){
-            //if(!aboutScreen.isVisible())
-                aboutScreen.setVisible(true);
+            aboutScreen.setVisible(true);
         }
     } // end actionPerformed
 
@@ -571,7 +558,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 }
             } else {
                 double time = (System.currentTimeMillis() - startTime)/1000D;
-                timerLabel.setText(timeToString(time, true));
+                timerLabel.setText(RJT_Utils.timeToString(time, optionsBox.showMinutesX, true));
                 try{
                     timerThread.sleep(120);
                 } catch(InterruptedException ex){
@@ -600,12 +587,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             numberDNFed = currentSolve.numberDNFs;
 
             if(currentSolve.sessionAverage != INF)
-                formatedAverage = timeToString(currentSolve.sessionAverage, false, true);
+                formatedAverage = RJT_Utils.timeToString(currentSolve.sessionAverage, optionsBox.showMinutesX, false, true);
             else
                 formatedAverage = "DNF";
 
             if(currentSolve.sessionStdDev != INF)
-                formatedStdDev = timeToString(currentSolve.sessionStdDev, false, false);
+                formatedStdDev = RJT_Utils.timeToString(currentSolve.sessionStdDev, optionsBox.showMinutesX, false, false);
             else
                 formatedStdDev = "???";
 
@@ -649,8 +636,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         if(bestIndex != -1){
             SolveTable.Solve bestSolve = solveTable.getSolve(bestIndex);
 
-            formatedAverage = timeToString(bestSolve.rollingAverage, false, true);
-            formatedStdDev = timeToString(bestSolve.rollingStdDev, false, false);
+            formatedAverage = RJT_Utils.timeToString(bestSolve.rollingAverage, optionsBox.showMinutesX, false, true);
+            formatedStdDev = RJT_Utils.timeToString(bestSolve.rollingStdDev, optionsBox.showMinutesX, false, false);
 
             solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
             timesAndScrambles = ""; timesOnly = "";
@@ -683,38 +670,6 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
 //**********************************************************************************************************************
 
-    private final String timeToString(double time, boolean truncate){
-        return timeToString(time, truncate, false);
-    }
-
-    private final String timeToString(double time, boolean truncate, boolean verbose){
-        String s;
-        time = RJT_Utils.roundTime(time);
-        if(time>=60 && optionsBox.showMinutesX){
-            int min = (int)(time/60);
-            double sec = time-min*60;
-            s = min + ":" + ((time < 600 || !truncate) ? RJT_Utils.ssxx_format(sec) : RJT_Utils.ss_format(sec));
-        } else
-            s = RJT_Utils.ssxx_format(time) + (verbose ? " sec." : "");
-        return s;
-    }
-
-//**********************************************************************************************************************
-
-    private void saveToFile(String text, File file){
-        File outputFile = new File(file+".txt");
-        try{
-            FileWriter fr = new FileWriter(outputFile);
-            BufferedWriter out = new BufferedWriter(fr);
-            out.write(text);
-            out.close();
-        } catch(IOException ex){
-            JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
-        }
-    } // end saveToFile
-
-//**********************************************************************************************************************
-
     private void updateScrambleAlgs(){
         String puzzle = puzzleCombo.getSelectedItem()+"";
         scrambleText.setFont(puzzle.equals("Megaminx") ? smAlgFont : lgAlgFont);
@@ -739,6 +694,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         scramblePanel.newScramble(puzzleCombo.getSelectedItem()+"", newAlg.replaceAll(ALG_BREAK, " "));
     }
 
+//**********************************************************************************************************************
+//**********************************************************************************************************************
 //**********************************************************************************************************************
 
     public void timerStart(){
@@ -770,7 +727,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             stopTime = System.currentTimeMillis();
             timerThread = null;
             double time = (stopTime-startTime)/1000D;
-            timerLabel.setText(timeToString(time, true));
+            timerLabel.setText(RJT_Utils.timeToString(time, optionsBox.showMinutesX, true));
             startButton.setText("Accept Time");
             if(solveTable.okayToDNF())
                 dnfButton.setText("DNF");
@@ -784,12 +741,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
 //**********************************************************************************************************************
     public void timerAccept(){
-//        try{
-            acceptTime((stopTime-startTime)/1000D);
-//        } catch(NumberFormatException ex){
-//            JOptionPane.showMessageDialog(this, ERROR_MESS);
-//            System.out.println(ex.getMessage());
-//        }
+        acceptTime((stopTime-startTime)/1000D);
     }
 
 //**********************************************************************************************************************
@@ -800,7 +752,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
     }
 
 //**********************************************************************************************************************
-
+/*
     private void disposeAll(){
         optionsBox.dispose();
         scrambleGenerator.dispose();
@@ -808,7 +760,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         aboutScreen.dispose();
         this.dispose();
     } // end disposeAll
-
+*/
 //**********************************************************************************************************************
 
     private void hideEverything(){
@@ -972,7 +924,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         String sSessionAverage = "N/A";
 
 
-        solveTable.setTimeStyle(optionsBox.showMinutesX, true, false);
+        boolean showMin = optionsBox.showMinutesX;
+        solveTable.setTimeStyle(showMin, true, false);
         if(size < 12){
             for(int i=0; i<12; i++){
                 String s;
@@ -1017,8 +970,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
             if(size >= 12){
                 if(currentSolve.rollingAverage != INF){
-                    sRollingAverage = timeToString(currentSolve.rollingAverage, false, true);
-                    sRollingStdDev = timeToString(currentSolve.rollingStdDev, false, false);
+                    sRollingAverage = RJT_Utils.timeToString(currentSolve.rollingAverage, showMin, false, true);
+                    sRollingStdDev = RJT_Utils.timeToString(currentSolve.rollingStdDev, showMin, false, false);
                 }
                 else{
                     sRollingAverage = "DNF"; sRollingAverageColor = RED;
@@ -1028,7 +981,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 if(size > 12){
                     SolveTable.Solve prevSolve = solveTable.getSolve(size-2);
                     if(currentSolve.rollingAverage != INF && prevSolve.rollingAverage != INF){
-                        sRollingProgress = timeToString(currentSolve.rollingAverage-prevSolve.rollingAverage, false, true);
+                        double time = currentSolve.rollingAverage - prevSolve.rollingAverage;
+                        sRollingProgress = RJT_Utils.timeToString(time , showMin, false, true);
                         if(currentSolve.rollingAverage > prevSolve.rollingAverage) sRollingProgressColor = RED;
                         if(currentSolve.rollingAverage < prevSolve.rollingAverage) sRollingProgressColor = BLUE;
                         if(currentSolve.rollingAverage == prevSolve.rollingAverage) sRollingProgressColor = TIE;
@@ -1046,7 +1000,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                         sRollingProgressColor = TIE;
                     }
                 }
-                solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
+                solveTable.setTimeStyle(showMin, false, false);
                 sRollingFastest = solveTable.getString(currentSolve.rollingFastestIndex);
                 sRollingSlowest = solveTable.getString(currentSolve.rollingSlowestIndex);
             }
@@ -1056,8 +1010,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             if(bestIndex != -1){
                 SolveTable.Solve bestSolve = solveTable.getSolve(bestIndex);
 
-                sBestAverage = timeToString(bestSolve.rollingAverage, false, true);
-                solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
+                sBestAverage = RJT_Utils.timeToString(bestSolve.rollingAverage, showMin, false, true);
+                solveTable.setTimeStyle(showMin, false, false);
                 sBestIndvTimes = "";
                 for(int i=1; i<=12; i++){
                     int index = i+bestIndex-12;
@@ -1069,13 +1023,13 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
                 sBestIndvTimes = sBestIndvTimes.substring(0, sBestIndvTimes.length()-2);
             }
 
-            solveTable.setTimeStyle(optionsBox.showMinutesX, false, false);
+            solveTable.setTimeStyle(showMin, false, false);
             sRecentTime = solveTable.getString(size-1);
             if(size > 1){
                 sPrevTime = solveTable.getString(size-2);
                 double recentTime = solveTable.getTime(size-1), prevTime = solveTable.getTime(size-2);
                 if(recentTime != INF && prevTime != INF){
-                    sProgress = timeToString(recentTime-prevTime, false, true);
+                    sProgress = RJT_Utils.timeToString(recentTime-prevTime, showMin, false, true);
                     if(recentTime > prevTime) sProgressColor = RED;
                     if(recentTime < prevTime) sProgressColor = BLUE;
                     if(recentTime == prevTime) sProgressColor = TIE;
@@ -1095,7 +1049,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             }
             numberSolved = currentSolve.numberSolves;
             if(currentSolve.sessionAverage != INF)
-                sSessionAverage = timeToString(currentSolve.sessionAverage, false, true);
+                sSessionAverage = RJT_Utils.timeToString(currentSolve.sessionAverage, showMin, false, true);
             else
                 sSessionAverage = "DNF";
         }

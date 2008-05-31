@@ -242,7 +242,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         toolsMenu = new JMenu("Tools"); toolsMenu.setMnemonic('T');
 //        toolsMenu.add(importItem);
         toolsMenu.add(generatorItem);
-//        networkMenu = new JMenu("Network Timer"); networkMenu.setMnemonic('N');
         standaloneMenu = new JMenu("Standalone Timer"); standaloneMenu.setMnemonic('S');
         standaloneMenu.add(standaloneItem);
         helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
@@ -251,7 +250,6 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         jMenuBar = new JMenuBar();
         jMenuBar.add(fileMenu);
         jMenuBar.add(toolsMenu);
-//        jMenuBar.add(networkMenu);
 //        jMenuBar.add(standaloneMenu);
         jMenuBar.add(Box.createHorizontalGlue());
         jMenuBar.add(helpMenu);
@@ -586,7 +584,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     protected final class RunTimer extends java.util.TimerTask{
         public void run(){
-            double time = (System.currentTimeMillis()-startTime)/1000D;
+            double time = (System.currentTimeMillis() - startTime)/1000D;
             timerLabel.setText(RJT_Utils.ssxx_format(time));
         }
     } // end RunTimer class

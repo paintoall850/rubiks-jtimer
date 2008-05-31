@@ -29,6 +29,10 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
     String printToWindow;
     JButton saveButton;
 
+    JFileChooser fc = new JFileChooser();
+
+//**********************************************************************************************************************
+
     public DetailedView(String windowTitle, String printToWindow, Color textBackgrColor){
         this.printToWindow = printToWindow;
 
@@ -40,6 +44,9 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         setTitle(windowTitle);
         RJT_Utils.centerJFrame(this, 625, 340+10);
         RJT_Utils.configureJFrame(this);
+
+        fc.setFileFilter(new TextFileFilter());
+        fc.setAcceptAllFileFilterUsed(false);
 
         // main textArea
         JTextArea window = new JTextArea();
@@ -62,28 +69,17 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     } // end constructor
 
+//**********************************************************************************************************************
+
     public void actionPerformed(ActionEvent e){
         Object source = e.getSource();
 
-        if(source == saveButton)
-            saveToFile();
-    } // end actionPerformed
-
-    private void saveToFile(){
-        JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(new TextFileFilter());
-        fc.setAcceptAllFileFilterUsed(false);
-
-        int userChoice = fc.showSaveDialog(DetailedView.this);
-        if(userChoice == JFileChooser.APPROVE_OPTION){
-            try{
-                FileWriter out = new FileWriter(new File((fc.getSelectedFile())+".txt"));
-                out.write(printToWindow);
-                out.close();
-            } catch(IOException ex){
-                JOptionPane.showMessageDialog(this, "There was an error saving. You may not have write permissions.");
+        if(source == saveButton){
+            int userChoice = fc.showSaveDialog(DetailedView.this);
+            if(userChoice == JFileChooser.APPROVE_OPTION){
+                RJT_Utils.saveToFile(this, printToWindow, fc.getSelectedFile());
             }
         }
-    } // end saveToFile
+    } // end actionPerformed
 
 }

@@ -20,8 +20,9 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Locale;
 import java.awt.event.*;
+import java.io.*;
+import java.util.Locale;
 
 public abstract class RJT_Utils implements Constants{
 
@@ -32,14 +33,28 @@ public abstract class RJT_Utils implements Constants{
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int appWidth = jFrame.getSize().width, appHeight = jFrame.getSize().height;
         jFrame.setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
-    }
+    } // end centerJFrame
 
 //**********************************************************************************************************************
 
     public static final void configureJFrame(JFrame jFrame){
         jFrame.setIconImage((new ImageIcon(jFrame.getClass().getResource("Cow.gif"))).getImage());
         jFrame.setResizable(false);
-    }
+    } // end configureJFrame
+
+//**********************************************************************************************************************
+
+    public static final void saveToFile(Component component, String text, File file){
+        File outputFile = new File(file+".txt");
+        try{
+            FileWriter fr = new FileWriter(outputFile);
+            BufferedWriter out = new BufferedWriter(fr);
+            out.write(text);
+            out.close();
+        } catch(IOException ex){
+            JOptionPane.showMessageDialog(component, "There was an error saving. You may not have write permissions.");
+        }
+    } // end saveToFile
 
 //**********************************************************************************************************************
 
@@ -101,6 +116,24 @@ public abstract class RJT_Utils implements Constants{
     public static final String ss_format(double x){
         x = (double)Math.round(x);
         return String.format(Locale.US, "%02.0f", x); // new Locale("en", "US")
+    }
+
+//**********************************************************************************************************************
+
+    public static final String timeToString(double time, boolean showMinutes, boolean truncate){
+        return timeToString(time, showMinutes, truncate, false);
+    }
+
+    public static final String timeToString(double time, boolean showMinutes, boolean truncate, boolean verbose){
+        String s;
+        time = roundTime(time);
+        if(time>=60 && showMinutes){
+            int min = (int)(time/60);
+            double sec = time-min*60;
+            s = min + ":" + ((time < 600 || !truncate) ? ssxx_format(sec) : ss_format(sec));
+        } else
+            s = ssxx_format(time) + (verbose ? " sec." : "");
+        return s;
     }
 
 //**********************************************************************************************************************
