@@ -113,7 +113,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         megaminxPanel.setLayout(null);
         megaminxPanel.setBorder(BorderFactory.createTitledBorder(theBorder, "Megaminx Preview"));
 
-        sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of Pops<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
+        sessionSyntaxLabel = new JLabel("<html>%A - Average<br>%C - Number of Solves<br>%D - Standard Deviation<br>%F - Fastest Time<br>%I - Times and Scrambles<br>%O - Times Only<br>%P - Number of DNFs<br>%S - Slowest Time<br>%T - Date and Time<br>%Z - Puzzle Name</html>");
         sessionSyntaxLabel.setBorder(BorderFactory.createTitledBorder(theBorder, "Syntax"));
         sessionText = new JTextArea();
         sessionText.setFont(regFont);
@@ -492,7 +492,7 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
     }
 
     private void sessionReset(){
-        sessionViewFormatX = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
+        sessionViewFormatX = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nTotal Solves: %C\nTotal DNFs: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\nStandard Deviation: %D\n\nIndividual Times:\n%I";
     }
 
     private void averageReset(){
