@@ -44,7 +44,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
     JComboBox puzzleCombo, countdownCombo;
     JTextArea scrambleText, bestAverageText;
-    JButton startButton, discardButton, popButton, plusTwoButton;
+    JButton startButton, discardButton, dnfButton, plusTwoButton;
     JButton sessionResetButton, sessionDetailedViewButton, averageDetailedViewButton, insertTimeButton;
     JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel;
     JLabel sessionStatsLabel, rollingAverageLabel, bestAverageLabel;
@@ -141,7 +141,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         startButton = new JButton("Start Timer");
         discardButton = new JButton("Discard Time");
-        popButton = new JButton();
+        dnfButton = new JButton("DNF");
         plusTwoButton = new JButton("+2");
 
         averageLabels = new JLabel[12];
@@ -195,7 +195,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         RJT_Utils.enterPressesWhenFocused(startButton);
         RJT_Utils.enterPressesWhenFocused(discardButton);
-        RJT_Utils.enterPressesWhenFocused(popButton);
+        RJT_Utils.enterPressesWhenFocused(dnfButton);
         RJT_Utils.enterPressesWhenFocused(plusTwoButton);
         RJT_Utils.enterPressesWhenFocused(sessionResetButton);
         RJT_Utils.enterPressesWhenFocused(sessionDetailedViewButton);
@@ -293,7 +293,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         countdownCombo.setBounds(110,25,90,20);
         startButton.setBounds(10,50,190,90);
         discardButton.setBounds(10,145,190,45);
-        popButton.setBounds(10,195,90,45);
+        dnfButton.setBounds(10,195,90,45);
         plusTwoButton.setBounds(110,195,90,45);
 
         useThisAlgLabel.setBounds(215,5,333,20);
@@ -346,7 +346,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         countdownCombo.addActionListener(this);
         startButton.addActionListener(this);
         discardButton.addActionListener(this);
-        popButton.addActionListener(this);
+        dnfButton.addActionListener(this);
         plusTwoButton.addActionListener(this);
         sessionDetailedViewButton.addActionListener(this);
         averageDetailedViewButton.addActionListener(this);
@@ -364,7 +364,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         contentPane.add(countdownCombo);
         contentPane.add(startButton);
         contentPane.add(discardButton);
-        contentPane.add(popButton);
+        contentPane.add(dnfButton);
         contentPane.add(plusTwoButton);
         contentPane.add(useThisAlgLabel);
         contentPane.add(scrambleText);
@@ -403,8 +403,8 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             buttonsOn();
             updateScrambleAlgs();
             returnFocus();
-        } else if(source == popButton){
-            popButton.setText("Popped!");
+        } else if(source == dnfButton){
+            dnfButton.setText(RJT_Utils.makeRed("DNF"));
 //            try{
                 acceptTime((stopTime-startTime)/1000D, true, false);
 //            } catch(NumberFormatException ex){
@@ -434,10 +434,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             solveTable.setPuzzle(puzzle);
             updateLabels(puzzle);
 
-            if(solveTable.okayToPop())
-                popButton.setText("POP");
+            if(solveTable.okayToDNF())
+                dnfButton.setText("DNF");
             else
-                popButton.setText("Popped!");
+                dnfButton.setText(RJT_Utils.makeRed("DNF"));
 
             hasImported = false;
             importedIndex = 0;
@@ -454,7 +454,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             DetailedView win = new DetailedView("Best Average for " + solveTable.getPuzzle(), getAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == insertTimeButton){
-            String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or POP:", "Insert New Time", JOptionPane.PLAIN_MESSAGE);
+            String input = JOptionPane.showInputDialog(this, "Enter time to add in seconds or DNF:", "Insert New Time", JOptionPane.PLAIN_MESSAGE);
             if(input == null) return;
             acceptTime(input);
             insertTimeButton.requestFocus();
@@ -590,14 +590,14 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         String formatedAverage = "N/A", formatedStdDev = "N/A";
         String timesAndScrambles = "none", timesOnly = "none";
         String formatedFastest = "N/A", formatedSlowest = "N/A";
-        int numberSolved = 0, numberPopped = 0;
+        int numberSolved = 0, numberDNFed = 0;
 
         int size = solveTable.getSize();
         if(size > 0){
             SolveTable.Solve currentSolve = solveTable.getSolve(size-1);
 
             numberSolved = currentSolve.numberSolves;
-            numberPopped = currentSolve.numberPops;
+            numberDNFed = currentSolve.numberDNFs;
 
             if(currentSolve.sessionAverage != INF)
                 formatedAverage = timeToString(currentSolve.sessionAverage, false, true);
@@ -625,7 +625,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         String returnMe = optionsBox.sessionViewFormatX;
         returnMe = returnMe.replaceAll("%T", new Date()+"");
         returnMe = returnMe.replaceAll("%C", numberSolved+"");
-        returnMe = returnMe.replaceAll("%P", numberPopped+"");
+        returnMe = returnMe.replaceAll("%P", numberDNFed+"");
         returnMe = returnMe.replaceAll("%A", formatedAverage);
         returnMe = returnMe.replaceAll("%D", formatedStdDev);
         returnMe = returnMe.replaceAll("%I", timesAndScrambles.trim());
@@ -772,13 +772,11 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             double time = (stopTime-startTime)/1000D;
             timerLabel.setText(timeToString(time, true));
             startButton.setText("Accept Time");
-            if(solveTable.okayToPop()){
-                popButton.setText("POP");
-                popButton.setEnabled(true);
-            } else{
-                popButton.setText("Popped!");
-                popButton.setEnabled(false);
-            }
+            if(solveTable.okayToDNF())
+                dnfButton.setText("DNF");
+            else
+                dnfButton.setText(RJT_Utils.makeRed("DNF"));
+            dnfButton.setEnabled(true);
             discardButton.setEnabled(true);
             plusTwoButton.setEnabled(true);
         }
@@ -856,12 +854,12 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         acceptTime(time, false, false);
     } // end acceptTime
 
-    private void acceptTime(double time, boolean isPop, boolean isPlus2){// throws NumberFormatException{
+    private void acceptTime(double time, boolean isDNF, boolean isPlus2){// throws NumberFormatException{
         if(time < 0){
             JOptionPane.showMessageDialog(this, "Negative time entered." + NOT_ADDED);
             return;
         }
-        solveTable.addSolve(time, newAlg, isPop, isPlus2);
+        solveTable.addSolve(time, newAlg, isDNF, isPlus2);
         updateStats();
         buttonsOn();
         updateScrambleAlgs();
@@ -876,11 +874,11 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         int min = 0;
         double sec = 0;
-        boolean isPop = false;
+        boolean isDNF = false;
         boolean isPlus2 = false;
 
-        if(input.equalsIgnoreCase("POP")){
-            isPop = true;
+        if(input.equalsIgnoreCase("DNF")){
+            isDNF = true;
         }
         else{
             if(input.endsWith("+")){
@@ -908,9 +906,9 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
             }
         }
         if(isPlus2)
-            acceptTime(60*min + sec - 2, isPop, isPlus2);
+            acceptTime(60*min + sec - 2, isDNF, isPlus2);
         else
-            acceptTime(60*min + sec, isPop, isPlus2);
+            acceptTime(60*min + sec, isDNF, isPlus2);
 
     } // end acceptTime
 
@@ -921,7 +919,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         countdownCombo.setEnabled(true);
         startButton.setText("Start Timer");
         discardButton.setEnabled(false);
-        popButton.setEnabled(false);
+        dnfButton.setEnabled(false);
         plusTwoButton.setEnabled(false);
 
         sessionDetailedViewButton.setEnabled(sessionDetailsEnabled);
@@ -937,7 +935,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 //**********************************************************************************************************************
 
     private void resetTheSession(){
-        popButton.setText("POP");
+        dnfButton.setText("DNF");
         hasImported = false;
         importedIndex = 0;
 

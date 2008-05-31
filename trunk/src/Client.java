@@ -99,7 +99,7 @@ public class Client extends NetcubeMode{
             localTimeLabel.setText(RJT_Utils.ssxx_format((stopTime-startTime)/1000D));
             safePrint("N" + RJT_Utils.ssxx_format((stopTime-startTime)/1000D));
 
-            //increment acceptsSincePOp
+            //increment acceptsSincePop
             acceptsSincePop++;
             localCubesSolved++;
 

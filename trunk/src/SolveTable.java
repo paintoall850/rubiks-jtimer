@@ -51,8 +51,8 @@ public class SolveTable implements Constants{
 
 //**********************************************************************************************************************
 
-    public void addSolve(double time, String scramble, boolean isPop, boolean isPlus2){
-        Solve solve = new Solve(RJT_Utils.roundTime(time), scramble, isPop, isPlus2);
+    public void addSolve(double time, String scramble, boolean isDNF, boolean isPlus2){
+        Solve solve = new Solve(RJT_Utils.roundTime(time), scramble, isDNF, isPlus2);
         myTable.get(currentPuzzle).add(solve);
         computeStats(getSize()-1);
     }
@@ -73,7 +73,7 @@ public class SolveTable implements Constants{
 
     public double getTime(int i){
         Solve solve = myTable.get(currentPuzzle).get(i);
-        if(solve.isPop)
+        if(solve.isDNF)
             return INF;
         if(solve.isPlus2)
             return solve.time + 2;
@@ -84,7 +84,7 @@ public class SolveTable implements Constants{
 
     public String getString(int i){
         Solve solve = myTable.get(currentPuzzle).get(i);
-        if(solve.isPop) return "POP";
+        if(solve.isDNF) return "DNF";
         return formatTime(solve);
     }
 
@@ -97,8 +97,8 @@ public class SolveTable implements Constants{
 
 //**********************************************************************************************************************
 
-    public boolean getPopQ(int i){
-        return myTable.get(currentPuzzle).get(i).isPop;
+    public boolean getDnfQ(int i){
+        return myTable.get(currentPuzzle).get(i).isDNF;
     }
 
 //**********************************************************************************************************************
@@ -106,7 +106,7 @@ public class SolveTable implements Constants{
     public class Solve{
         double time;
         String scramble;
-        boolean isPop, isPlus2;
+        boolean isDNF, isPlus2;
 
         double rollingAverage = INF, rollingStdDev = INF;
         double rollingFastestTime = INF, rollingSlowestTime = 0;
@@ -115,12 +115,12 @@ public class SolveTable implements Constants{
         double sessionAverage = INF, sessionStdDev = INF;
         double sessionFastestTime = INF, sessionSlowestTime = 0;
         int sessionFastestIndex = 0, sessionSlowestIndex = 0;
-        int numberSolves = 0, numberPops = 0;
+        int numberSolves = 0, numberDNFs = 0;
 
-        public Solve(double time, String scramble, boolean isPop, boolean isPlus2){
+        public Solve(double time, String scramble, boolean isDNF, boolean isPlus2){
             this.time = time;
             this.scramble = scramble;
-            this.isPop = isPop;
+            this.isDNF = isDNF;
             this.isPlus2 = isPlus2;
         }
     }
@@ -220,7 +220,7 @@ public class SolveTable implements Constants{
         solve.sessionAverage = 0;
         solve.sessionFastestTime = INF; solve.sessionSlowestTime = 0;
         solve.sessionFastestIndex = size-1; solve.sessionSlowestIndex = 0;
-        solve.numberSolves = 0; solve.numberPops = 0;
+        solve.numberSolves = 0; solve.numberDNFs = 0;
         for(int index=0; index<size; index++){
             double time = getTime(index);
             if(time <= solve.sessionFastestTime){
@@ -231,11 +231,11 @@ public class SolveTable implements Constants{
                 solve.sessionSlowestTime = time;
                 solve.sessionSlowestIndex = index;
             }
-            if(!getPopQ(index)){
+            if(!getDnfQ(index)){
                 solve.sessionAverage += time;
                 solve.numberSolves++;
             } else{
-                solve.numberPops++;
+                solve.numberDNFs++;
             }
         }
         if(solve.numberSolves > 0)
@@ -245,7 +245,7 @@ public class SolveTable implements Constants{
 
         solve.sessionStdDev = 0;
         for(int index=0; index<size; index++)
-            if(!getPopQ(index))
+            if(!getDnfQ(index))
                 solve.sessionStdDev += (solve.sessionAverage-getTime(index)) * (solve.sessionAverage-getTime(index));
         if(solve.numberSolves > 1)
             solve.sessionStdDev = Math.sqrt(solve.sessionStdDev/(solve.numberSolves-1));
@@ -278,12 +278,12 @@ public class SolveTable implements Constants{
 
 //**********************************************************************************************************************
 
-    public boolean okayToPop(){
+    public boolean okayToDNF(){
         int size = getSize();
 
         int index;
         for(index = size-1; index >= 0; index--)
-            if(getPopQ(index)) break;
+            if(getDnfQ(index)) break;
 
         if(index == -1) return true;
         return (size-index) >= 12;
