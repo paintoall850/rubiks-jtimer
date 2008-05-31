@@ -142,6 +142,18 @@ public class OptionsBox extends JFrame implements ActionListener, MouseListener,
         rejectButton = new JButton("Undo Changes");
         //closeButton = new JButton("Close");
 
+        RJT_Utils.enterPressesWhenFocused(colorResetButton);
+        RJT_Utils.enterPressesWhenFocused(cubeResetButton);
+        RJT_Utils.enterPressesWhenFocused(pyraminxResetButton);
+        RJT_Utils.enterPressesWhenFocused(megaminxResetButton);
+        RJT_Utils.enterPressesWhenFocused(sessionResetButton);
+        RJT_Utils.enterPressesWhenFocused(averageResetButton);
+
+        RJT_Utils.enterPressesWhenFocused(saveButton);
+        RJT_Utils.enterPressesWhenFocused(applyButton);
+        RJT_Utils.enterPressesWhenFocused(resetButton);
+        RJT_Utils.enterPressesWhenFocused(rejectButton);
+
         // call big add tabs and content function
         addStuffToTabs();
 
