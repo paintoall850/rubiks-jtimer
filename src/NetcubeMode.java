@@ -85,9 +85,14 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     // listening thread
     Thread chatListener;
 
+    JFileChooser fc;// = new JFileChooser();
+
 //**********************************************************************************************************************
 
-    public NetcubeMode(OptionsBox optionsBox, ScrambleGenerator scrambleGenerator, InstructionScreen instructionScreen, AboutScreen aboutScreen){
+    public NetcubeMode(JFileChooser fc, OptionsBox optionsBox,
+                                        ScrambleGenerator scrambleGenerator,
+                                        InstructionScreen instructionScreen,
+                                        AboutScreen aboutScreen){
         RJT_Utils.configureJFrame(this);
 
         try { //configure chatSound
@@ -110,6 +115,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
             startupClip = Applet.newAudioClip(getClass().getResource("startup.wav"));
         } catch(NullPointerException ex){JOptionPane.showMessageDialog(this, "startup.wav not found. There will be no startup sound.");}
 
+        this.fc = fc;
         this.optionsBox = optionsBox;
         this.scrambleGenerator = scrambleGenerator;
         this.instructionScreen = instructionScreen;
@@ -496,16 +502,16 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
                 System.out.println(ex.getMessage());
             }
         } else if(source == localSessionDetailButton){
-            DetailedView win = new DetailedView("Local Session Times", getLocalSessionView(), optionsBox.textBackgrColorX);
+            DetailedView win = new DetailedView(fc, "Local Session Times", getLocalSessionView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == localAverageDetailButton){
-            DetailedView win = new DetailedView("Local Rolling Average", getLocalAverageView(), optionsBox.textBackgrColorX);
+            DetailedView win = new DetailedView(fc, "Local Rolling Average", getLocalAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteSessionDetailButton){
-            DetailedView win = new DetailedView("Remote Session Times", getRemoteSessionView(), optionsBox.textBackgrColorX);
+            DetailedView win = new DetailedView(fc, "Remote Session Times", getRemoteSessionView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == remoteAverageDetailButton){
-            DetailedView win = new DetailedView("Remote Rolling Average", getRemoteAverageView(), optionsBox.textBackgrColorX);
+            DetailedView win = new DetailedView(fc, "Remote Rolling Average", getRemoteAverageView(), optionsBox.textBackgrColorX);
             win.setVisible(true);
         } else if(source == optionsItem){
             optionsBox.setVisible(true);

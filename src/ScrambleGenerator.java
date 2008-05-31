@@ -32,11 +32,11 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
     ButtonGroup radioGroup;
     ScrambleAlg algGenerator;
 
-    JFileChooser fc = new JFileChooser();
+    JFileChooser fc;// = new JFileChooser();
 
 //**********************************************************************************************************************
 
-    public ScrambleGenerator(){
+    public ScrambleGenerator(JFileChooser fc){
         // configure Contentpane
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -46,8 +46,9 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
         RJT_Utils.centerJFrame(this, 225, 155);
         RJT_Utils.configureJFrame(this);
 
-        fc.setFileFilter(new TextFileFilter());
-        fc.setAcceptAllFileFilterUsed(false);
+        this.fc = fc;
+        //fc.setFileFilter(new TextFileFilter());
+        //fc.setAcceptAllFileFilterUsed(false);
 
         algGenerator = new ScrambleAlg();
 
@@ -121,9 +122,8 @@ public class ScrambleGenerator extends JFrame implements ActionListener, Constan
             printToFile = printToFile.replaceAll("\n", System.getProperty("line.separator"));
 
             int userChoice = fc.showSaveDialog(ScrambleGenerator.this);
-            if(userChoice == JFileChooser.APPROVE_OPTION){
+            if(userChoice == JFileChooser.APPROVE_OPTION)
                 RJT_Utils.saveToFile(this, printToFile, fc.getSelectedFile());
-            }
 
             this.setVisible(false);
         }

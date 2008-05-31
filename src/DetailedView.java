@@ -29,11 +29,11 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
     String printToWindow;
     JButton saveButton;
 
-    JFileChooser fc = new JFileChooser();
+    JFileChooser fc;// = new JFileChooser();
 
 //**********************************************************************************************************************
 
-    public DetailedView(String windowTitle, String printToWindow, Color textBackgrColor){
+    public DetailedView(JFileChooser fc, String windowTitle, String printToWindow, Color textBackgrColor){
         this.printToWindow = printToWindow;
 
         // configure Contentpane
@@ -45,8 +45,9 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
         RJT_Utils.centerJFrame(this, 625, 340+10);
         RJT_Utils.configureJFrame(this);
 
-        fc.setFileFilter(new TextFileFilter());
-        fc.setAcceptAllFileFilterUsed(false);
+        this.fc = fc;
+        //fc.setFileFilter(new TextFileFilter());
+        //fc.setAcceptAllFileFilterUsed(false);
 
         // main textArea
         JTextArea window = new JTextArea();
@@ -76,9 +77,8 @@ public class DetailedView extends JFrame implements ActionListener, Constants{
 
         if(source == saveButton){
             int userChoice = fc.showSaveDialog(DetailedView.this);
-            if(userChoice == JFileChooser.APPROVE_OPTION){
+            if(userChoice == JFileChooser.APPROVE_OPTION)
                 RJT_Utils.saveToFile(this, printToWindow, fc.getSelectedFile());
-            }
         }
     } // end actionPerformed
 

@@ -38,8 +38,12 @@ public class Server extends NetcubeMode{
 
 //**********************************************************************************************************************
 
-    public Server(OptionsBox optionsBox, ScrambleGenerator scrambleGenerator, InstructionScreen instructionScreen, AboutScreen aboutScreen){
-        super(optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
+    public Server(JFileChooser fc,  OptionsBox optionsBox,
+                                    ScrambleGenerator scrambleGenerator,
+                                    InstructionScreen instructionScreen,
+                                    AboutScreen aboutScreen){
+
+        super(fc, optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
 
         // configure Contentpane
         Container contentPane = getContentPane();
