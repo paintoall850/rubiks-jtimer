@@ -45,6 +45,6 @@ public interface Constants{
     // needs to be changed in ScrambleMegaminx.java too
     static final String ALG_BREAK = "[.]"; // was "@" (note it's treated as regular expression)
     static final String APP_TITLE = "Rubik's JTimer";
-    static final String ERROR_MESS = "There has been an error, please inform Doug that you saw this message.";
+    //static final String ERROR_MESS = "There has been an error, please inform Doug that you saw this message.";
     static final String NOT_ADDED = " No time was added to the session.";
 }
