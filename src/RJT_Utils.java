@@ -88,6 +88,19 @@ public abstract class RJT_Utils implements Constants{
     }
 
 //**********************************************************************************************************************
+
+    public static final void hideOnEsc(final JFrame jFrame, JRootPane rootPane){
+        ActionListener escListener = new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                jFrame.setVisible(false);
+            }
+        };
+        rootPane.registerKeyboardAction(escListener,
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false), // on down-press of Esc
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+//**********************************************************************************************************************
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
