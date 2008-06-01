@@ -237,7 +237,7 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
-        startButton.requestFocus();
+        returnFocus();
 
     } // end constructor
 
@@ -408,8 +408,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         } else if(source == dnfButton){
             dnfButton.setText(RJT_Utils.makeRed("DNF"));
             acceptTime((stopTime-startTime)/1000D, true, false);
+            returnFocus();
         } else if(source == plusTwoButton){
             acceptTime((stopTime-startTime)/1000D, false, true);
+            returnFocus();
         } else if(source == sessionResetButton){
             if(optionsBox.showResetConfirmX){
                 int choice = JOptionPane.showConfirmDialog(this,
