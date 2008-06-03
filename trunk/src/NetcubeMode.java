@@ -45,7 +45,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel, userIsTyping;
     JLabel localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
     JTextField usernameText, serverIpText, serverPortText, chatText;
-    JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton;
+    JButton connectButton, sendMessageButton, localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton, startButton, popButton, disconnectButton;
     JTextPane chatPane;
     StyledDocument chatDoc;
     Style redStyle, blueStyle, blackStyle;
@@ -154,6 +154,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         chatText = new JTextField();
         chatText.addKeyListener(this);
         sendMessageButton = new JButton("Send");
+        
+        disconnectButton = new JButton("Disconnect");
 
         useThisAlgLabel = new JLabel("Use this Scramble Algorithm:");
         scrambleText = new JTextArea("");
@@ -277,8 +279,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         puzzleCombo.setBounds(10,25,90,20);
         countdownLabel.setBounds(110,5,90,20);
         countdownCombo.setBounds(110,25,90,20);
-        startButton.setBounds(10,50,190,30);
-        popButton.setBounds(10,85,190,30);
+        startButton.setBounds(10,50,190,20);
+        popButton.setBounds(10,75,190,20);
+        disconnectButton.setBounds(10,100,190,20);
         readyColor.setBounds(10,120,20,20); // not used in Client
         remoteStatusLabel.setBounds(40,120,160,20); // not used in Client
         localStatusLabel.setBounds(10,120,190,20); // not used in Server
@@ -323,6 +326,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(userIsTyping);
         contentPane.add(chatText);
         contentPane.add(sendMessageButton);
+        contentPane.add(disconnectButton);
 
         contentPane.add(useThisAlgLabel);
         contentPane.add(scrambleText);
@@ -355,6 +359,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     protected void addActionListeners(){
         connectButton.addActionListener(this);
         sendMessageButton.addActionListener(this);
+        disconnectButton.addActionListener(this);
         chatText.addActionListener(this);
         startButton.addActionListener(this);
         popButton.addActionListener(this);
@@ -421,6 +426,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         userIsTyping.setVisible(false);
         chatText.setVisible(false);
         sendMessageButton.setVisible(false);
+        disconnectButton.setVisible(false);
 
         useThisAlgLabel.setVisible(false);
         scrambleText.setVisible(false);
@@ -466,6 +472,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         userIsTyping.setVisible(true);
         chatText.setVisible(true);
         sendMessageButton.setVisible(true);
+        disconnectButton.setVisible(true);
 
         useThisAlgLabel.setVisible(true);
         scrambleText.setVisible(true);

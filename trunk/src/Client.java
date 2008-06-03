@@ -157,6 +157,11 @@ public class Client extends NetcubeMode{
                 // move to next solve
                 updateStats();
             }
+        }else if(source == disconnectButton){
+            	if(JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to disconnect?") == 0){
+            		safePrint("D");
+            		this.performAction("D", null);
+            	}
         }
     } // end actionPerformed
 
@@ -262,6 +267,14 @@ public class Client extends NetcubeMode{
             remoteIsTyping = !remoteIsTyping;
             if(remoteIsTyping) userIsTyping.setIcon(typeOn);
             else userIsTyping.setIcon(typeOff);
+        } else if(prefix.equals("D")){
+            try{
+            		in.close();
+            		out.close();
+                	clientSocket.close();
+            } catch(IOException ex){
+                //already disconnected
+            }
         }
     } // end performedAction
 
