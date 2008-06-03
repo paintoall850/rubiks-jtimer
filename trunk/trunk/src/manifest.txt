@@ -1,0 +1,2 @@
+SplashScreen-Image: bigPicture.jpg
+Main-Class: Standalone
