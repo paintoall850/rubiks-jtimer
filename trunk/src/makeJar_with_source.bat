@@ -1,0 +1,2 @@
+javac *.java
+jar cvmf manifest.txt RubiksJTimer_with_source.jar *.java *.class makeJar.bat makeJar_with_source.bat typeOff.gif typeOn.gif Cow.gif Cow.jpg bigPicture.jpg smallPicture.jpg count.mid bing1.wav bing2.wav blip.wav ready.wav startup.wav
