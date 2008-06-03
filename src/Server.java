@@ -201,6 +201,10 @@ public class Server extends NetcubeMode{
                 updateStats();
                 generateNewScramble();
             }
+        }else if(source == disconnectButton){
+        	if(JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to disconnect?") == 0){
+        		safePrint("D");
+        	}
         }
     } // end actionPerformed
 
@@ -297,6 +301,19 @@ public class Server extends NetcubeMode{
             remoteIsTyping = !remoteIsTyping;
             if(remoteIsTyping) userIsTyping.setIcon(typeOn);
             else userIsTyping.setIcon(typeOff);
+        } else if(prefix.equals("D")){
+            try{
+            	if(in != null)
+            		in.close();
+            	if(out != null)
+            		out.close();
+            	if(clientSocket != null)
+            		clientSocket.close();
+            	if(serverSocket != null)
+            		serverSocket.close();
+            } catch(IOException ex){
+                //already disconnected
+            }
         }
     } // end performedAction
 
