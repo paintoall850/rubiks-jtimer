@@ -201,10 +201,15 @@ public class Server extends NetcubeMode{
                 updateStats();
                 generateNewScramble();
             }
-        }else if(source == disconnectButton){
-        	if(JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to disconnect?") == 0){
-        		safePrint("D");
-        	}
+//        } else if(source == disconnectButton){
+//            int choice = JOptionPane.showConfirmDialog(this,
+//                                            "Are you sure you want to disconnect?",
+//                                            "Warning!",
+//                                            JOptionPane.YES_NO_OPTION,
+//                                            JOptionPane.QUESTION_MESSAGE);
+//                                            );
+//            if(choice == JOptionPane.YES_OPTION)
+//                safePrint("D");
         }
     } // end actionPerformed
 
