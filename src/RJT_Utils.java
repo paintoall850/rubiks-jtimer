@@ -33,6 +33,7 @@ public abstract class RJT_Utils implements Constants{
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int appWidth = jFrame.getSize().width, appHeight = jFrame.getSize().height;
         jFrame.setLocation((screenSize.width-appWidth)/2, (screenSize.height-appHeight)/2);
+        jFrame.doLayout();
     } // end centerJFrame
 
 //**********************************************************************************************************************
