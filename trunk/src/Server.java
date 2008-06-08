@@ -35,6 +35,7 @@ public class Server extends NetcubeMode{
     ScrambleAlg scrambleAlg;
     ServerSocket serverSocket;
     Thread connectionListener;
+    boolean isListening;
 
 //**********************************************************************************************************************
 
@@ -84,6 +85,8 @@ public class Server extends NetcubeMode{
         // GUI preperation
         super.prepGUI();
         serverIpText.setEnabled(false);
+        
+        isListening = false;
 
         // hide GUI
         hideGUI();
@@ -101,7 +104,11 @@ public class Server extends NetcubeMode{
                 JOptionPane.showMessageDialog(this, "Username should not be blank.");
                 return;
             }
-            startServerConnection();
+            if(!isListening)
+            	startServerConnection();
+            else
+            	stopServerConnection();
+            	
         } else if(source == puzzleCombo){
             safePrint("P" + puzzleCombo.getSelectedItem());
             generateNewScramble();
@@ -201,15 +208,18 @@ public class Server extends NetcubeMode{
                 updateStats();
                 generateNewScramble();
             }
-//        } else if(source == disconnectButton){
-//            int choice = JOptionPane.showConfirmDialog(this,
-//                                            "Are you sure you want to disconnect?",
-//                                            "Warning!",
-//                                            JOptionPane.YES_NO_OPTION,
-//                                            JOptionPane.QUESTION_MESSAGE);
-//                                            );
-//            if(choice == JOptionPane.YES_OPTION)
-//                safePrint("D");
+        } else if(source == disconnectButton){
+            int choice = JOptionPane.showConfirmDialog(this,
+                                            "Are you sure you want to disconnect?",
+                                            "Warning!",
+                                            JOptionPane.YES_NO_OPTION,
+                                            JOptionPane.QUESTION_MESSAGE);
+            if(choice == JOptionPane.YES_OPTION)
+                safePrint("D");
+        } else if(source == returnToStandalone){
+        	stopServerConnection();
+        	this.setVisible(false);
+        	parentStandalone.setVisible(true);
         }
     } // end actionPerformed
 
@@ -308,13 +318,9 @@ public class Server extends NetcubeMode{
             else userIsTyping.setIcon(typeOff);
         } else if(prefix.equals("D")){
             try{
-            	if(in != null)
             		in.close();
-            	if(out != null)
             		out.close();
-            	if(clientSocket != null)
             		clientSocket.close();
-            	if(serverSocket != null)
             		serverSocket.close();
             } catch(IOException ex){
                 //already disconnected
@@ -354,10 +360,11 @@ public class Server extends NetcubeMode{
 
     private void startServerConnection(){
         try{
-            connectButton.setText("LISTENING");
-            connectButton.setEnabled(false);
+            connectButton.setText("STOP LISTENING");
+            //connectButton.setEnabled(false);
             usernameText.setEnabled(false);
             serverPortText.setEnabled(false);
+            isListening = true;
 
             serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
             connectionListener = new ConnectionListener(serverSocket, this);
@@ -374,6 +381,24 @@ public class Server extends NetcubeMode{
             sendMessageButton.setEnabled(false);
             chatText.setEnabled(false);
         }
+    }
+//  **********************************************************************************************************************
+    
+    public void stopServerConnection(){
+        reset();
+        connectButton.setText("Start Server");
+        chatText.setText("");
+        connectButton.setEnabled(true);
+        usernameText.setEnabled(true);
+        serverPortText.setEnabled(true);
+        sendMessageButton.setEnabled(false);
+        chatText.setEnabled(false);
+        try{
+        	serverSocket.close();
+        }catch(Exception e){
+        	//already disconnected
+        }
+        isListening = false;
     }
 
 //**********************************************************************************************************************
@@ -425,7 +450,7 @@ public class Server extends NetcubeMode{
                 clientSocket = serverSocket.accept();
                 server.connectionMade(clientSocket);
             } catch(Exception ex){
-                System.out.println(ex.getMessage());
+                //System.out.println(ex.getMessage());
             }
         }
     }
