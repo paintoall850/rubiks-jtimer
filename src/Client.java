@@ -157,16 +157,19 @@ public class Client extends NetcubeMode{
                 // move to next solve
                 updateStats();
             }
-//        } else if(source == disconnectButton){
-//            int choice = JOptionPane.showConfirmDialog(this,
-//                                            "Are you sure you want to disconnect?",
-//                                            "Warning!",
-//                                            JOptionPane.YES_NO_OPTION,
-//                                            JOptionPane.QUESTION_MESSAGE);
-//            if(choice == JOptionPane.YES_OPTION){
-//                safePrint("D");
-//                this.performAction("D", null);
-//            }
+        } else if(source == disconnectButton){
+            int choice = JOptionPane.showConfirmDialog(this,
+                                            "Are you sure you want to disconnect?",
+                                            "Warning!",
+                                            JOptionPane.YES_NO_OPTION,
+                                            JOptionPane.QUESTION_MESSAGE);
+            if(choice == JOptionPane.YES_OPTION){
+                safePrint("D");
+                this.performAction("D", null);
+            }
+        } else if(source == returnToStandalone){
+        	this.setVisible(false);
+        	parentStandalone.setVisible(true);
         }
     } // end actionPerformed
 
@@ -272,14 +275,14 @@ public class Client extends NetcubeMode{
             remoteIsTyping = !remoteIsTyping;
             if(remoteIsTyping) userIsTyping.setIcon(typeOn);
             else userIsTyping.setIcon(typeOff);
-//        } else if(prefix.equals("D")){
-//            try{
-//                in.close();
-//                out.close();
-//                clientSocket.close();
-//            } catch(IOException ex){
-//                //already disconnected
-//            }
+        } else if(prefix.equals("D")){
+            try{
+                in.close();
+                out.close();
+                clientSocket.close();
+            } catch(IOException ex){
+                //already disconnected
+            }
         }
     } // end performedAction
 
