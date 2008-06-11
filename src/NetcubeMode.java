@@ -30,7 +30,7 @@ import java.util.*;
 import javax.swing.border.Border;
 
 public abstract class NetcubeMode extends JFrame implements ActionListener, KeyListener, Runnable, OptionsBox.OptionsListener, Constants{
-	protected Standalone parentStandalone;
+
     protected OptionsBox optionsBox;
     protected ScrambleGenerator scrambleGenerator;
     protected InstructionScreen instructionScreen;
@@ -42,13 +42,13 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     protected static final String sessionViewFormat = "----- " + APP_TITLE + " Session Statistics for %T -----\n\nUsername: %U\n\nTotal Solves: %C\nTotal Pops: %P\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
     protected static final String averageViewFormat = "----- " + APP_TITLE + " Best Average for %T -----\n\nUsername: %U\n\nAverage: %A\n\nFastest Time: %F\nSlowest Time: %S\n\nIndividual Times:\n%I";
 
-    JLabel usernameLabel, serverIpLabel, serverPortLabel, bigPicture, smallPicture;
+    JLabel usernameLabel, serverIpLabel, serverPortLabel, smallPicture;
     JLabel puzzleLabel, countdownLabel, useThisAlgLabel, timerLabel, userIsTyping;
     JLabel localTimeLabel, remoteTimeLabel, localTimeUsernameLabel, remoteTimeUsernameLabel;
     JTextField usernameText, serverIpText, serverPortText, chatText;
-    JButton connectButton, sendMessageButton, returnToStandalone;
+    JButton connectButton, returnButton, sendMessageButton;
     JButton localSessionDetailButton, localAverageDetailButton, remoteSessionDetailButton, remoteAverageDetailButton;
-    JButton startButton, popButton, disconnectButton;
+    JButton startButton, popButton;
     JTextPane chatPane;
     StyledDocument chatDoc;
     Style redStyle, blueStyle, blackStyle;
@@ -76,9 +76,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
     // JMenu stuff
     JMenuBar jMenuBar;
     //JMenu fileMenu, toolsMenu, helpMenu;
-    JMenu fileMenu, toolsMenu, standaloneMenu, helpMenu;
+    JMenu fileMenu, toolsMenu, disconnectMenu, helpMenu;
     //JMenuItem saveBestItem, saveSessionItem, optionsItem, exitItem, importItem, generatorItem, instItem, aboutItem;
-    JMenuItem optionsItem, exitItem, generatorItem, standaloneItem, instItem, aboutItem;
+    JMenuItem optionsItem, exitItem, generatorItem, disconnectItem, instItem, aboutItem;
 
     // network stuff
     Socket clientSocket;
@@ -137,7 +137,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         serverIpText = new JTextField(); // override in sub-class
         serverPortText = new JTextField("52003");
         connectButton = new JButton(); // override in sub-class
-        returnToStandalone = new JButton("Back To Standalone");
+        returnButton = new JButton("Back to Standalone");
 
         typeOff = new ImageIcon(getClass().getResource("typeOff.gif"));
         typeOn = new ImageIcon(getClass().getResource("typeOn.gif"));
@@ -206,7 +206,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         countdownCombo = new JComboBox(countdownChoices);
         startButton = new JButton(); // will override
         popButton = new JButton("POP");
-        disconnectButton = new JButton("Disconnect");
+        //disconnectButton = new JButton("Disconnect");
 
         // mixed stuff
         readyColor = new JTextArea();
@@ -216,9 +216,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         remoteStatusLabel = new JLabel("Remote Status");
         localStatusLabel = new JCheckBox("I'm ready!");
 
-        bigPicture = new JLabel((new ImageIcon(getClass().getResource("bigPicture.jpg"))));
+        //bigPicture = new JLabel((new ImageIcon(getClass().getResource("bigPicture.jpg"))));
         smallPicture = new JLabel((new ImageIcon(getClass().getResource("smallPicture.jpg"))));
-        bigPicture.setBorder(blackLine);
+        //bigPicture.setBorder(blackLine);
         smallPicture.setBorder(blackLine);
 
         reset(); // set everything to defaults
@@ -238,7 +238,8 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //        importItem.setAccelerator(KeyStroke.getKeyStroke('I', 2));
         generatorItem = new JMenuItem("Generate Scrambles"); generatorItem.setMnemonic('G');
         generatorItem.setAccelerator(KeyStroke.getKeyStroke('G', 2));
-        standaloneItem = new JMenuItem("Go Back to Standalone Mode");
+//        standaloneItem = new JMenuItem("Go Back to Standalone Mode");
+        disconnectItem = new JMenuItem("Terminate Connection");
         instItem = new JMenuItem("Instuctions");
         instItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         aboutItem = new JMenuItem("About " + APP_TITLE); aboutItem.setMnemonic('A');
@@ -253,15 +254,15 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         toolsMenu = new JMenu("Tools"); toolsMenu.setMnemonic('T');
 //        toolsMenu.add(importItem);
         toolsMenu.add(generatorItem);
-        standaloneMenu = new JMenu("Standalone Timer"); standaloneMenu.setMnemonic('S');
-        standaloneMenu.add(standaloneItem);
+        disconnectMenu = new JMenu("Disconnect"); disconnectMenu.setMnemonic('D');
+        disconnectMenu.add(disconnectItem);
         helpMenu = new JMenu("Help"); helpMenu.setMnemonic('H');
 //        helpMenu.add(instItem);
         helpMenu.add(aboutItem);
         jMenuBar = new JMenuBar();
         jMenuBar.add(fileMenu);
         jMenuBar.add(toolsMenu);
-//        jMenuBar.add(standaloneMenu);
+        jMenuBar.add(disconnectMenu);
         jMenuBar.add(Box.createHorizontalGlue());
         jMenuBar.add(helpMenu);
     }
@@ -277,7 +278,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         serverIpText.setBounds(90,35,80,20);
         serverPortText.setBounds(90,60,80,20);
         connectButton.setBounds(10,85,160,30);
-        returnToStandalone.setBounds(10,120,160,30);
+        returnButton.setBounds(10,120,160,30);
 
         puzzleLabel.setBounds(10,5,90,20);
         puzzleCombo.setBounds(10,25,90,20);
@@ -287,10 +288,10 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         popButton.setBounds(10,85,190,30);
 //        startButton.setBounds(10,50,190,20);
 //        popButton.setBounds(10,75,190,20);
-        disconnectButton.setBounds(10,120,190,20);
-        readyColor.setBounds(10,145,20,20); // not used in Client
-        remoteStatusLabel.setBounds(40,145,160,20); // not used in Client
-        localStatusLabel.setBounds(10,145,190,20); // not used in Server
+//        disconnectButton.setBounds(10,120,190,20);
+        readyColor.setBounds(10,120,20,20); // not used in Client
+        remoteStatusLabel.setBounds(40,120,160,20); // not used in Client
+        localStatusLabel.setBounds(10,120,190,20); // not used in Server
 
         useThisAlgLabel.setBounds(215,5,350,20);
         scrambleText.setBounds(215,25,350,115);
@@ -298,7 +299,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
         scramblePanel.setBounds(575,5,350,235); // needs to be changed in two places
 
-        chatScrollPane.setBounds(10,170,190,225);
+        chatScrollPane.setBounds(10,150,190,245);
         userIsTyping.setBounds(10,400,20,20);
         chatText.setBounds(35,400,85,20);
         sendMessageButton.setBounds(130,400,70,20);
@@ -313,7 +314,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         remoteSessionDetailButton.setBounds(785,355,120,20);
 
         smallPicture.setBounds(180,10,583,140);
-        bigPicture.setBounds(10,150,700,355);
+        //bigPicture.setBounds(10,150,700,355);
     }
 
 //**********************************************************************************************************************
@@ -327,7 +328,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(serverIpText);
         contentPane.add(serverPortText);
         contentPane.add(connectButton);
-        contentPane.add(returnToStandalone);
+        contentPane.add(returnButton);
 
         contentPane.add(chatScrollPane);
         contentPane.add(userIsTyping);
@@ -355,7 +356,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         contentPane.add(countdownCombo);
         contentPane.add(startButton);
         contentPane.add(popButton);
-        contentPane.add(disconnectButton);
+//        contentPane.add(disconnectButton);
 
         contentPane.add(smallPicture);
         //contentPane.add(bigPicture);
@@ -365,12 +366,13 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     protected void addActionListeners(){
         connectButton.addActionListener(this);
-        returnToStandalone.addActionListener(this);
+        returnButton.addActionListener(this);
+
         sendMessageButton.addActionListener(this);
         chatText.addActionListener(this);
         startButton.addActionListener(this);
         popButton.addActionListener(this);
-        disconnectButton.addActionListener(this);
+//        disconnectButton.addActionListener(this);
 
         localSessionDetailButton.addActionListener(this);
         localAverageDetailButton.addActionListener(this);
@@ -380,7 +382,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         optionsItem.addActionListener(this);
         exitItem.addActionListener(this);
         generatorItem.addActionListener(this);
-        standaloneItem.addActionListener(this);
+        disconnectItem.addActionListener(this);
         instItem.addActionListener(this);
         aboutItem.addActionListener(this);
     }
@@ -411,7 +413,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 
     protected void hideGUI(){
         //RJT_Utils.centerJFrame(this, 695, 170);
-    	RJT_Utils.centerJFrame(this, 778, 185);
+        RJT_Utils.centerJFrame(this, 778, 190);
         setJMenuBar(null);
 
         usernameLabel.setVisible(true);
@@ -421,8 +423,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         serverIpText.setVisible(true);
         serverPortText.setVisible(true);
         connectButton.setVisible(true);
-        returnToStandalone.setVisible(true);
-        bigPicture.setVisible(true);
+        returnButton.setVisible(true);
+
+        //bigPicture.setVisible(true);
         smallPicture.setVisible(true);
 
         //hide everything
@@ -432,7 +435,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         countdownCombo.setVisible(false);
         startButton.setVisible(false);
         popButton.setVisible(false);
-        disconnectButton.setVisible(false);
+//        disconnectButton.setVisible(false);
 
         chatScrollPane.setVisible(false);
         userIsTyping.setVisible(false);
@@ -468,8 +471,9 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         serverIpText.setVisible(false);
         serverPortText.setVisible(false);
         connectButton.setVisible(false);
-        returnToStandalone.setVisible(false);
-        bigPicture.setVisible(false);
+        returnButton.setVisible(false);
+
+        //bigPicture.setVisible(false);
         smallPicture.setVisible(false);
 
         //show everything
@@ -479,7 +483,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         countdownCombo.setVisible(true);
         startButton.setVisible(true);
         popButton.setVisible(true);
-        disconnectButton.setVisible(true);
+//        disconnectButton.setVisible(true);
 
         chatScrollPane.setVisible(true);
         userIsTyping.setVisible(true);
@@ -1002,7 +1006,7 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
 //**********************************************************************************************************************
 //**********************************************************************************************************************
 
-    private VisiblityListener visiblityListener;
+    protected VisiblityListener visiblityListener;
 
     public static interface VisiblityListener{
         public abstract void netmodeCallback();
@@ -1012,7 +1016,4 @@ public abstract class NetcubeMode extends JFrame implements ActionListener, KeyL
         this.visiblityListener = visiblityListener;
     }
 
-    public void setStandalone(Standalone parent){
-    	this.parentStandalone = parent;
-    }
 }

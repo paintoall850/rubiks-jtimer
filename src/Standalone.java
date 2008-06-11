@@ -130,12 +130,10 @@ public class Standalone extends JFrame implements ActionListener, Runnable, Opti
         server = new Server(fc, optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
         server.setVisible(false);
         server.addVisiblityListener(this);
-        server.setStandalone(this);
 
         client = new Client(fc, optionsBox, scrambleGenerator, instructionScreen, aboutScreen);
         client.setVisible(false);
         client.addVisiblityListener(this);
-        client.setStandalone(this);
 
         // initialize GUI objects
         puzzleLabel = new JLabel("Puzzle:");
