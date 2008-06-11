@@ -49,7 +49,7 @@ public class Client extends NetcubeMode{
 
         // GUI Object creation
         serverIpText.setText("127.0.0.1");
-        connectButton.setText("Connect To Server");
+        connectButton.setText("Connect to Server");
 
         //puzzleCombo.setSelectedItem("3x3x3");
         //countdownCombo.setSelectedItem("15");
@@ -157,7 +157,7 @@ public class Client extends NetcubeMode{
                 // move to next solve
                 updateStats();
             }
-        } else if(source == disconnectButton){
+        } else if(source == disconnectItem){
             int choice = JOptionPane.showConfirmDialog(this,
                                             "Are you sure you want to disconnect?",
                                             "Warning!",
@@ -167,9 +167,9 @@ public class Client extends NetcubeMode{
                 safePrint("D");
                 this.performAction("D", null);
             }
-        } else if(source == returnToStandalone){
-        	this.setVisible(false);
-        	parentStandalone.setVisible(true);
+        } else if(source == returnButton){
+            this.setVisible(false);
+            visiblityListener.netmodeCallback();
         }
     } // end actionPerformed
 
@@ -187,7 +187,7 @@ public class Client extends NetcubeMode{
             hideGUI();
             JOptionPane.showMessageDialog(this, "You have been disconnected from the server.");
             reset();
-            connectButton.setText("Connect To Server");
+            connectButton.setText("Connect to Server");
             chatText.setText("");
             connectButton.setEnabled(true);
             usernameText.setEnabled(true);
@@ -281,7 +281,7 @@ public class Client extends NetcubeMode{
                 out.close();
                 clientSocket.close();
             } catch(IOException ex){
-                //already disconnected
+                System.out.println(ex.getMessage()); //already disconnected
             }
         }
     } // end performedAction
@@ -328,7 +328,7 @@ public class Client extends NetcubeMode{
         } catch(Exception ex){
             JOptionPane.showMessageDialog(this, "Cannot connect to server. Information may be entered incorrectly.");
             hideGUI();
-            connectButton.setText("Connect To Server");
+            connectButton.setText("Connect to Server");
             connectButton.setEnabled(true);
             serverIpText.setEnabled(true);
             usernameText.setEnabled(true);

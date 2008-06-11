@@ -35,7 +35,6 @@ public class Server extends NetcubeMode{
     ScrambleAlg scrambleAlg;
     ServerSocket serverSocket;
     Thread connectionListener;
-    boolean isListening;
 
 //**********************************************************************************************************************
 
@@ -85,8 +84,6 @@ public class Server extends NetcubeMode{
         // GUI preperation
         super.prepGUI();
         serverIpText.setEnabled(false);
-        
-        isListening = false;
 
         // hide GUI
         hideGUI();
@@ -104,11 +101,10 @@ public class Server extends NetcubeMode{
                 JOptionPane.showMessageDialog(this, "Username should not be blank.");
                 return;
             }
-            if(!isListening)
-            	startServerConnection();
-            else
-            	stopServerConnection();
-            	
+            if(connectButton.getText().equals("Start Server"))
+                startServerConnection();
+            else if(connectButton.getText().equals("STOP LISTENING"))
+                stopServerConnection();
         } else if(source == puzzleCombo){
             safePrint("P" + puzzleCombo.getSelectedItem());
             generateNewScramble();
@@ -208,7 +204,7 @@ public class Server extends NetcubeMode{
                 updateStats();
                 generateNewScramble();
             }
-        } else if(source == disconnectButton){
+        } else if(source == disconnectItem){
             int choice = JOptionPane.showConfirmDialog(this,
                                             "Are you sure you want to disconnect?",
                                             "Warning!",
@@ -216,10 +212,11 @@ public class Server extends NetcubeMode{
                                             JOptionPane.QUESTION_MESSAGE);
             if(choice == JOptionPane.YES_OPTION)
                 safePrint("D");
-        } else if(source == returnToStandalone){
-        	stopServerConnection();
-        	this.setVisible(false);
-        	parentStandalone.setVisible(true);
+        } else if(source == returnButton){
+            if(connectButton.getText().equals("STOP LISTENING"))
+                stopServerConnection();
+            this.setVisible(false);
+            visiblityListener.netmodeCallback();
         }
     } // end actionPerformed
 
@@ -318,12 +315,11 @@ public class Server extends NetcubeMode{
             else userIsTyping.setIcon(typeOff);
         } else if(prefix.equals("D")){
             try{
-            		in.close();
-            		out.close();
-            		clientSocket.close();
-            		serverSocket.close();
+                in.close();
+                out.close();
+                clientSocket.close();
             } catch(IOException ex){
-                //already disconnected
+                System.out.println(ex.getMessage()); //already disconnected
             }
         }
     } // end performedAction
@@ -364,7 +360,6 @@ public class Server extends NetcubeMode{
             //connectButton.setEnabled(false);
             usernameText.setEnabled(false);
             serverPortText.setEnabled(false);
-            isListening = true;
 
             serverSocket = new ServerSocket(Integer.parseInt(serverPortText.getText()));
             connectionListener = new ConnectionListener(serverSocket, this);
@@ -383,22 +378,20 @@ public class Server extends NetcubeMode{
         }
     }
 //  **********************************************************************************************************************
-    
+
     public void stopServerConnection(){
-        reset();
         connectButton.setText("Start Server");
-        chatText.setText("");
         connectButton.setEnabled(true);
         usernameText.setEnabled(true);
         serverPortText.setEnabled(true);
         sendMessageButton.setEnabled(false);
         chatText.setEnabled(false);
+        //reset();
         try{
-        	serverSocket.close();
-        }catch(Exception e){
-        	//already disconnected
+            serverSocket.close();
+        } catch(Exception ex){
+            System.out.println(ex.getMessage()); //already disconnected
         }
-        isListening = false;
     }
 
 //**********************************************************************************************************************
@@ -450,7 +443,7 @@ public class Server extends NetcubeMode{
                 clientSocket = serverSocket.accept();
                 server.connectionMade(clientSocket);
             } catch(Exception ex){
-                //System.out.println(ex.getMessage());
+                System.out.println(ex.getMessage());
             }
         }
     }
