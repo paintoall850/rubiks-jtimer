@@ -25,6 +25,7 @@ public class ScrambleAlg{
     Scramble5x5 cube5x5;
     ScramblePyraminx pyraminx;
     ScrambleMegaminx megaminx;
+    ScrambleSquareOne squareOne;
 
 //**********************************************************************************************************************
 
@@ -35,6 +36,7 @@ public class ScrambleAlg{
         cube5x5 = new Scramble5x5();
         pyraminx  = new ScramblePyraminx();
         megaminx  = new ScrambleMegaminx();
+        squareOne = new ScrambleSquareOne();
     }
 
 //**********************************************************************************************************************
@@ -52,6 +54,8 @@ public class ScrambleAlg{
             return pyraminx.generateScramble();
         if(puzzle.equals("Megaminx"))
             return megaminx.generateScramble();
+        if(puzzle.equals("Square One"))
+        	return squareOne.generateScramble();
         return null;
     }
 

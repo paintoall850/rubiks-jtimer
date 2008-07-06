@@ -232,7 +232,9 @@ public class Server extends NetcubeMode{
             }
         } catch(Exception ex){
             hideGUI();
-            JOptionPane.showMessageDialog(this, "Client has disconnected from this server.");
+            //JOptionPane.showMessageDialog(this, "Client has disconnected from this server.");
+            new DisconnectWindow(this,"Client has disconnected from this server.",this.getLocalSessionView(), this.getRemoteSessionView());           
+            
             reset();
             connectButton.setText("Start Server");
             chatText.setText("");
@@ -314,6 +316,15 @@ public class Server extends NetcubeMode{
             if(remoteIsTyping) userIsTyping.setIcon(typeOn);
             else userIsTyping.setIcon(typeOff);
         } else if(prefix.equals("D")){
+        	/*
+        	 * 
+        	 * 
+        	 * 
+        	 * Add save option code
+        	 * 
+        	 * 
+        	 * 
+        	 */
             try{
                 in.close();
                 out.close();
