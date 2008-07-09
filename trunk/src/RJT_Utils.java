@@ -155,10 +155,12 @@ public abstract class RJT_Utils implements Constants{
     public static final String timeToString(double time, boolean showMinutes, boolean truncate, boolean verbose){
         String s;
         time = roundTime(time);
+        if(time >= 600 && truncate)
+            time = (double)Math.round(time);
         if(time>=60 && showMinutes){
             int min = (int)(time/60);
             double sec = time-min*60;
-            s = min + ":" + ((time < 600 || !truncate) ? ssxx_format(sec) : ss_format(sec));
+            s = min + ":" + ((time >= 600 && truncate) ? ss_format(sec) : ssxx_format(sec));
         } else
             s = ssxx_format(time) + (verbose ? " sec." : "");
         return s;
